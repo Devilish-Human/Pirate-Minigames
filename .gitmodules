@@ -1,0 +1,8 @@
+[submodule "vendor/Knit"]
+	path = vendor/Knit
+	url = https://github.com/Sleitnick/Knit.git
+	branch = main
+[submodule "vendor/Roact"]
+	path = vendor/Roact
+	url = https://github.com/roblox/Roact.git
+	branch = master
