@@ -1,93 +1,97 @@
+-- File: GameService
+-- Author: PirateNinja
+-- Date: 07/16/2021
+
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 
+-- // Utilities \\ --
+local Signal = require(Knit.Util.Signal)
+local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
+local Thread = require(Knit.Util.Thread)
+
+-- // Shared Modules
 local Number = require(Knit.Shared.Number)
 local String = require(Knit.Shared.String)
+-- End Shared Modules //
 
+-- // Roblox Services \\ --
 local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Players = game:GetService("Players")
 
 local RoundInfo = ReplicatedStorage.Round
-local Status = RoundInfo.Status
-local Timer = RoundInfo.Time
+local Status: StringValue = RoundInfo.Status
+local Timer: IntValue = RoundInfo.Time
+
+local INTERMISSION_TIME = 30;
 
 local GameService = Knit.CreateService {
     Name = "GameService";
-    Client = {};
+    Client = {
+        RoundInfo = RemoteSignal.new();
+    };
 }
 
-local MINIGAMES = { "ObbyRunaway"}
-local chosen;
-
-function GameService:_startGame()
-    chosen.Parent = workspace.Game
-    local AllSpawns = chosen.Spawns:GetChildren()
-    
-    self:SetStatus("Teleporting players")
-    local spawnPoint = AllSpawns[math.random(1, #AllSpawns)]
-    local instanceNew = Instance.new("Part")
-    instanceNew.Position = spawnPoint.Position + Vector3.new(0, 2, 0)
-    spawnPoint:Destroy()
-
-    print("Objective: ", chosen:GetAttribute("Objective"))
-    self:SetStatus(chosen:GetAttribute("Objective"))
-    wait(3)
-    self:SetStatus("Game in progress")
-    for i = chosen:GetAttribute("Length"), 1, -1 do
-        wait(1)
-        i -= 1
-        Timer.Value = i
+-- // Game Loop
+function GameService:_intermission ()
+    while (#Players:GetPlayers() < Knit.Config.minPlayers) do
+        wait()
+        self:setStatus ("Waiting for enough players")
     end
-
-    print("Name: " .. chosen:GetAttribute("Name"), "Objective: " .. chosen:GetAttribute("Objective"))
-    workspace.Game:ClearAllChildren()
-end
-
-function GameService:_intermission()
-    self:SetStatus("Intermission")
-    for i = 10, 1, -1 do
+    self:setStatus ("Intermission")
+    for i = INTERMISSION_TIME, 1, -1 do
+        self:setTime (i)
         wait(1)
-        i -= 1
-        Timer.Value = i
+        print(self:getStatus() .. " | " .. i)
     end
-    self:SetStatus ("Choosing a minigame game")
-    local chosenMinigame = MINIGAMES[math.random(1, #MINIGAMES)]
-    local allMaps = ServerStorage.Assets.Maps[chosenMinigame]:GetChildren();
-    chosen = allMaps[math.random(1, #allMaps)]:Clone()
-    self:SetStatus("Minigame chosen: " .. chosenMinigame)
-    if (not chosen) then return end
-    print("A")
 end
+function GameService:_startGame ()
+    while (#Players:GetPlayers() < Knit.Config.minPlayers) do
+        self:_intermission()
+    end
+    self:setStatus ("Game")
+    for i = 60, 1, -1 do
+        self:setTime (i)
+        wait(1)
+        --self.Client.RoundInfo:FireAllClients(self:getStatus(), self:getTime())
+        print(self:getStatus() .. " | " .. i)
+    end
+end
+-- End Game Loop //
 
-function GameService:_procces ()
-    while wait(1) do
-        print("Running game")
+-- // Status
+function GameService:setStatus (status: string)
+    Status.Value = status
+end
+function GameService:getStatus ()
+    return Status.Value
+end
+function GameService.Client:getStatus ()
+    return self.Server:getStatus ()
+end
+-- End Status //
+
+-- // Timer
+function GameService:setTime (seconds: number)
+    Timer.Value = seconds
+end
+function GameService:getTime ()
+    return Timer.Value
+end
+function GameService.Client:getTime ()
+    return self.Server:getTime ()
+end
+-- End Timer //
+
+-- Knit
+function GameService:KnitStart ()
+    while true do
         self:_intermission()
         self:_startGame()
     end
 end
-
-function GameService:GetLength ()
-    return Timer.Value
+function GameService:KnitInit ()
 end
-
-function GameService:GetStatus ()
-    return Status.Value
-end
-
-function GameService.Client:GetLength()
-    return self.Server:GetLength()
-end
-
-function GameService.Client:GetStatus()
-    return self.Server:GetStatus()
-end
-
-function GameService:SetStatus (status)
-    Status.Value = status
-end
-
-function GameService:KnitStart ()
-    self:_procces()
-end
+-- End Knit //
 
 return GameService

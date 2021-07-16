@@ -45,7 +45,8 @@ function KillBrick:_setupKillBricks ()
                     GetHumanoid (player):Match {
                         Some = function(humanoid)
                             humanoid.Health = 0
-                        end
+                        end;
+                        None = function() end
                     }
                 end
             end;

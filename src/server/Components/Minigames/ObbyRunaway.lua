@@ -14,7 +14,10 @@ function ObbyRunaway.new(instance)
 end
 
 function ObbyRunaway:_processMinigame()
-    
+    self:_setupPlayerFolders()
+    self._maid:GiveTask(function()
+        print("Game Ended")
+    end)
 end
 
 function ObbyRunaway:_setupPlayerFolders ()
@@ -31,7 +34,7 @@ function ObbyRunaway:_setupPlayerFolders ()
 end
 
 function ObbyRunaway:Init()
-    self:_processMinigame()
+    self:_processMinigame ()
 end
 
 

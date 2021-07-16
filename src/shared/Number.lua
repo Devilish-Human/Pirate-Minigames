@@ -1,3 +1,7 @@
+-- File: Number
+-- Author: PirateNinja
+-- Date: 07/16/2021
+
 local Number = {}
 
 function Number:Mutlipy(num1, num2)
