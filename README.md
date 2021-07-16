@@ -1,6 +1,7 @@
 # Pirate Minigames
 
-## Gameplay: Play many minigames to earn coins, unlock cosmetic items, and win different minigames with friends or alone.
+## Gameplay:
+### Play many minigames to earn coins, unlock cosmetic items, and win different minigames with friends or alone.
 
 ## Credits
 ### Group: [PirateNinja](https://www.roblox.com/groups/1043574/pirateninja#!/about)
