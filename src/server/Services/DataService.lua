@@ -3,7 +3,7 @@
 -- Date: 07/16/2021
 
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local UData = require(script.UserData)
+local UData = require(Knit.Modules.UserData)
 
 local Players = game:GetService("Players")
 

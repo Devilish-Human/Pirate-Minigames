@@ -4,7 +4,6 @@
 
 -- A basic data system created in 20-30 minutes
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
 --local DDS = game:GetService("DataStoreService")
 --local playerDataStore = DDS:GetDataStore("UData-test")
 
