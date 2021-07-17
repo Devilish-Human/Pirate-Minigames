@@ -16,17 +16,18 @@ DataService.UDataPool = {}
 
 -- // Player Events
 function OnPlayerAdded (player: Player)
+    -- TODO:
+    -- Better handling for data loads
+    -- Handle data checks
     local data = UData.new(player)
     DataService.UDataPool[player] = data
-
-    data:AddToInventory("Gear of Moderation")
-    data:AddToInventory("Trail of Testing")
-    data:AddToInventory("Effect of Punishment")
-    data:AddToInventory("King of Pir'Te")
 
     print(data)
 end
 function OnPlayerRemoving (player: Player)
+    -- // TODO:
+    -- Handle saving
+    -- Handle data checks
     print (player)
 end
 -- End Player Events //
@@ -34,15 +35,14 @@ end
 function DataService:GetPlayer (player: Player)
     return self.UDataPool[player]
 end
--- // Coins
 function DataService:GetData (player: Player, dataName: string)
     local data = self:GetPlayer(player)
     return data:GetStatValue (dataName)
 end
+-- // TODO: Better client communication for data
 function DataService.Client:GetData (player: Player, dataName: string)
     return self:GetData(player, dataName)
 end
--- End Coins //
 -- End Data Methods //
 -- // Knit
 function DataService:KnitStart()

@@ -16,43 +16,29 @@ function ObbyRunaway.new(instance)
 end
 
 function ObbyRunaway:_processMinigame()
-    self:_setupPlayerFolders()
     local function func_44821621()
-        local startPart = self.Instance:FindFirstChild("Start")
-        local beginLinePart = self.Instance:FindFirstChild("BeginLine")
+        --local startPart = self.Instance:FindFirstChild("Start")
+        --local beginLinePart = self.Instance:FindFirstChild("BeginLine")
         local endPart = self.Instance:FindFirstChild("Finish")
 
         self._maid:GiveTask(endPart.Touched:Connect(function(hit)
             print(hit.Name)
         end))
-        self._maid:GiveTask(beginLinePart:Destroy())
+        --self._maid:GiveTask(beginLinePart:Destroy())
     end
     repeat
         func_44821621()
-    until GameService.hasRoundEnded == false
-end
-
-function ObbyRunaway:_setupPlayerFolders ()
-    local playersFolder = Instance.new("Folder")
-    playersFolder.Name = "PlayersFolder"
-    playersFolder.Parent = self.Instance
-    local InGameFolder = Instance.new("Folder")
-    InGameFolder.Name = "InGameFolder"
-    InGameFolder.Parent = playersFolder
-    local allPlayers = Instance.new("Folder")
-    allPlayers.Name = "All Players"
-    allPlayers.Parent = playersFolder
-    self._maid:GiveTask(playersFolder)
+    until GameService.hasRoundEnded == true
 end
 
 function ObbyRunaway:Init()
     self:_processMinigame ()
+    self:_setupPlayerFolders()
 end
 
 
 function ObbyRunaway:Deinit()
 end
-
 
 function ObbyRunaway:Destroy()
     self._maid:Destroy()
