@@ -14,5 +14,10 @@ Knit.Config = require(Knit.Shared.Config)
 Knit.AddServicesDeep(script.Parent.Services)
 
 Knit.Start():Then(function()
+    for _,v in pairs(workspace:GetChildren()) do
+        if (v.Name == "Nodes" and v:IsA("Folder")) then
+            v:Destroy()
+        end
+    end
     Component.Auto(script.Parent.Components)
 end):Catch(warn)

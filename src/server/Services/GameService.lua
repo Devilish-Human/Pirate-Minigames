@@ -23,12 +23,19 @@ local RoundInfo = ReplicatedStorage.Round
 local Status: StringValue = RoundInfo.Status
 local Timer: IntValue = RoundInfo.Time
 
-local INTERMISSION_TIME = 30;
+local maps = ServerStorage.Assets.Maps
+local minigame
+
+local INTERMISSION_TIME = 15;
+
+local Chosen;
+local MinigameService;
 
 local GameService = Knit.CreateService {
     Name = "GameService";
     Client = {
-        RoundInfo = RemoteSignal.new();
+        ShowObjUI = RemoteSignal.new ();
+        DisplayStatus = RemoteSignal.new ()
     };
 }
 
@@ -41,21 +48,28 @@ function GameService:_intermission ()
     self:setStatus ("Intermission")
     for i = INTERMISSION_TIME, 1, -1 do
         self:setTime (i)
-        wait(1)
-        print(self:getStatus() .. " | " .. i)
+        self.Client.DisplayStatus:FireAll (self:getStatus() .. ' (' .. i .. ')')
     end
+    self:setStatus ("Choosing a minigame")
+    Chosen = MinigameService:ChooseMinigame()
+    minigame = maps:FindFirstChild(Chosen.Name)
+    self:setStatus("Minigame has been chosen: " .. Chosen.Name)
 end
 function GameService:_startGame ()
+    Chosen.Parent = workspace:FindFirstChild("Game")
     while (#Players:GetPlayers() < Knit.Config.minPlayers) do
         self:_intermission()
     end
     self:setStatus ("Game")
-    for i = 60, 1, -1 do
+    print(minigame:GetAttribute("Objective"))
+    self.Client.ShowObjUI:FireAll (Chosen.Name, minigame:GetAttribute("Objective"))
+    for i = minigame:GetAttribute("Length"), 1, -1 do
         self:setTime (i)
         wait(1)
-        --self.Client.RoundInfo:FireAllClients(self:getStatus(), self:getTime())
-        print(self:getStatus() .. " | " .. i)
+        self.Client.DisplayStatus:FireAll (self:getStatus() .. ' (' .. i .. ')')
     end
+    Chosen:Destroy()
+    Chosen = nil
 end
 -- End Game Loop //
 
@@ -66,9 +80,6 @@ end
 function GameService:getStatus ()
     return Status.Value
 end
-function GameService.Client:getStatus ()
-    return self.Server:getStatus ()
-end
 -- End Status //
 
 -- // Timer
@@ -78,11 +89,15 @@ end
 function GameService:getTime ()
     return Timer.Value
 end
+-- End Timer //
+-- // Client
 function GameService.Client:getTime ()
     return self.Server:getTime ()
 end
--- End Timer //
-
+function GameService.Client:getStatus ()
+    return self.Server:getStatus ()
+end
+-- End Client //
 -- Knit
 function GameService:KnitStart ()
     while true do
@@ -91,6 +106,7 @@ function GameService:KnitStart ()
     end
 end
 function GameService:KnitInit ()
+    MinigameService = Knit.Services.MinigameService
 end
 -- End Knit //
 
