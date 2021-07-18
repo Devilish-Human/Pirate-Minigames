@@ -16,18 +16,18 @@ function ObbyRunaway.new(instance)
 end
 
 function ObbyRunaway:_processMinigame()
-    local function func_44821621()
+
+    repeat
         --local startPart = self.Instance:FindFirstChild("Start")
         --local beginLinePart = self.Instance:FindFirstChild("BeginLine")
         local endPart = self.Instance:FindFirstChild("Finish")
 
         self._maid:GiveTask(endPart.Touched:Connect(function(hit)
-            print(hit.Name)
+            local player = hit.Parent
+            print(player)
         end))
         --self._maid:GiveTask(beginLinePart:Destroy())
-    end
-    repeat
-        func_44821621()
+        wait(1)
     until GameService.hasRoundEnded == true
 end
 

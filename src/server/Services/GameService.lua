@@ -39,6 +39,7 @@ local GameService = Knit.CreateService {
         DisplayStatus = RemoteSignal.new ()
     };
     hasRoundEnded = false;
+    Winners = {};
 }
 
 -- // Private Function
@@ -76,29 +77,44 @@ function GameService:_intermission ()
         self.Client.DisplayStatus:FireAll (self:getStatus(), self:getTime())
     end
     self:setStatus ("Choosing a minigame")
+    wait(2)
+    self.Client.DisplayStatus:FireAll (self:getStatus())
     Chosen = MinigameService:ChooseMinigame()
     minigame = maps:FindFirstChild(Chosen.Name)
-    self:setStatus("Minigame has been chosen: " .. Chosen.Name)
 end
 function GameService:_startGame ()
+    self:setStatus("Minigame has been chosen: " .. Chosen.Name)
     Chosen.Parent = workspace:FindFirstChild("Game")
     while (#Players:GetPlayers() < Knit.Config.minPlayers) do
         self:_intermission()
     end
-    self:setStatus ("Game")
+    self:setStatus("Minigame will began shortly")
+    wait(2)
+    self:setStatus ("")
     print(minigame:GetAttribute("Objective"))
     local a = minigame:GetAttribute("Objective")
     for _, player in pairs(Players:GetPlayers()) do
         TeleportPlayer(player)
     end
-    wait(1)
-    self.Client.ShowObjUI:FireAll (Chosen.Name, a)
+    self:setStatus ("Game")
+    self.Client.ShowObjUI:FireAll ()
     for i = minigame:GetAttribute("Length"), 1, -1 do
         self:setTime (i)
         self.Client.DisplayStatus:FireAll (self:getStatus(), i)
         RBXWait(1)
+
+        if (#Chosen.Players.InGame:GetChildren() < 1) then
+            self.hasRounEnded = true
+        end
     end
     self.hasRounEnded = true
+    for _, obj in (Chosen.Players.InGame:GetChildren()) do
+        local player = obj.Value
+
+        if (Players:FindFirstChild(player)) then
+            player:LoadCharacter()
+        end
+    end
     Chosen:Destroy()
 end
 -- End Game Loop //
@@ -119,19 +135,16 @@ function GameService:getTime ()
     return Timer.Value
 end
 -- End Timer //
--- // Client
-function GameService.Client:getTime ()
-    return self.Server:getTime ()
-end
-function GameService.Client:getStatus ()
-    return self.Server:getStatus ()
-end
--- End Client //
 -- Knit
 function GameService:KnitStart ()
     while true do
         self:_intermission()
         self:_startGame()
+        if (self:getTime() ~= 0) then
+            self.Client.DisplayStatus:FireAll (self:getStatus(), self:getTime())
+        else
+            self.Client.DisplayStatus:FireAll (self:getStatus())
+        end
     end
 end
 function GameService:KnitInit ()

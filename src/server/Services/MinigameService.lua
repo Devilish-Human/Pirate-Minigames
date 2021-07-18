@@ -18,7 +18,7 @@ function MinigameService.ChooseMinigame ()
     chosenMap = maps[math.random(1, #maps)]
 
     chosenMap.Name = choseMinigame
-    return chosenMap
+    return chosenMap:Clone()
 end
 
 return MinigameService
