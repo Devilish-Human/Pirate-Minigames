@@ -30,14 +30,8 @@ local function func_135459427()
         wait(5)
         hideObjective:Play()
     end)
-    GameService.DisplayStatus:Connect(function(a, b)
-        if (a == "Game" and b ~= 0) then
-            playerGui.MinigameUI:FindFirstChild("StatusLabel").Text = ("Game in progress (%s)"):format(tostring(b))
-        elseif (b ~= nil) then
-            playerGui.MinigameUI:FindFirstChild("StatusLabel").Text = ("%s (%s)"):format(a, tostring(b))
-        else
-            playerGui.MinigameUI:FindFirstChild("StatusLabel").Text = ("%s"):format(a)
-        end
+    GameService.DisplayStatus:Connect(function(...)
+        playerGui.MinigameUI:FindFirstChild("StatusLabel").Text = ("%s"):format(...)
     end)
 end
 

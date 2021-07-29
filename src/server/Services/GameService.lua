@@ -67,60 +67,44 @@ end
 -- // Game Loop
 function GameService:_intermission ()
     while (#Players:GetPlayers() < Knit.Config.minPlayers) do
-        wait()
-        self:setStatus ("Waiting for enough players")
+        Knit:Wait(1)
+        self:fireStatus ("Waiting for enough players")
     end
-    self:setStatus ("Intermission")
     for i = INTERMISSION_TIME, 1, -1 do
-        wait(1)
+        Knit:Wait(1)
         self:setTime (i)
-        self.Client.DisplayStatus:FireAll (self:getStatus(), self:getTime())
+        self:fireStatus (("Intermission (%s)"):format(i))
     end
-    self:setStatus ("Choosing a minigame")
-    wait(2)
+    self:fireStatus ("Choosing a minigame")
+    Knit:Wait(2)
     self.Client.DisplayStatus:FireAll (self:getStatus())
     Chosen = MinigameService:ChooseMinigame()
     minigame = maps:FindFirstChild(Chosen.Name)
 end
 function GameService:_startGame ()
-    self:setStatus("Minigame has been chosen: " .. Chosen.Name)
+    self:fireStatus("Minigame has been chosen: " .. Chosen.Name)
     Chosen.Parent = workspace:FindFirstChild("Game")
     while (#Players:GetPlayers() < Knit.Config.minPlayers) do
         self:_intermission()
     end
-    self:setStatus("Minigame will began shortly")
-    wait(2)
-    self:setStatus ("")
+    self:fireStatus("Minigame will began shortly")
+    wait(1)
     print(minigame:GetAttribute("Objective"))
     local a = minigame:GetAttribute("Objective")
     for _, player in pairs(Players:GetPlayers()) do
         TeleportPlayer(player)
     end
-    self:setStatus ("Game")
+    --self:setStatus ("Game")
     self.Client.ShowObjUI:FireAll ()
-    for i = minigame:GetAttribute("Length"), 1, -1 do
-        self:setTime (i)
-        self.Client.DisplayStatus:FireAll (self:getStatus(), i)
-        RBXWait(1)
-
-        if (#Chosen.Players.InGame:GetChildren() < 1) then
-            self.hasRounEnded = true
-        end
-    end
-    self.hasRounEnded = true
-    for _, obj in (Chosen.Players.InGame:GetChildren()) do
-        local player = obj.Value
-
-        if (Players:FindFirstChild(player)) then
-            player:LoadCharacter()
-        end
-    end
+    repeat
+        wait(1)
+    until self.hasRoundEnded == true
     Chosen:Destroy()
 end
 -- End Game Loop //
 -- // Status
-function GameService:setStatus (status: string)
-    Status.Value = status
+function GameService:fireStatus (status: any)
+    self.Client.DisplayStatus:FireAll(status)
 end
 function GameService:getStatus ()
     return Status.Value
@@ -140,11 +124,6 @@ function GameService:KnitStart ()
     while true do
         self:_intermission()
         self:_startGame()
-        if (self:getTime() ~= 0) then
-            self.Client.DisplayStatus:FireAll (self:getStatus(), self:getTime())
-        else
-            self.Client.DisplayStatus:FireAll (self:getStatus())
-        end
     end
 end
 function GameService:KnitInit ()

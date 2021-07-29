@@ -10,6 +10,9 @@ Knit.Shared = game:GetService("ReplicatedStorage").Shared
 
 Knit.Config = require(Knit.Shared.Config)
 
+function Knit:Wait (...)
+    return require(Knit.Shared.RBXWait)(...)
+end
 -- Load all services within 'Services':
 Knit.AddServicesDeep(script.Parent.Services)
 

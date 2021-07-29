@@ -16,24 +16,19 @@ function ObbyRunaway.new(instance)
 end
 
 function ObbyRunaway:_processMinigame()
-
-    repeat
-        --local startPart = self.Instance:FindFirstChild("Start")
-        --local beginLinePart = self.Instance:FindFirstChild("BeginLine")
-        local endPart = self.Instance:FindFirstChild("Finish")
-
-        self._maid:GiveTask(endPart.Touched:Connect(function(hit)
-            local player = hit.Parent
-            print(player)
-        end))
-        --self._maid:GiveTask(beginLinePart:Destroy())
-        wait(1)
-    until GameService.hasRoundEnded == true
+    for i = 60, 1, -1 do
+        GameService:fireStatus (("The minigame will end in %s seconds"):format(i))
+        Knit:Wait(1)
+        print(i, os.clock())
+        if (#self.Instance.Players.InGame:GetChildren() <= 0) then
+            break;
+        end
+    end
+    GameService.hasRoundEnded = true
 end
 
 function ObbyRunaway:Init()
     self:_processMinigame ()
-    self:_setupPlayerFolders()
 end
 
 
@@ -42,7 +37,6 @@ end
 
 function ObbyRunaway:Destroy()
     self._maid:Destroy()
-    self.Instance:Destroy()
 end
 
 
