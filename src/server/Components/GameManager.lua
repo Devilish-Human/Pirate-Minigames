@@ -47,7 +47,7 @@ end
 
 function GameManager:awardReward (player: Player, rewardType: string, rewardValue: number)
     if (player) then
-        local playerData = DataService:GetPlayer (player)
+        local playerData = DataService:GetProfile (player)
         if (playerData) then
             playerData[rewardType] += rewardValue
         end
@@ -77,12 +77,12 @@ function GameManager:_setupObserver ()
             local team1 = Instance.new("Folder")
             team1.Name = "Pirates"
             team1.Parent = teamsFolder
-            team1:SetAttribute("Color", Color3.fromRGB(16, 16, 16))
+            team1:SetAttribute("Color", Color3.fromRGB(116, 61, 61))
 
             local team2 = Instance.new("Folder")
             team2.Name = "Ninjas"
             team2.Parent = teamsFolder
-            team2:SetAttribute("Color", Color3.fromRGB(239, 50, 0))
+            team2:SetAttribute("Color", Color3.fromRGB(49, 49, 49))
         end
     end))
     self._maid:GiveTask(self.Instance.ChildRemoved:Connect(function(child)
@@ -94,6 +94,8 @@ function GameManager:_setupObserver ()
         if (child:FindFirstChild("Teams")) then
             child:FindFirstChild("Teams"):Destroy()
         end
+
+        GameService.Winners = {}
     end))
 end
 
