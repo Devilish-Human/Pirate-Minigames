@@ -22,5 +22,6 @@ Knit.Start():Then(function()
             v:Destroy()
         end
     end
+
     Component.Auto(script.Parent.Components)
 end):Catch(warn)

@@ -21,7 +21,7 @@ function UData.new (player: Player)
       Inventory = {};
 
        -- Info
-       LastSaved = 0;
+       LastSave = 0;
        SaveId = 0;
 
     }, UData)

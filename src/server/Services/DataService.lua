@@ -3,88 +3,90 @@
 -- Date: 07/16/2021
 
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local Thread = require(Knit.Util.Thread)
+local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
 
-local UData = require(Knit.Modules.UserData)
+local ProfileService = require(Knit.Modules.ProfileService)
 
 local Players = game:GetService("Players")
-local DataStoreService = game:GetService("DataStoreService")
-local RunService = game:GetService("RunService")
-
-local PlayerDataStore = DataStoreService:GetDataStore("UData-dev")
 
 local DataService = Knit.CreateService {
     Name = "DataService";
     Client = {};
 }
 
-DataService.UDataPool = {}
+local GameProfileStore = ProfileService.GetProfileStore(
+    "PlayerData-dev",
+    {
+        -- Stats
+        Coins = 0;
+        Wins = 0;
+        Level = 1;
+    
+        -- Inventory
+        Inventory = {};
+    
+        -- Info
+        LastSave = 0;
+        SaveId = 0;
+    }
+)
 
--- // Player Events
-function Load (player: Player)
-    -- TODO:
-    -- Better handling for data loads
-    -- Handle data checks
-    local data = UData.new(player)
-    DataService.UDataPool[player] = data
+local Profiles = {}
 
-    print(player, data)
-end
-function Save (player: Player)
-    -- // TODO:
-    -- Handle saving
-    -- Handle data checks
-    local data = DataService.UDataPool[player]
-    print("Data saving for", player)
-    PlayerDataStore:SetAsync("Player_" .. player.UserId, data)
-    print("Data saved for", player)
-    data = nil
-    print(player, DataService.UDataPool)
-end
+local OnPlayerAdded = function(player: Player)
+    local profile = GameProfileStore:LoadProfileAsync(
+        "player_" .. player.UserId,
+        "ForceLoad"
+    )
 
-function AutoSave ()
-    print("Saving")
-    while wait(60) do
-        for _, player in ipairs(Players:GetPlayers()) do
-            coroutine.wrap(Save)(player)
+    if (profile) then
+        profile:ListenToRelease(function()
+            Profiles[player] = nil
+            player:Kick()
+        end)
+
+        if (player:IsDescendantOf(Players)) then
+            Profiles[player] = profile
+        else
+            profile:Release()
         end
+    else
+        player:Kick("Failed to retrieve data. Please rejoin the game!")
     end
-    print("Saved")
+
+    local folder = Instance.new("Folder")
+    folder.Name = "leaderstats"
+    folder.Parent = player
 end
-function OnShutdown()
-	if RunService:IsStudio() then
-		wait(1)
-	else
-		for _, player in ipairs(Players:GetPlayers()) do
-			coroutine.wrap(Save)(player)
-		end
-	end
+local OnPlayerRemoving = function (player: Player)
+    local profile = Profiles[player]
+
+    if (profile) then
+        profile:Release()
+    end
 end
--- End Player Events //
--- // Data Methods
-function DataService:GetPlayer (player: Player)
-    return self.UDataPool[player]
+
+function DataService:GetProfile (player)
+    local profile = Profiles[player]
+    if (profile) then
+        return profile.Data
+    end
 end
+
 function DataService:GetData (player: Player, dataName: string)
-    local data = self:GetPlayer(player)
-    return data:GetStatValue (dataName)
+    local profile = self:GetProfile(player)
+    if (profile) then
+        return profile[dataName] or 0
+    end
 end
--- // TODO: Better client communication for data
+
 function DataService.Client:GetData (player: Player, dataName: string)
-    return self:GetData(player, dataName)
+    return self.Server:GetData (player, dataName)
 end
--- End Data Methods //
--- // Knit
-function DataService:KnitStart()
-    Players.PlayerAdded:Connect(Load)
-    Players.PlayerRemoving:Connect(Save)
-    Thread.SpawnNow(AutoSave)
 
-    game:BindToClose(OnShutdown)
-
+function DataService:KnitStart ()
+    Players.PlayerAdded:Connect(OnPlayerAdded)
+    Players.PlayerRemoving:Connect(OnPlayerRemoving)
 end
-function DataService:KnitInit()
-end
--- End Knit //
 
 return DataService

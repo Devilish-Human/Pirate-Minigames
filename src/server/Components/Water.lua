@@ -27,7 +27,7 @@ function Water:Init()
         local object = hit.Parent
         local player = Players:GetPlayerFromCharacter(object)
         if (player) then
-            if workspace.Game:GetChildren()[1] then
+            if workspace.Game:GetChildren()[1] and workspace.Game:GetChildren()[1].Players.InGame:FindFirstChild(player.Name) then
                 workspace.Game:GetChildren()[1].Players.InGame:FindFirstChild(player.Name):Destroy();
             end
             player:LoadCharacter();

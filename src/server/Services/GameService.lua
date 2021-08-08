@@ -7,8 +7,7 @@ local Knit = require(game:GetService("ReplicatedStorage").Knit)
 -- // Utilities \\ --
 local Signal = require(Knit.Util.Signal)
 local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
-local Thread = require(Knit.Util.Thread)
-local RBXWait = require(Knit.Shared.RBXWait)
+local Component = require(Knit.Util.Component)
 
 -- // Shared Modules
 local Number = require(Knit.Shared.Number)
@@ -38,7 +37,6 @@ local GameService = Knit.CreateService {
         ShowObjUI = RemoteSignal.new ();
         DisplayStatus = RemoteSignal.new ()
     };
-    hasRoundEnded = false;
     Winners = {};
 }
 
@@ -61,6 +59,8 @@ function TeleportPlayer(player)
         player.Character.Humanoid.Died:Connect(function()
             Obj:Destroy()
         end)
+        Obj.Value.Character.Humanoid.WalkSpeed = 0
+        Obj.Value.Character.Humanoid.JumpPower = 0
     end
 end
 -- End Private Function //
@@ -82,24 +82,36 @@ function GameService:_intermission ()
     minigame = maps:FindFirstChild(Chosen.Name)
 end
 function GameService:_startGame ()
+    local gameManager = self:GetGameManager()
     self:fireStatus("Minigame has been chosen: " .. Chosen.Name)
     Chosen.Parent = workspace:FindFirstChild("Game")
     while (#Players:GetPlayers() < Knit.Config.minPlayers) do
         self:_intermission()
     end
-    self:fireStatus("Minigame will began shortly")
     wait(1)
-    print(minigame:GetAttribute("Objective"))
     local a = minigame:GetAttribute("Objective")
+    self:fireStatus("Teleporting players..")
     for _, player in pairs(Players:GetPlayers()) do
         TeleportPlayer(player)
     end
+    wait(1)
     --self:setStatus ("Game")
-    self.Client.ShowObjUI:FireAll ()
+    self:fireStatus("Minigame will began shortly")
+    self.Client.ShowObjUI:FireAll (minigame:GetAttribute("Name"), minigame:GetAttribute("Objective"))
+    wait(1.25)
+    for i, v in pairs (Chosen.Players.InGame:GetChildren()) do
+        v.Value.Character.Humanoid.WalkSpeed = 16
+        v.Value.Character.Humanoid.JumpPower = 50
+    end
+    Chosen:FindFirstChild("MinigameScript").Disabled = false
     repeat
         wait(1)
-    until self.hasRoundEnded == true
+    until gameManager:GetAttribute("hasRoundEnded")
+    print("A")
     Chosen:Destroy()
+end
+function GameService:GetGameManager()
+    return Component.FromTag("GameManager"):GetFromInstance(workspace.Game)
 end
 -- End Game Loop //
 -- // Status

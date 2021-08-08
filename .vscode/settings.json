@@ -1,4 +1,5 @@
 {
     "Lua.diagnostics.disable": [
+        "missing-module-return"
     ]
 }
