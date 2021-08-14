@@ -6,30 +6,30 @@ local MinigameService = Knit.CreateService {
     Client = {};
 }
 
-local GameService
-
 local ServerStorage = game:GetService("ServerStorage")
 local Assets = ServerStorage:FindFirstChild("Assets")
 local MapsFolder = Assets:FindFirstChild("Maps")
+local ScriptsFolder = Assets:FindFirstChild("MinigameScripts")
 
+--local Minigames = { "ObbyRunaway", "Sweeper", "Swordvival" }
 local Minigames = { "ObbyRunaway" }
 
-MINIGAME = ""
+local choseMinigame, chosenMap;
 function MinigameService.ChooseMinigame ()
-    local choseMinigame, chosenMap;
     choseMinigame = Minigames[math.random(1, #Minigames)]
     local maps = MapsFolder[choseMinigame]:GetChildren()
     chosenMap = maps[math.random(1, #maps)]
 
-    chosenMap.Name = choseMinigame
-    MINIGAME = choseMinigame
-    return chosenMap:Clone()
+    local clone = chosenMap:Clone()
+    clone.Name = choseMinigame
+
+    local currentMScript = ScriptsFolder:FindFirstChild(choseMinigame):Clone()
+    currentMScript.Name = "MinigameScript"
+    currentMScript.Parent = clone
+    return clone
 end
 
 function MinigameService:KnitStart()
 end
 
-function MinigameService:KnitInit()
-    GameService = Knit.Services.GameService
-end
 return MinigameService

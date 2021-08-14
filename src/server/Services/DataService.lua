@@ -11,33 +11,45 @@ local Players = game:GetService("Players")
 
 local DataService = Knit.CreateService {
     Name = "DataService";
-    Client = {};
+    Client = {
+        CoinsChanged = RemoteSignal.new();
+        WinsChanged = RemoteSignal.new();
+        LevelChanged = RemoteSignal.new();
+    };
+}
+
+local ProfileTemplate = {
+    -- Stats
+    Coins = 0;
+    Wins = 0;
+    Level = 1;
+
+    -- Inventory
+    Inventory = {
+        Gears = {};
+        Effects = {};
+        Titles = {};
+        Characters = {};
+    };
 }
 
 local GameProfileStore = ProfileService.GetProfileStore(
     "PlayerData-dev",
-    {
-        -- Stats
-        Coins = 0;
-        Wins = 0;
-        Level = 1;
-    
-        -- Inventory
-        Inventory = {};
-    
-        -- Info
-        LastSave = 0;
-        SaveId = 0;
-    }
+    ProfileTemplate
 )
 
 local Profiles = {}
 
+local requiredExp
+
 local OnPlayerAdded = function(player: Player)
+    print(player.UserId)
     local profile = GameProfileStore:LoadProfileAsync(
         "player_" .. player.UserId,
         "ForceLoad"
     )
+
+    --requiredExp = math.floor(Profiles[player].Data.Level * 24 / 6 * 1.25 + 1.5)
 
     if (profile) then
         profile:ListenToRelease(function()
@@ -54,9 +66,13 @@ local OnPlayerAdded = function(player: Player)
         player:Kick("Failed to retrieve data. Please rejoin the game!")
     end
 
-    local folder = Instance.new("Folder")
-    folder.Name = "leaderstats"
-    folder.Parent = player
+    task.spawn(function()
+        while true do
+            local d = DataService:GetProfile(player)
+            if (d) then DataService.Client.CoinsChanged:Fire(player, d.Coins) end
+            wait(.05)
+        end
+    end)
 end
 local OnPlayerRemoving = function (player: Player)
     local profile = Profiles[player]
@@ -80,9 +96,33 @@ function DataService:GetData (player: Player, dataName: string)
     end
 end
 
+function DataService:GetInventoryData (player: Player, inventoryName: string)
+    local profile = self:GetProfile (player)
+    if (profile) then
+        return profile.Inventory[inventoryName]
+    end
+end
+
+function DataService:AddToInventory (player: Player, inventoryName: string, itemName: string)
+    local inventoryData = self:GetInventoryData (player, inventoryName)
+    inventoryData[itemName] = false
+end
+
+function DataService:ResetData (player: Player)
+    local profile = Profiles[player]
+    if (profile) then
+        profile = ProfileTemplate
+    end
+end
+
 function DataService.Client:GetData (player: Player, dataName: string)
     return self.Server:GetData (player, dataName)
 end
+
+function DataService.Client:GetInventoryData (player: Player, inventoryName: string)
+    return self.Server:GetInventoryData (player, inventoryName)
+end
+
 
 function DataService:KnitStart ()
     Players.PlayerAdded:Connect(OnPlayerAdded)

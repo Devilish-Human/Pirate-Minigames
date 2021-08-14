@@ -17,6 +17,8 @@ end
 Knit.AddServicesDeep(script.Parent.Services)
 
 Knit.Start():Then(function()
+    require(Knit.Modules.AntiExploitModule):Start()
+    
     for _,v in pairs(workspace:GetChildren()) do
         if (v.Name == "Nodes" and v:IsA("Folder")) then
             v:Destroy()

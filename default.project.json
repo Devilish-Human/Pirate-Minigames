@@ -21,6 +21,12 @@
       }
     },
 
+    "ServerStorage": {
+      "Assets": {
+        "$path": "src/assets"
+      }
+    },
+
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "Game": {

@@ -14,14 +14,15 @@ function Water.new(instance)
     local self = setmetatable({}, Water)
     
     self._maid = Maid.new()
-    self.color = Color3.fromRGB(13, 106, 172)
-    self.material = Enum.Material.Sand
+    self._color = Color3.fromRGB(13, 106, 172)
+    self._material = Enum.Material.Sand
+
     return self
 end
 
 function Water:Init()
-    self.Instance.Color = self.color;
-    self.Instance.Material = self.material
+    self.Instance.Color = self._color;
+    self.Instance.Material = self._material
 
     self._maid:GiveTask (self.Instance.Touched:Connect(function(hit)
         local object = hit.Parent

@@ -1,4 +1,7 @@
+local Players = game:GetService("Players")
+
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Signal = require(Knit.Util.Signal)
 local Maid = require(Knit.Util.Maid)
 
 local GameManager = {}
@@ -10,48 +13,58 @@ local GameService, DataService
 
 function GameManager.new(instance)
     local self = setmetatable({}, GameManager)
+
     self._maid = Maid.new()
-    print("GameManager::new")
+    self.Winners = {}
+
     return self
 end
 
 function GameManager:isContestant (player: Player)
-    self._maid:GiveTask (function()
-        for i, v in pairs (self.Instance.Players.AllPlayers:GetChildren()) do
-            if (v.Value == player and self.Instance.Players.InGame:FindFirstChild(player.Name)) then
-                return v
-            end
+    for i, v in pairs (self.Instance:FindFirstChild(self:GetAttribute("CurrentMinigame")).Players.AllPlayers:GetChildren()) do
+        if (v.Value == player and self.Instance:FindFirstChild(self:GetAttribute("CurrentMinigame")).Players.InGame:FindFirstChild(player.Name)) then
+            return v
         end
-        return false
-    end)
+    end
+    return false
 end
 
 function GameManager:isWinner (player: Player)
-    self._maid:GiveTask(function()
-        for i, v in pairs (GameService.Winners) do
-            if (v == player) then
-                return v
-            end
+    for i, v in pairs (self.Winners) do
+        if (v == player) then
+            return v
         end
-        return nil
-    end)
+    end
+    return nil
 end
 
 function GameManager:addWinner (player: Player)
-    self._maid:GiveTask (function()
-        if (self:isContestant(player) and not self:isWinner (player)) then
-            table.insert(GameService.Winners, player)
-        end
-    end)
+    if (self:isContestant(player) and not self:isWinner (player)) then
+        table.insert(self.Winners, player)
+    end
 end
 
-function GameManager:awardReward (player: Player, rewardType: string, rewardValue: number)
-    if (player) then
-        local playerData = DataService:GetProfile (player)
-        if (playerData) then
-            playerData[rewardType] += rewardValue
+function GameManager:awardPlayer (player: Player, dataName: string, dataValue: any)
+    local profile = DataService:GetProfile (player)
+
+    if (profile) then
+        if (type(dataValue) == "number") then
+            profile[dataName] = profile[dataName] + dataValue
+        elseif (type(dataValue) == "table") then
+            table.insert(profile[dataName], dataValue)
+        else
+            profile[dataName] = dataValue
         end
     end
+end
+
+function GameManager:ForceStop ()
+    for i, v in pairs(self.Instance:FindFirstChild(self:GetAttribute("CurrentMinigame").Players.InGame:GetChildren())) do
+        if (v) then
+            v:Destroy()
+        end
+    end
+    self.Started = false
 end
 
 function GameManager:SetAttribute (attribute, value)
@@ -65,7 +78,7 @@ end
 function GameManager:_setupObserver ()
     self._maid:GiveTask(self.Instance.ChildAdded:Connect(function(child)
         self.Instance:SetAttribute("CurrentMinigame", child.Name)
-        self.Instance:SetAttribute("CurrentMap", child:GetAttribute("Map"))
+        self.Instance:SetAttribute("CurrentMap", child:GetAttribute("Id"))
         self.Instance:SetAttribute("Teams", game:GetService("ServerStorage").Assets.Maps:FindFirstChild(child.Name):GetAttribute("Team"))
         self.Instance:SetAttribute("hasEnded", false)
 
@@ -95,27 +108,29 @@ function GameManager:_setupObserver ()
             child:FindFirstChild("Teams"):Destroy()
         end
 
-        GameService.Winners = {}
+        self.Started = false
+        self.Winners = {}
     end))
 end
 
 function GameManager:Init()
     GameService = Knit.Services.GameService
     DataService = Knit.Services.DataService
-    GameService.Winners = {}
+    self.Winners = {}
+    self.Started = false
     
     self:_setupObserver()
-    print("GameManager::init")
+end
+
+function GameManager:ChangeMinigameProperty (Minigame, propertyName, value)
+    return game:GetService("ServerStorage").Assets.Maps:FindFirstChild(Minigame):SetAttribute (propertyName, value)
 end
 
 function GameManager:Deinit()
-    print("GameManager::deinit")
 end
 
 function GameManager:Destroy()
     self._maid:Destroy()
-    print("GameManager::destroy")
 end
-
 
 return GameManager
