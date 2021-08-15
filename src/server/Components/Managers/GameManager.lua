@@ -126,6 +126,10 @@ function GameManager:ChangeMinigameProperty (Minigame, propertyName, value)
     return game:GetService("ServerStorage").Assets.Maps:FindFirstChild(Minigame):SetAttribute (propertyName, value)
 end
 
+function GameManager:GetCurrentMinigame ()
+    return script:FindFirstChild(self:GetAttribute("CurrentMinigame"))
+end
+
 function GameManager:Deinit()
 end
 

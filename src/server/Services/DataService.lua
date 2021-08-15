@@ -51,6 +51,11 @@ local OnPlayerAdded = function(player: Player)
 
     --requiredExp = math.floor(Profiles[player].Data.Level * 24 / 6 * 1.25 + 1.5)
 
+    local isAFK = Instance.new"BoolValue"
+    isAFK.Name = "isAFK"
+    isAFK.Value = false
+    isAFK.Parent = player
+
     if (profile) then
         profile:ListenToRelease(function()
             Profiles[player] = nil

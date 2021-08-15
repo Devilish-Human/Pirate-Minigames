@@ -56,19 +56,12 @@ function TeleportPlayer(player)
         player.Character.Humanoid.Died:Connect(function()
             Obj:Destroy()
         end)
-        Obj.Value.Character.Humanoid.WalkSpeed = 0
-        Obj.Value.Character.Humanoid.JumpPower = 0
     end
 end
 -- End Private Function //
 
 -- // Game Loop
 function GameService:_intermission ()
-    while (#Players:GetPlayers() < Knit.Config.minPlayers) do
-        Knit:Wait(1)
-        self:fireStatus ("Waiting for enough players")
-    end
-
     for i = INTERMISSION_TIME, 1, -1 do
         Knit:Wait(1)
         --self:setTime (i)
@@ -86,9 +79,6 @@ function GameService:_startGame ()
     local gameManager = self:GetGameManager()
     self:fireStatus("Minigame has been chosen: " .. minigame:GetAttribute("Name"))
     Chosen.Parent = workspace:FindFirstChild("Game")
-    while (#Players:GetPlayers() < Knit.Config.minPlayers) do
-        self:_intermission()
-    end
     Knit:Wait(2)
     local a = minigame:GetAttribute("Objective")
     self:fireStatus("Teleporting players..")
@@ -96,11 +86,7 @@ function GameService:_startGame ()
         TeleportPlayer(player)
     end
     self.Client.ShowObjUI:FireAll (minigame:GetAttribute("Name"), minigame:GetAttribute("Objective"))
-    Knit:Wait(2)
-    for i, v in pairs (Chosen.Players.InGame:GetChildren()) do
-        v.Value.Character.Humanoid.WalkSpeed = 16
-        v.Value.Character.Humanoid.JumpPower = 50
-    end
+    Knit:Wait(1)
     --gameManager.HasEnded:Fire()
     Chosen:FindFirstChild("MinigameScript").Disabled = false
     repeat
@@ -116,18 +102,51 @@ end
 function GameService:GetMinigameObject ()
     return minigame
 end
+
+function GameService:ToggleAFK (player: Player)
+    local afkValue = player:FindFirstChild("isAFK")
+    afkValue.Value = not afkValue.Value
+end
 -- End Game Loop //
 -- // Status
 function GameService:fireStatus (status: any)
     self.Client.DisplayStatus:FireAll(status)
 end
 
+function GameService.Client:ToggleAFK (player: Player)
+    return self.Server:ToggleAFK (player)
+end
+
+
+function GameService:_getPlayers()
+    local Players = {}
+    for ind, plr in pairs(game:GetService("Players"):GetChildren()) do
+        if (plr:FindFirstChild("isAFK") and not plr:FindFirstChild("isAFK").Value) then
+            table.insert(Players, plr)
+        end
+    end
+    return Players
+end
+
 -- Knit
 function GameService:KnitStart ()
     while true do
-        self:_intermission()
-        self:_startGame()
+        if (#self:_getPlayers() < Knit.Config.minPlayers) then
+            Knit:Wait(1)
+            self:fireStatus ("Waiting for enough players")
+        else
+            self:_intermission()
+            self:_startGame()
+        end
     end
+
+    game.Players.PlayerAdded:Connect(function(player)
+        local gameManager = self:GetGameManager()
+        local playerObject = gameManager:GetCurrentMinigame().Players.InGame:FindFirstChild(player.Name)
+        if (playerObject) then
+            playerObject:Destroy()
+        end
+    end)
 end
 function GameService:KnitInit ()
     MinigameService = Knit.Services.MinigameService

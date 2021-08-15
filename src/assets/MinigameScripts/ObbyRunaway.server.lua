@@ -37,10 +37,11 @@ minigame:FindFirstChild("BeginLine"):Destroy()
 
 for i = minigameObject:GetAttribute("Length"), 1, -1 do
 	GameService:fireStatus(("The minigame will end in %s seconds!"):format(tostring(i)))
+
 	if (#ingamePlayersFolder:GetChildren() <= 0) then
 		break
 	end
-	wait(1)
+	Knit:Wait(1)
 end
 
 for i, v in pairs (gameManager.Winners) do
