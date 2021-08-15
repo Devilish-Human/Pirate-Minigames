@@ -1,4 +1,5 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
+local Maid = require(Knit.Util.Maid)
 
 local minigame = script.Parent
 
@@ -8,6 +9,8 @@ local gameManager = GameService:GetGameManager()
 local playersFolder = minigame:FindFirstChild("Players")
 local ingamePlayersFolder = playersFolder:FindFirstChild("InGame")
 local allPlayersFolder = playersFolder:FindFirstChild("AllPlayers")
+
+local cleanMaid = Maid.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
@@ -26,7 +29,7 @@ function onTouch (hit)
 		end
 	end
 end
-minigame.Finish.Touched:Connect(onTouch)
+cleanMaid:GiveTask(minigame.Finish.Touched:Connect(onTouch))
 
 for i = 10, 1, -1 do
 	Knit:Wait(1)
@@ -53,3 +56,4 @@ for i, v in pairs (gameManager.Winners) do
 end
 
 gameManager:SetAttribute("hasEnded", true)
+cleanMaid:Destroy()
