@@ -16,6 +16,7 @@ function GameManager.new(instance)
 
     self._maid = Maid.new()
     self.Winners = {}
+    self.RoundResults = {}
 
     return self
 end
