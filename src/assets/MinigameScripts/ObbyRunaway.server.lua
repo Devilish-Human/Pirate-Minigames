@@ -50,7 +50,7 @@ for i, v in pairs (gameManager.Winners) do
 	print("Awarding!")
 	if (v) then
 		gameManager:awardPlayer (v, "Coins", 10)
-		RoundResults[v.Value.Name] = {
+		RoundResults[v.Name] = {
 			Won = true,
 			Message = "Reached the end",
 			Coins = 10
@@ -69,19 +69,6 @@ for i, v in pairs (allPlayersFolder:GetChildren()) do
 		}
 	end
 end
-local tempRR = {}
-for i, v in pairs (RoundResults) do
-	if (v.Won) then
-		tempRR[i] = v
-	end
-end
-for i,v in pairs (RoundResults) do
-	if (not v.Won) then
-		tempRR[i] = v
-	end
-end
-
-RoundResults = tempRR
 
 GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
