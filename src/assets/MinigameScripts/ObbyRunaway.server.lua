@@ -81,6 +81,8 @@ for i,v in pairs (RoundResults) do
 	end
 end
 
---GameService.Clients.ShowResults:FireAll (RoundResults)
+RoundResults = tempRR
+
+GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
 cleanMaid:Destroy()
