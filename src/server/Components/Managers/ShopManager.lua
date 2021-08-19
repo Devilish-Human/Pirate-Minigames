@@ -23,7 +23,7 @@ function ShopManager:Init()
 end
 
 function ShopManager:GetSelected ()
-    
+    return self.Instance:GetAttribute ("Selected")
 end
 
 function ShopManager:SetSelected (value)
