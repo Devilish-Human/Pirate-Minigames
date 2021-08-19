@@ -60,7 +60,7 @@ function GameUIController:KnitStart()
             local won = v.Won
     
             local label = script.UsernameLabel:Clone()
-            label.Text = " @" .. userName
+            label.Text = ((" %s (@%s)"):format(Knit.Player.DisplayName, userName))
             label.Parent = ResultsFrame.ResultList
 
             local earnedCoins = ResultsFrame.earnedLabel

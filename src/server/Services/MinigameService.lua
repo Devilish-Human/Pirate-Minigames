@@ -12,7 +12,7 @@ local MapsFolder = Assets:FindFirstChild("Maps")
 local ScriptsFolder = Assets:FindFirstChild("MinigameScripts")
 
 --local Minigames = { "ObbyRunaway", "Sweeper", "Swordvival" }
-local Minigames = { "ObbyRunaway" }
+local Minigames = require ( Knit.Modules.MinigameData )
 
 local choseMinigame, chosenMap;
 function MinigameService.ChooseMinigame ()

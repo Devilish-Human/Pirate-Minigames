@@ -40,16 +40,12 @@ local GameProfileStore = ProfileService.GetProfileStore(
 
 local Profiles = {}
 
-local requiredExp
-
 local OnPlayerAdded = function(player: Player)
     print(player.UserId)
     local profile = GameProfileStore:LoadProfileAsync(
         "player_" .. player.UserId,
         "ForceLoad"
     )
-
-    --requiredExp = math.floor(Profiles[player].Data.Level * 24 / 6 * 1.25 + 1.5)
 
     local isAFK = Instance.new"BoolValue"
     isAFK.Name = "isAFK"
