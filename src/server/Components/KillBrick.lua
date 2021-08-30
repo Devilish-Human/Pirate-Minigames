@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local Maid = require(Knit.Util.Maid)
+local Janitor = require(Knit.Util.Janitor)
 local Option = require(Knit.Util.Option)
 
 local KillBrick = {}
@@ -14,7 +14,7 @@ function KillBrick.new(instance)
     
     local self = setmetatable({}, KillBrick)
     
-    self._maid = Maid.new()
+    self._janitor = Janitor.new()
     
     return self
     
@@ -38,7 +38,7 @@ function KillBrick:_setupKillBricks ()
         self.Instance.Color = Color3.fromRGB( 255, 0 , 0 )
     end
 
-    self._maid:GiveTask(self.Instance.Touched:Connect(function(part)
+    self._janitor:Add(self.Instance.Touched:Connect(function(part)
         GetPlayerFromPart(part):Match {
             Some = function(player)
                 if (player) then
@@ -67,7 +67,7 @@ end
 
 
 function KillBrick:Destroy()
-    self._maid:Destroy()
+    self._janitor:Cleanup()
 end
 
 

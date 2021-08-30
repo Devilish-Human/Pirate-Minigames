@@ -17,8 +17,9 @@ function GameUIController:KnitStart()
         wait()
     until Knit.Player.Character
 
-    local a = Knit.Player.PlayerGui.GameUI
-    local MoneyLabel = a.MoneyLabel
+    local GameUI = Knit.Player.PlayerGui.GameUI
+
+    local MoneyLabel = GameUI.MoneyLabel
 
     local function displayCoins (coins)
         MoneyLabel.Text = "$" .. tostring(coins)
@@ -28,7 +29,7 @@ function GameUIController:KnitStart()
 
     DataService.CoinsChanged:Connect (displayCoins)
 
-    local afkButton = a:FindFirstChild("Buttons"):FindFirstChild("afkButton")
+    local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")
     local isAFKToggled = Knit.Player:FindFirstChild("isAFK")
 
     local function updateAFK ()
@@ -44,24 +45,33 @@ function GameUIController:KnitStart()
         updateAFK()
     end)
 
-    local UI = a
-    local ResultsFrame = UI:FindFirstChild("EndResults")
+    local ResultsFrame = GameUI:FindFirstChild("EndResults")
+    local usernameLabel = script.UsernameLabel
     ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
     ResultsFrame.earnedLabel.Text = ""
 
-    GameService.ShowResults:Connect (function(endScreen)
+    --[[ local uiList = Instance.new ("UIListLayout")
+    uiList.Parent = ResultsFrame.ResultList
+    uiList.Padding = UDim.new (0, 3) ]]
 
-        print (endScreen)
+    local function showEndResults (...)
+        ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
+        local endResult = ...
+
+        print (endResult)
+
         Tween:Create (ResultsFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { Position = UDim2.new (0.5, 0, 0.5, 0) }):Play ()
 
-        for i,v in pairs (endScreen) do
+        local x = 0
+        for i,v in pairs (endResult) do
             local userName = i
             local message = v.Message
             local won = v.Won
-    
-            local label = script.UsernameLabel:Clone()
+
+            local label = usernameLabel:Clone()
             label.Text = ((" %s (@%s)"):format(Knit.Player.DisplayName, userName))
             label.Parent = ResultsFrame.ResultList
+            label.Position = UDim2.new (0, 0, 0, 25*x)
 
             local earnedCoins = ResultsFrame.earnedLabel
             label.ResultLabel.Text = message
@@ -78,10 +88,13 @@ function GameUIController:KnitStart()
                 Tween:Create (label, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { TextColor3 = Color3.fromRGB (255, 255, 255) }):Play()
             end
             earnedCoins.Text = ("Earned +%s coins"):format(v.Coins)
+            x += 1
         end
        wait (10)
         Tween:Create (ResultsFrame, TweenInfo.new(0.50, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { Position = UDim2.new (0.5, 0, 1.5, 0) }):Play()
-    end)
+    end
+
+    GameService.ShowResults:Connect(showEndResults)
 end
 
 

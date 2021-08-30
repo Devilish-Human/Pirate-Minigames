@@ -10,7 +10,7 @@ end
 
 
 function ShopController:KnitInit()
-    ShopService = Knit.GetService("ShopService")
+    --ShopService = Knit.GetService("ShopService")
 end
 
 

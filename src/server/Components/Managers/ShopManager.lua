@@ -1,5 +1,5 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local Maid = require(Knit.Util.Maid)
+local Janitor = require(Knit.Util.Janitor)
 
 local ShopManager = {}
 ShopManager.__index = ShopManager
@@ -11,7 +11,7 @@ function ShopManager.new(instance)
     
     local self = setmetatable({}, ShopManager)
     
-    self._maid = Maid.new()
+    self._janitor = Janitor.new()
     print ("ShopManager::new")
 
     return self
@@ -35,7 +35,7 @@ end
 
 
 function ShopManager:Destroy()
-    self._maid:Destroy()
+    self._janitor:Cleanup()
 end
 
 

@@ -9,6 +9,7 @@ local ProfileService = require(Knit.Modules.ProfileService)
 
 local Players = game:GetService("Players")
 
+-- Creating a new service
 local DataService = Knit.CreateService {
     Name = "DataService";
     Client = {
@@ -40,6 +41,7 @@ local GameProfileStore = ProfileService.GetProfileStore(
 
 local Profiles = {}
 
+-- Loading Data
 local OnPlayerAdded = function(player: Player)
     print(player.UserId)
     local profile = GameProfileStore:LoadProfileAsync(
@@ -68,13 +70,14 @@ local OnPlayerAdded = function(player: Player)
     end
 
     task.spawn(function()
-        while true do
-            local d = DataService:GetProfile(player)
-            if (d) then DataService.Client.CoinsChanged:Fire(player, d.Coins) end
-            wait(.05)
+        while wait(0.35) do
+            local coins = DataService:GetData (player, "Coins")
+            DataService.Client.CoinsChanged:Fire (player, coins)
         end
     end)
 end
+
+-- Saving Data
 local OnPlayerRemoving = function (player: Player)
     local profile = Profiles[player]
 

@@ -1,5 +1,5 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local Maid = require(Knit.Util.Maid)
+local Janitor = require(Knit.Util.Janitor)
 
 local minigame = script.Parent
 
@@ -10,7 +10,7 @@ local playersFolder = minigame:FindFirstChild("Players")
 local ingamePlayersFolder = playersFolder:FindFirstChild("InGame")
 local allPlayersFolder = playersFolder:FindFirstChild("AllPlayers")
 
-local cleanMaid = Maid.new ()
+local cleanJanitor = Janitor.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
@@ -20,6 +20,8 @@ function onTouch (hit)
 		local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
 		if (player) then
 			gameManager:addWinner (player)
+			gameManager:awardPlayer (player, "Coins", 10)
+			gameManager:awardPlayer (player, "Wins", 1)
 			player:LoadCharacter()
 			if ingamePlayersFolder:FindFirstChild(player.Name) then
 				ingamePlayersFolder:FindFirstChild(player.Name):Destroy()
@@ -27,7 +29,7 @@ function onTouch (hit)
 		end
 	end
 end
-cleanMaid:GiveTask(minigame.Finish.Touched:Connect(onTouch))
+cleanJanitor:Add(minigame.Finish.Touched:Connect(onTouch))
 
 for i = 10, 1, -1 do
 	Knit:Wait(1)
@@ -46,30 +48,49 @@ end
 
 local RoundResults = {}
 
-for i, v in pairs (gameManager.Winners) do
-	print("Awarding!")
-	if (v) then
-		gameManager:awardPlayer (v, "Coins", 10)
-		RoundResults[v.Name] = {
-			Won = true,
-			Message = "Reached the end",
-			Coins = 10
-		}
-		gameManager:awardPlayer (v, "Wins", 1)
-	end
-end
-
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then
-		gameManager:awardPlayer(v.Value, "Coins", 5)
+		if gameManager.Winners[v.Value] then
+			gameManager:awardPlayer (v, "Coins", 0)
+		else
+			gameManager:awardPlayer(v.Value, "Coins", 5)
+		end
+
 		RoundResults[v.Value.Name] = {
 			Won = false,
-			Message = "DNF",
+			Message = "Did not finish",
 			Coins = 5
 		}
 	end
 end
 
+for i, v in pairs (gameManager.Winners) do
+	print("Awarding!")
+	if (v) then
+		RoundResults[v.Name] = {
+			Won = true,
+			Message = "Reached the end",
+			Coins = 10
+		}
+	end
+end
+
+local tempResults = {}
+
+for i,v in pairs (RoundResults) do
+	if v.Won then
+		tempResults[i] = v
+	end
+end
+
+for i,v in pairs (RoundResults) do
+	if v.Won == false then
+		tempResults[i] = v
+	end
+end
+
+RoundResults = tempResults
+
 GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
-cleanMaid:Destroy()
+cleanJanitor:Cleanup()

@@ -2,7 +2,7 @@ local Players = game:GetService("Players")
 
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 local Signal = require(Knit.Util.Signal)
-local Maid = require(Knit.Util.Maid)
+local Janitor = require(Knit.Util.Janitor)
 
 local GameManager = {}
 GameManager.__index = GameManager
@@ -14,7 +14,7 @@ local GameService, DataService
 function GameManager.new(instance)
     local self = setmetatable({}, GameManager)
 
-    self._maid = Maid.new()
+    self._janitor = Janitor.new()
     self.Winners = {}
     self.RoundResults = {}
 
@@ -77,7 +77,7 @@ function GameManager:GetAttribute (attribute)
 end
 
 function GameManager:_setupObserver ()
-    self._maid:GiveTask(self.Instance.ChildAdded:Connect(function(child)
+    self._janitor:Add(self.Instance.ChildAdded:Connect(function(child)
         self.Instance:SetAttribute("CurrentMinigame", child.Name)
         self.Instance:SetAttribute("CurrentMap", child:GetAttribute("Id"))
         self.Instance:SetAttribute("Teams", game:GetService("ServerStorage").Assets.Maps:FindFirstChild(child.Name):GetAttribute("Team"))
@@ -99,7 +99,7 @@ function GameManager:_setupObserver ()
             team2:SetAttribute("Color", Color3.fromRGB(49, 49, 49))
         end
     end))
-    self._maid:GiveTask(self.Instance.ChildRemoved:Connect(function(child)
+    self._janitor:Add(self.Instance.ChildRemoved:Connect(function(child)
         self.Instance:SetAttribute("CurrentMinigame", "")
         self.Instance:SetAttribute("CurrentMap", "")
         self.Instance:SetAttribute("Teams", false)
@@ -135,7 +135,7 @@ function GameManager:Deinit()
 end
 
 function GameManager:Destroy()
-    self._maid:Destroy()
+    self._janitor:Cleanup()
 end
 
 return GameManager

@@ -1,5 +1,5 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
-local Maid = require(Knit.Util.Maid)
+local Janitor = require(Knit.Util.Janitor)
 
 local Players = game:GetService("Players")
 
@@ -13,7 +13,7 @@ function Water.new(instance)
     
     local self = setmetatable({}, Water)
     
-    self._maid = Maid.new()
+    self._janitor = Janitor.new()
     self._color = Color3.fromRGB(13, 106, 172)
     self._material = Enum.Material.Sand
 
@@ -24,7 +24,7 @@ function Water:Init()
     self.Instance.Color = self._color;
     self.Instance.Material = self._material
 
-    self._maid:GiveTask (self.Instance.Touched:Connect(function(hit)
+    self._janitor:Add (self.Instance.Touched:Connect(function(hit)
         local object = hit.Parent
         local player = Players:GetPlayerFromCharacter(object)
         if (player) then
@@ -37,7 +37,7 @@ function Water:Init()
 end
 
 function Water:Destroy()
-    self._maid:Destroy()
+    self._janitor:Cleanup()
 end
 
 
