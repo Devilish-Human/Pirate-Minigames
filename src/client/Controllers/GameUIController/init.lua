@@ -74,10 +74,6 @@ function GameUIController:KnitStart()
             local earnedCoins = ResultsFrame.earnedLabel
             label.ResultLabel.Text = message
 
-            if userName == "messiboy111" then
-                label.Text = ((" Trashyboy111 (@%s)"):format(userName))
-            end
-
             if (won == true) then
                 label.ResultLabel.TextColor3 = Color3.new (0, 1, 0)
             else
