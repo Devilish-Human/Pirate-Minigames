@@ -58,8 +58,6 @@ function GameUIController:KnitStart()
         ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
         local endResult = ...
 
-        print (endResult)
-
         Tween:Create (ResultsFrame, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { Position = UDim2.new (0.5, 0, 0.5, 0) }):Play ()
 
         local x = 0
@@ -69,13 +67,17 @@ function GameUIController:KnitStart()
             local won = v.Won
 
             local label = usernameLabel:Clone()
-            label.Text = ((" %s (@%s)"):format(Knit.Player.DisplayName, userName))
+            label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
             label.Parent = ResultsFrame.ResultList
-            label.Position = UDim2.new (0, 0, 0, 25*x)
+            label.Position = UDim2.new (0, 0, 0, 32*x)
 
             local earnedCoins = ResultsFrame.earnedLabel
             label.ResultLabel.Text = message
-            
+
+            if userName == "messiboy111" then
+                label.Text = ((" Trashyboy111 (@%s)"):format(userName))
+            end
+
             if (won == true) then
                 label.ResultLabel.TextColor3 = Color3.new (0, 1, 0)
             else
