@@ -40,7 +40,7 @@ local GameService = Knit.CreateService {
 local function GetPlayers()
     local Players = {}
     for ind, plr in next, game:GetService("Players"):GetChildren() do
-        if (plr:WaitForChild("isAFK") and not plr:WaitForChild("isAFK").Value) then
+        if (plr:FindFirstChild("isAFK") and not plr:FindFirstChild("isAFK").Value) then
             table.insert(Players, plr)
         end
     end
@@ -128,24 +128,15 @@ end
 
 -- Knit
 function GameService:KnitStart ()
-    Knit:Wait(0.5)
     while true do
         if (#GetPlayers() < Knit.Config.minPlayers) then
-            self:fireStatus (("Waiting for enough player(s) (%s/%s)"):format (#GetPlayers(), Knit.Config.minPlayers))
+            self:fireStatus (("Waiting for enough player(s)"))
             Knit:Wait()
         else
             self:_intermission()
             self:_startGame()
         end
     end
-
-    game.Players.PlayerRemoving:Connect(function(player)
-        local gameManager = self:GetGameManager()
-        local playerObject = gameManager:GetCurrentMinigame().Players.InGame:FindFirstChild(player.Name)
-        if (playerObject) then
-            playerObject:Destroy()
-        end
-    end)
 end
 function GameService:KnitInit ()
     MinigameService = Knit.GetService("MinigameService")

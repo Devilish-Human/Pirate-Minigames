@@ -1,8 +1,8 @@
 local groupTags = {
     [255] = {
-        TagText = "Owner",
-        TagColor = Color3.fromRGB (255, 8, 0)
-    };
+		TagText = "Owner",
+		TagColor = Color3.fromRGB (255, 8, 0)
+	};
     [245] = {
         TagText = "Developer",
         TagColor = Color3.fromRGB (255, 100, 60)

@@ -24,18 +24,10 @@ local ProfileTemplate = {
     Coins = 0;
     Wins = 0;
     Level = 1;
-
-    -- Inventory
-    Inventory = {
-        Gears = {};
-        Effects = {};
-        Titles = {};
-        Characters = {};
-    };
 }
 
 local GameProfileStore = ProfileService.GetProfileStore(
-    "PlayerData-dev",
+    "PlayerData-dev2",
     ProfileTemplate
 )
 
@@ -44,15 +36,16 @@ local Profiles = {}
 -- Loading Data
 local OnPlayerAdded = function(player: Player)
     print(player.UserId)
-    local profile = GameProfileStore:LoadProfileAsync(
-        "player_" .. player.UserId,
-        "ForceLoad"
-    )
 
     local isAFK = Instance.new"BoolValue"
     isAFK.Name = "isAFK"
     isAFK.Value = false
     isAFK.Parent = player
+
+    local profile = GameProfileStore:LoadProfileAsync(
+        "player_" .. player.UserId,
+        "ForceLoad"
+    )
 
     if (profile) then
         profile:ListenToRelease(function()
@@ -70,7 +63,7 @@ local OnPlayerAdded = function(player: Player)
     end
 
     task.spawn(function()
-        while wait(0.35) do
+        while task.wait(0.35) do
             local coins = DataService:GetData (player, "Coins")
             DataService.Client.CoinsChanged:Fire (player, coins)
         end
@@ -129,6 +122,14 @@ end
 
 
 function DataService:KnitStart ()
+    for _, plr in pairs (game:GetService("Players"):GetChildren()) do
+        if plr then
+            OnPlayerAdded(plr)
+        end
+    end
+end
+
+function DataService:KnitInit()
     Players.PlayerAdded:Connect(OnPlayerAdded)
     Players.PlayerRemoving:Connect(OnPlayerRemoving)
 end

@@ -5,14 +5,14 @@ local ShopService = Knit.CreateService {
     Client = {};
 }
 
+function ShopService:PurchaseItem ()
+end
 
 function ShopService:KnitStart()
-    
 end
 
 
 function ShopService:KnitInit()
-    
 end
 
 

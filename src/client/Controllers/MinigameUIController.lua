@@ -9,7 +9,7 @@ local RBXWait = require(Knit.Shared.RBXWait)
 
 local TweenService = game:GetService("TweenService")
 
-local GameService, DataService
+local GameService
 
 local MinigameUIController = Knit.CreateController { Name = "MinigameUIController" }
 
@@ -40,13 +40,10 @@ function MinigameUIController:KnitStart()
     GameService.DisplayStatus:Connect(function(message)
         minigameUI.StatusLabel.Text = message
     end)
-    local coins = DataService:GetData ("Coins")
-    print("Coins:", coins)
 end
 
 function MinigameUIController:KnitInit()
     GameService = Knit.GetService("GameService")
-    DataService = Knit.GetService("DataService")
 end
 
 
