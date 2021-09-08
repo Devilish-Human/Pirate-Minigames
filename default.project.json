@@ -8,6 +8,9 @@
         "$path": "src/shared",
         "Roact": {
           "$path": "vendor/Roact/src"
+        },
+        "TopbarPlus": {
+          "$path": "vendor/TopbarPlus/src"
         }
       },
       "Knit": {

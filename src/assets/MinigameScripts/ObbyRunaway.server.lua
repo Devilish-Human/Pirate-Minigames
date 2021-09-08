@@ -50,11 +50,7 @@ local RoundResults = {}
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then
-		if not gameManager.Winners[v.Value] then
-			gameManager:awardPlayer (v, "Coins", 5)
-		else
-			gameManager:awardPlayer(v.Value, "Coins", 0)
-		end
+		gameManager:awardPlayer (v, "Coins", 5)
 
 		RoundResults[v.Value.Name] = {
 			Won = false,

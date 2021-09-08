@@ -3,6 +3,8 @@ local Knit = require(game:GetService("ReplicatedStorage").Knit)
 local Tween = game:GetService("TweenService")
 
 local Prompt = require(Knit.Modules.Prompt)
+local ConvertComma = require(Knit.Modules.ConvertComma)
+local Icon = require(Knit.Shared.TopbarPlus)
 
 local GameUIController = Knit.CreateController { Name = "GameUIController" }
 
@@ -19,15 +21,25 @@ function GameUIController:KnitStart()
 
     local GameUI = Knit.Player.PlayerGui.GameUI
 
-    local MoneyLabel = GameUI.MoneyLabel
-
-    local function displayCoins (coins)
-        MoneyLabel.Text = "$" .. tostring(coins)
-    end
-
-    displayCoins(DataService.GetData("Coins"))
-
-    DataService.CoinsChanged:Connect (displayCoins)
+    Icon.new()
+        :setName("CashSpinnerIcon")
+        :setRight()
+        :lock()
+        :setSize(100, 32)
+        :give(function(icon)
+            local NumberSpinner = require(Knit.Shared.NumberSpinner)
+            local labelSpinner = NumberSpinner.new()
+            icon:convertLabelToNumberSpinner(labelSpinner)
+            labelSpinner.Name = "LabelSpinner"
+            labelSpinner.Commas = true
+            labelSpinner.Decimals = 0
+            labelSpinner.Duration = 0.25
+            coroutine.wrap(function()
+                DataService.CoinsChanged:Connect(function(...)
+                    labelSpinner.Value = ...
+                end)
+            end)()
+        end)
 
     local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")
     local isAFKToggled = Knit.Player:FindFirstChild("isAFK")
@@ -55,6 +67,9 @@ function GameUIController:KnitStart()
     uiList.Padding = UDim.new (0, 3) ]]
 
     local function showEndResults (...)
+        local NumberSpinner = require(Knit.Shared.NumberSpinner)
+        local labelSpinner = NumberSpinner.new()
+
         ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
         local endResult = ...
 
@@ -85,6 +100,10 @@ function GameUIController:KnitStart()
             else
                 Tween:Create (label, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { TextColor3 = Color3.fromRGB (255, 255, 255) }):Play()
             end
+            labelSpinner.Commas = false
+            labelSpinner.Decimals = 0
+            labelSpinner.Duration = 0.24
+            labelSpinner.Value = v.Coins
             earnedCoins.Text = ("Earned +%s coins"):format(v.Coins)
             x += 1
         end

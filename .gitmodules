@@ -6,3 +6,6 @@
 	path = vendor/Roact
 	url = https://github.com/roblox/Roact.git
 	branch = master
+[submodule "vendor/TopbarPlus"]
+	path = vendor/TopbarPlus
+	url = https://github.com/1ForeverHD/TopbarPlus.git
