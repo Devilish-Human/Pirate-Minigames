@@ -14,12 +14,22 @@ local cleanJanitor = Janitor.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
-local conveyorSpeed = 1
-local stopConveyor
+local spawnDelay = 0.15
+local canSpawnBlocks = false
 
-local function SetConveyorState (currentTime: number)
-	if (currentTime < 90 and currentTime > 70) then
-		-- ConveyorBelt.Speed = 8
+local function setSpeedWithTime (remainingTime)
+	if (remainingTime < 90 and remainingTime >= 75) then
+		minigame.Conveyor:SetAttribute("Speed", 8)
+	elseif remainingTime < 75 and remainingTime >= 55 then
+		minigame.Conveyor:SetAttribute("Speed", 12)
+	elseif remainingTime < 55 and remainingTime >= 35 then
+		minigame.Conveyor:SetAttribute("Speed", 16)
+	elseif remainingTime < 35 and remainingTime >= 5 then
+		minigame.Conveyor:SetAttribute("Speed", 20)
+	elseif remainingTime < 5 and remainingTime >= 4 then
+		minigame.Conveyor:SetAttribute("Speed", 7)
+	else
+		minigame.Conveyor:SetAttribute("Speed", 0)
 	end
 end
 
@@ -27,22 +37,159 @@ for i = 10, 1, -1 do
 	Knit:Wait(1)
 	GameService:fireStatus (("Minigame will start in %s seconds"):format(tostring(i)))
 end
+canSpawnBlocks = true
 
-minigame:FindFirstChild("BeginLine"):Destroy()
+for _,v in pairs(ingamePlayersFolder:GetChildren()) do
+	if v.Value.Character then
+		local human = v.Value.Character:FindFirstChild("Humanoid")
+		if human and human.RigType == Enum.HumanoidRigType.R6 then
+			human.JumpPower = 0
+		else
+			human.JumpHeight = 0
+		end
+	end
+end
+
+
+function SpawnRandomPart ()
+	local touchConnection
+	if (canSpawnBlocks) then
+		local rotations = {0, 90}
+		local randomRotation = rotations[math.random(1, #rotations)]
+		
+		local allParts = game:GetService("ServerStorage").Assets.Objects.Parts:GetChildren()
+		
+		--local partModel = allParts[math.random(1, #allParts)]:Clone()
+		local part = allParts[math.random(1, #allParts)]:Clone()
+		
+		--local part = Instance.new("Part")
+		part.Parent = minigame.Blocks
+		
+		local xPos, zPos, yRotate, xSize, zSize
+		
+		xPos = math.random(488, 516)
+		--zPos = math.random(-154, 9)
+		
+		yRotate = randomRotation
+		
+		--xSize = math.random(37, 40)
+		--zSize = math.random(4, 10)
+		part.Position = Vector3.new(xPos, 6, -118.5)
+		part.Rotation = Vector3.new(0, yRotate, 0)
+		
+		part.Color = Color3.fromRGB(math.random(1, 255),math.random(1, 255), math.random(1, 255))
+		
+		debounce = false
+		cleanJanitor:Add(part.Touched:Connect(function(hit)
+			if not debounce then
+				debounce = true
+				local humanoid = hit.Parent:FindFirstChild("Humanoid")
+				if humanoid then
+					humanoid:TakeDamage(10)
+				end
+				wait(.75)
+				debounce = false
+			end
+		end))
+	else
+		if (minigame.Conveyor:GetAttribute("Speed") > 0 and minigame.Conveyor:GetAttribute("Speed") <= 6) then canSpawnBlocks = false end
+		for _,v in pairs(minigame.Blocks:GetChildren()) do
+			if (v.Name == "P1" or v.Name == "P2") then
+				v:Destroy()
+			end
+		end
+	end
+end
+
+task.spawn(function()
+	while canSpawnBlocks do
+		for i = 1, 3, 1 do
+			SpawnRandomPart()
+			Knit:Wait(1)
+		end
+		Knit:Wait(spawnDelay * 3)
+	end
+end)
 
 for i = minigameObject:GetAttribute("Length"), 1, -1 do
 	GameService:fireStatus(("The minigame will end in %s seconds!"):format(tostring(i)))
 	if (#ingamePlayersFolder:GetChildren() <= 0) then
 		break
 	end
+	setSpeedWithTime(i)
 	Knit:Wait(1)
 end
 
+for _, plr in pairs (ingamePlayersFolder:GetChildren()) do
+	if plr then
+		gameManager:addWinner (plr)
+		gameManager:awardPlayer (plr, "Coins", 10)
+		gameManager:awardPlayer (plr, "Wins", 1)
+	end
+end
+task.wait(2)
+
+for _,plr in pairs(game.Players:GetPlayers()) do
+	if plr.Character then
+		local human = plr.Character:FindFirstChild("Humanoid")
+		if human and human.RigType == Enum.HumanoidRigType.R6 then
+			human.JumpPower = 50
+		else
+			human.JumpHeight = 7.2
+		end
+	end
+end
+
+local RoundResults = {}
+
+local loseMessages = { "Fell into the void", "Got pushed off.", "Lost." }
+local wonMessages = { "Survived the blocks", "Didn't get pushed", "Won." }
+
+for i, v in pairs (allPlayersFolder:GetChildren()) do
+	if (v.Value ~= nil) then
+		gameManager:awardPlayer (v.Value, "Coins", 5)
+
+		local message = loseMessages[math.random(1, #loseMessages)]
+
+		RoundResults[v.Value.Name] = {
+			Won = false,
+			Message = message,
+			Coins = 5
+		}
+	end
+end
+
+for i, v in pairs (gameManager.Winners) do
+	print("Awarding!")
+	if (v) then
+		gameManager:awardPlayer (v, "Coins", 5)
+		local message = wonMessages[math.random(1, #wonMessages)]
+		RoundResults[v.Name] = {
+			Won = true,
+			Message = message,
+			Coins = 10
+		}
+	end
+end
+
+local tempResults = {}
+
+for i,v in pairs (RoundResults) do
+	if v.Won then
+		tempResults[i] = v
+	end
+end
+
+for i,v in pairs (RoundResults) do
+	if v.Won == false then
+		tempResults[i] = v
+	end
+end
+
+RoundResults = tempResults
+
+
+canSpawnBlocks = false
+GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
 cleanJanitor:Cleanup()
-
--- Dens;100
---Elast;1
---ElastWe;100
---Fric;2
---FricWe;100

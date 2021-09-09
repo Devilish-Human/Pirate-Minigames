@@ -14,7 +14,7 @@ local cleanJanitor = Janitor.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
-function onTouch (hit)
+cleanJanitor:Add(minigame.Finish.Touched:Connect(function(hit)
 	local human = hit.Parent:FindFirstChild("Humanoid")
 	if (human) then
 		local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
@@ -28,8 +28,7 @@ function onTouch (hit)
 			end
 		end
 	end
-end
-cleanJanitor:Add(minigame.Finish.Touched:Connect(onTouch))
+end))
 
 for i = 10, 1, -1 do
 	Knit:Wait(1)
@@ -48,9 +47,14 @@ end
 
 local RoundResults = {}
 
+local loseMessages = { "Stayed behind.", "Did not finish.", "Ran slow.", "Lost." }
+local wonMessages = { "Stayed ahead.", "Reached the end.", "Ran fast.", "Won." }
+
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then
 		gameManager:awardPlayer (v, "Coins", 5)
+
+		local message = loseMessages[math.random(1, #loseMessages)]
 
 		RoundResults[v.Value.Name] = {
 			Won = false,
@@ -63,6 +67,8 @@ end
 for i, v in pairs (gameManager.Winners) do
 	print("Awarding!")
 	if (v) then
+		local message = wonMessages[math.random(1, #wonMessages)]
+
 		RoundResults[v.Name] = {
 			Won = true,
 			Message = "Reached the end",

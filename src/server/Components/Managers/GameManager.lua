@@ -100,6 +100,9 @@ function GameManager:_setupObserver ()
         end
     end))
     self._janitor:Add(self.Instance.ChildRemoved:Connect(function(child)
+        if (child:FindFirstChild("MinigameScript")) then
+            child:FindFirstChild("MinigameScript"):Destroy()
+        end
         self.Instance:SetAttribute("CurrentMinigame", "")
         self.Instance:SetAttribute("CurrentMap", "")
         self.Instance:SetAttribute("Teams", false)

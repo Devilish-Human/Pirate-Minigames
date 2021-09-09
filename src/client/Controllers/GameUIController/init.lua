@@ -1,5 +1,7 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 
+local Janitor = require(Knit.Util.Janitor)
+
 local Tween = game:GetService("TweenService")
 
 local Prompt = require(Knit.Modules.Prompt)
@@ -14,6 +16,8 @@ function GameUIController:GetGameUI ()
     return Knit.Player.PlayerGui.GameUI
 end
 
+local UIJanitor = Janitor.new()
+
 function GameUIController:KnitStart()
     repeat
         wait()
@@ -22,23 +26,18 @@ function GameUIController:KnitStart()
     local GameUI = Knit.Player.PlayerGui.GameUI
 
     Icon.new()
-        :setName("CashSpinnerIcon")
+        :setName("CoinIcon")
+        :setImage(363483133)
+        :setLabel(DataService.GetData("Coins"))
         :setRight()
         :lock()
-        :setSize(100, 32)
         :give(function(icon)
-            local NumberSpinner = require(Knit.Shared.NumberSpinner)
-            local labelSpinner = NumberSpinner.new()
-            icon:convertLabelToNumberSpinner(labelSpinner)
-            labelSpinner.Name = "LabelSpinner"
-            labelSpinner.Commas = true
-            labelSpinner.Decimals = 0
-            labelSpinner.Duration = 0.25
-            coroutine.wrap(function()
-                DataService.CoinsChanged:Connect(function(...)
-                    labelSpinner.Value = ...
-                end)
-            end)()
+            return DataService.CoinsChanged:Connect(function(coins)
+                icon:setLabel(tostring(coins))
+                if coins >= 1000 then
+                    icon:setCaption(tostring(ConvertComma(coins)))
+                end
+            end)
         end)
 
     local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")
@@ -52,10 +51,10 @@ function GameUIController:KnitStart()
         end
     end
 
-    afkButton.MouseButton1Click:Connect(function()
+    UIJanitor:Add(afkButton.MouseButton1Click:Connect(function()
         GameService:ToggleAFK()
         updateAFK()
-    end)
+    end))
 
     local ResultsFrame = GameUI:FindFirstChild("EndResults")
     local usernameLabel = script.UsernameLabel
@@ -66,7 +65,7 @@ function GameUIController:KnitStart()
     uiList.Parent = ResultsFrame.ResultList
     uiList.Padding = UDim.new (0, 3) ]]
 
-    local function showEndResults (...)
+    UIJanitor:Add(GameService.ShowResults:Connect(function(...)
         local NumberSpinner = require(Knit.Shared.NumberSpinner)
         local labelSpinner = NumberSpinner.new()
 
@@ -96,7 +95,7 @@ function GameUIController:KnitStart()
             end
             if (userName == Knit.Player.Name) then
                 --label.TextColor3 = Color3.fromRGB(218, 145, 0)
-                Tween:Create (label, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { TextColor3 = Color3.fromRGB (218, 145, 0) }):Play()
+                Tween:Create (label, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { BackgroundColor3 = Color3.fromRGB (218, 145, 0) }):Play()
             else
                 Tween:Create (label, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { TextColor3 = Color3.fromRGB (255, 255, 255) }):Play()
             end
@@ -107,18 +106,17 @@ function GameUIController:KnitStart()
             earnedCoins.Text = ("Earned +%s coins"):format(v.Coins)
             x += 1
         end
-       wait (10)
+       wait (5.5)
         Tween:Create (ResultsFrame, TweenInfo.new(0.50, Enum.EasingStyle.Quint, Enum.EasingDirection.In), { Position = UDim2.new (0.5, 0, 1.5, 0) }):Play()
-    end
-
-    GameService.ShowResults:Connect(showEndResults)
+    end))
 end
 
 
 function GameUIController:KnitInit()
     DataService = Knit.GetService("DataService")
     GameService = Knit.GetService("GameService")
-end
 
+    UIJanitor:Cleanup()
+end
 
 return GameUIController
