@@ -21,7 +21,7 @@ function module:EquipEffect (player: Player, name: string)
     end
 end
 
-function module:RemoveAllTrails (player: Player)
+function module:RemoveAllEffects (player: Player)
     if (player) then
         if (player.Character and player.Character:FindFirstChild("HumanoidRootPart")) then
             for i,v in pairs (player.Character.HumanoidRootPart:GetChildren()) do
@@ -35,5 +35,4 @@ function module:RemoveAllTrails (player: Player)
         end
     end
 end
-
 return module

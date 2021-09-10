@@ -25,7 +25,7 @@ function LoadPlayer (player: Player)
     effectFolder.Parent = inventoryFolder
 
     local titleFolder = Instance.new("Folder")
-    titleFolder.Name = "Tags"
+    titleFolder.Name = "Tag"
     titleFolder.Parent = inventoryFolder
 
     local characterFolder = Instance.new("Folder")
@@ -42,7 +42,7 @@ function LoadPlayer (player: Player)
                     itemCheck.Name = item
                     itemCheck.Value = value
 
-                    if itemCat == "Gears" then
+                    if itemCat == "Gear" then
                         itemCheck.Parent = gearFolder
                         if itemCheck.Value then
                             local gearItem = game.ServerStorage.Assets.ShopItems["Gears"]:FindFirstChild(itemCheck.Name)
@@ -66,6 +66,23 @@ function LoadPlayer (player: Player)
 end
 function SavePlayer (player: Player)
     
+end
+
+function InventoryService:GetInventory(player)
+    return player.Inventory
+end
+
+function InventoryService:AddToInventory (player: Player, itemToPurchase)
+    local playerInventory = self:GetInventory(player)
+
+    local itemCheck = Instance.new("BoolValue")
+    itemCheck.Name = itemToPurchase.Name
+    itemCheck.Value = true
+    itemCheck.Parent = player.Inventory:FindFirstChild(itemToPurchase:GetAttribute("Category"))
+
+    for i,v in pairs(self:GetInventory(player):GetChildren()) do
+        print(i,v)
+    end
 end
 
 function InventoryService:KnitStart()

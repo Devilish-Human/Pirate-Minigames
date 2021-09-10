@@ -26,6 +26,7 @@
 
     "ServerStorage": {
       "Assets": {
+        "$ignoreUnknownInstances": true,
         "$path": "src/assets"
       }
     },

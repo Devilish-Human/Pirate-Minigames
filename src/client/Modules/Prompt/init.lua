@@ -18,7 +18,7 @@ local Player = Players.LocalPlayer
 --[[
 local SettingsTbl = {
 	Title = "", -- This will be the title of our prompt
-	Body = "", -- This will be the body of our prompt
+	Text = "", -- This will be the body of our prompt
 	
 	-- V These are optional V --
 	
@@ -80,6 +80,14 @@ function PromptHandler:Create(settingsTbl)
 	if DenySettings then
 		assert(DenySettings.Text, "Text for DenyButton not found")
 		CreateButton(DenyButton, DenySettings.Text, DenySettings.Callback)
+	end
+
+	if not DenySettings then
+		AcceptButton.Size = UDim2.new(1, 0, 1, 0)
+	end
+
+	if not AcceptSettings then
+		DenyButton.Size = UDim2.new(1, 0, 1, 0)
 	end
 
 	Prompt.Parent = Player.PlayerGui

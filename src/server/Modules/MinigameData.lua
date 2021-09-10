@@ -1,1 +1,1 @@
-return { "ObbyRunaway", "ConveyorFrenzy" }
+return { "ObbyRunaway" }

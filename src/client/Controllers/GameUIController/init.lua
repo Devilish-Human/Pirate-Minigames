@@ -3,6 +3,7 @@ local Knit = require(game:GetService("ReplicatedStorage").Knit)
 local Janitor = require(Knit.Util.Janitor)
 
 local Tween = game:GetService("TweenService")
+local TweenService = game:GetService("TweenService")
 
 local Prompt = require(Knit.Modules.Prompt)
 local ConvertComma = require(Knit.Modules.ConvertComma)
@@ -25,6 +26,8 @@ function GameUIController:KnitStart()
 
     local GameUI = Knit.Player.PlayerGui.GameUI
 
+    local shopFrame = GameUI:FindFirstChild("ShopFrame")
+
     Icon.new()
         :setName("CoinIcon")
         :setImage(363483133)
@@ -38,6 +41,18 @@ function GameUIController:KnitStart()
                     icon:setCaption(tostring(ConvertComma(coins)))
                 end
             end)
+        end)
+    Icon.new()
+        :setName ("ShopIcon")
+        :setImage(4882429582)
+        :setLabel("Shop")
+        :bindEvent("selected", function()
+            print("Selected")
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 0.5, 0) }):Play()
+        end)
+        :bindEvent("deselected", function()
+            print("Deselected!")
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 1.5, 0) }):Play()
         end)
 
     local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")

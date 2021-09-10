@@ -9,7 +9,7 @@ local MinigameService = Knit.CreateService {
 local ServerStorage = game:GetService("ServerStorage")
 local Assets = ServerStorage:FindFirstChild("Assets")
 local MapsFolder = Assets:FindFirstChild("Maps")
-local ScriptsFolder = Assets:FindFirstChild("MinigameScripts")
+local ScriptsFolder = Assets:FindFirstChild("MinigameSource")
 
 --local Minigames = { "ObbyRunaway", "Sweeper", "Swordvival" }
 local Minigames = require (Knit.Modules.MinigameData)
