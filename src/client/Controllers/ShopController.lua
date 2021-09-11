@@ -122,6 +122,12 @@ function ShopController:KnitStart()
         end
     end)
 
+    self:LoadItems("Gear")
+end
+function ShopController:KnitInit()
+    GameUIController = Knit.GetController("GameUIController")
+    ShopService = Knit.GetService("ShopService")
+
     ShopService.PrompEvent:Connect(function(messageType, ...)
         if (messageType) == "Error" then
             local content = {...}
@@ -140,12 +146,6 @@ function ShopController:KnitStart()
             }
         end
     end)
-
-    self:LoadItems("Gear")
-end
-function ShopController:KnitInit()
-    GameUIController = Knit.GetController("GameUIController")
-    ShopService = Knit.GetService("ShopService")
 end
 
 

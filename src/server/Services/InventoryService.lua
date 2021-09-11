@@ -1,3 +1,4 @@
+local Players = game:GetService("Players")
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 
 local DataStoreService = game:GetService("DataStoreService")
@@ -38,28 +39,23 @@ function LoadPlayer (player: Player)
         local Inventory = inventoryData:GetAsync ("player_" .. player.UserId)
 
         if Inventory then
-            for itemCat, Table in pairs (Inventory) do
-                for item, value in pairs (Table) do
-                    local itemCheck = Instance.new("BoolValue")
-                    itemCheck.Name = item
-                    itemCheck.Value = value
+            for name, Table in pairs (Inventory) do
+                for i,v in pairs (Table) do
+                    local Bool = Instance.new("BoolValue")
+                    Bool.Name = i
+                    Bool.Value = v
 
-                    if itemCat == "Gear" then
-                        itemCheck.Parent = gearFolder
-                        if itemCheck.Value then
-                            local gearItem = shopItems["Gears"]:FindFirstChild(itemCheck.Name)
-                            local bpck = gearItem:Clone()
-                            local strtpck = gearItem:Clone()
+                    Bool.Parent = inventoryFolder[name]
 
-                            bpck.Parent = player.Backpack
-                            strtpck.Parent = player.StarterPack
+                    if (name == "Gear") then
+                        if Bool.Value then
+                            local gear = game.ReplicatedStorage.ShopItems.Gear:FindFirstChild(Bool.Name)
+                            local clone = gear:Clone()
+                            local clone2 = gear:Clone()
+    
+                            clone.Parent = player.Backpack
+                            clone2.Parent = player.StarterGear
                         end
-                    elseif itemCat == "Effect" then
-                        itemCheck.Parent = effectFolder
-                    elseif itemCat == "Title" then
-                        itemCheck.Parent = titleFolder
-                    else
-                        itemCheck.Parent = characterFolder
                     end
                 end
             end
@@ -69,15 +65,17 @@ end
 function SavePlayer (player: Player)
     local playerInventory = InventoryService:GetInventory(player)
 
-    local saveTable = {}
-    for _, v in pairs (playerInventory:GetChildren()) do
-        saveTable[v.Name] = {}
-        for _, item in pairs (v:GetChildren()) do
-            saveTable[v.Name][item.Name] = item.Value
+    pcall(function()
+        local inventoryTable = {}
+        for i,v in pairs (playerInventory:GetChildren()) do
+            inventoryTable[v.Name] = {}
+            for _, item in pairs (v:GetChildren()) do
+                inventoryTable[v.Name][item.Name] = item.Value
+            end
         end
-    end
 
-    inventoryData:SetAsync("player_" .. player.UserId, saveTable)
+        inventoryData:SetAsync("player_" .. player.UserId, inventoryTable)
+    end)
 end
 
 function InventoryService:GetInventory(player)
@@ -89,12 +87,10 @@ function InventoryService:AddToInventory (player: Player, itemToPurchase)
 
     local itemCheck = Instance.new("BoolValue")
     itemCheck.Name = itemToPurchase.Name
-    itemCheck.Value = true
-    itemCheck.Parent = player.Inventory:FindFirstChild(itemToPurchase:GetAttribute("Category"))
+    itemCheck.Value = false
+    itemCheck.Parent = playerInventory:FindFirstChild(itemToPurchase:GetAttribute("Category"))
 
-    for i,v in pairs(self:GetInventory(player):GetChildren()) do
-        print(i,v)
-    end
+    SavePlayer(player)
 end
 
 function InventoryService:KnitStart()
@@ -109,6 +105,14 @@ end
 function InventoryService:KnitInit()
     game:GetService("Players").PlayerAdded:Connect (LoadPlayer)
     game:GetService("Players").PlayerRemoving:Connect (SavePlayer)
+
+    task.spawn(function()
+        while wait(30) do
+            for _, player in pairs(game.Players:GetPlayers()) do
+                SavePlayer(player)
+            end
+        end
+    end)
 end
 
 
