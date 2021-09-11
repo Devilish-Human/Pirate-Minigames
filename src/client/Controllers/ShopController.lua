@@ -102,11 +102,14 @@ function ShopController:LoadItems(Category)
                 end
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 1
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(0.25, 0, 0.143, 0)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Center
             else
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 0
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(1.214, 0, 0, 0)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Left
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = convertComma(currItem:GetAttribute("Cost"))
             end
+            gameUI.ShopFrame.infoFrame.Visible = true
         end)
     end
 end
@@ -119,6 +122,8 @@ function ShopController:KnitStart()
     gameUI.ShopFrame.infoFrame.purchaseButton.MouseButton1Click:Connect(function()
         if (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Equip") then
             ShopService:EquipItem(selected.Name)
+        elseif (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Unequip") then
+            ShopService:UnequipItem (selected.Name)
         else
             ShopService:PurchaseItem(selected.Name)
         end
@@ -143,7 +148,7 @@ function ShopController:KnitInit()
                     Text = "Accept", -- This will be the Text of the AcceptButton
                     Callback = function() -- This function will run when the player clicks the AcceptButton
                         return
-                    end,
+                    end
                 }
             }
         end

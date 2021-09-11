@@ -56,6 +56,17 @@ function LoadPlayer (player: Player)
                             clone.Parent = player.Backpack
                             clone2.Parent = player.StarterGear
                         end
+                    elseif (name == "Tag") then
+                        if Bool.Value then
+                            local tag = game.ReplicatedStorage.ShopItems.Tag:FindFirstChild(Bool.Name)
+                            local clone = tag:Clone()
+    
+                            clone.Parent = player.Character.Head
+
+                            player.CharacterAdded:Connect(function(char)
+                                clone.Parent = char.Head
+                            end)
+                        end
                     end
                 end
             end

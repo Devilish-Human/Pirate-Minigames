@@ -1,3 +1,5 @@
+repeat task.wait() until game:IsLoaded()
+
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 local Component = require(Knit.Util.Component)
 
