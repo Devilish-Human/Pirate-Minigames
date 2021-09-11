@@ -100,6 +100,14 @@ function DataService:GetInventoryData (player: Player, inventoryName: string)
     end
 end
 
+function DataService:ChangeData (player: Player, dataName: string, value: any)
+    local profile = self:GetProfile(player)
+
+    if profile then
+        profile[dataName] = value
+    end
+end
+
 function DataService:AddToInventory (player: Player, inventoryName: string, itemName: string)
     local inventoryData = self:GetInventoryData (player, inventoryName)
     inventoryData[itemName] = false

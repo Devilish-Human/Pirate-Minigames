@@ -7,6 +7,8 @@ local InventoryService = Knit.CreateService {
     Client = {};
 }
 
+local shopItems = game:GetService("ReplicatedStorage").ShopItems
+
 local inventoryData = DataStoreService:GetDataStore ("InventoryData-dev2")
 
 local toInstance = require(Knit.Modules.ToInstance)
@@ -45,7 +47,7 @@ function LoadPlayer (player: Player)
                     if itemCat == "Gear" then
                         itemCheck.Parent = gearFolder
                         if itemCheck.Value then
-                            local gearItem = game.ServerStorage.Assets.ShopItems["Gears"]:FindFirstChild(itemCheck.Name)
+                            local gearItem = shopItems["Gears"]:FindFirstChild(itemCheck.Name)
                             local bpck = gearItem:Clone()
                             local strtpck = gearItem:Clone()
 
@@ -65,7 +67,17 @@ function LoadPlayer (player: Player)
     end)
 end
 function SavePlayer (player: Player)
-    
+    local playerInventory = InventoryService:GetInventory(player)
+
+    local saveTable = {}
+    for _, v in pairs (playerInventory:GetChildren()) do
+        saveTable[v.Name] = {}
+        for _, item in pairs (v:GetChildren()) do
+            saveTable[v.Name][item.Name] = item.Value
+        end
+    end
+
+    inventoryData:SetAsync("player_" .. player.UserId, saveTable)
 end
 
 function InventoryService:GetInventory(player)
@@ -96,6 +108,7 @@ end
 
 function InventoryService:KnitInit()
     game:GetService("Players").PlayerAdded:Connect (LoadPlayer)
+    game:GetService("Players").PlayerRemoving:Connect (SavePlayer)
 end
 
 

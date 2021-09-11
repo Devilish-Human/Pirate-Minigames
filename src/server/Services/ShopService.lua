@@ -4,14 +4,16 @@ local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
 local ShopService = Knit.CreateService {
     Name = "ShopService";
     Client = {
-        PrompEvent = RemoteSignal.new()
+        PrompEvent = RemoteSignal.new(),
+        ShopItemEvent = RemoteSignal.new()
     };
 }
 
-local shopItems = game:GetService("ServerStorage").Assets.ShopItems
+local shopItems = game:GetService("ReplicatedStorage").ShopItems
 
 local DataService, InventoryService
 function ShopService:PurchaseItem (player: Player, itemName: string)
+    print("A")
     local profile = DataService:GetProfile(player)
 
     local itemToPurchase
@@ -19,14 +21,11 @@ function ShopService:PurchaseItem (player: Player, itemName: string)
         for i,v in pairs(shopItems:GetChildren()) do
             for _, item in pairs (v:GetChildren()) do
                 if item.Name == itemName then
-                    if (item == nil) then
-                        return
-                    end
                     itemToPurchase = item
                 end
             end
         end
-        --
+        
         if (profile.Coins >= itemToPurchase:GetAttribute("Cost")) then
             if (self:AlreadyOwnsItem(player, itemToPurchase)) then
                 self.Client.PrompEvent:Fire (player, "Error", "Already own item!", ("You already own this item."):format(itemName))
@@ -43,18 +42,24 @@ function ShopService:PurchaseItem (player: Player, itemName: string)
 end
 
 function ShopService:EquipItem (player: Player, item)
-    local character = player.Character or player.CharacterAdded:Wait()
     
-    if (item:GetAttribute("Category") == "Tag") then
-        if character then
-            local tag = item:Clone()
-            tag.Parent = character:FindFirstChild("Head")
+    if (item:GetAttribute("Category") == "Gear") then
+        local gear = shopItems:FindFirstChild(item.Name)
+
+        if gear then
+            if self:AlreadyOwnsItem(player, gear) and not player.StarterGear:FindFirstChild(gear.Name) then
+                local bpckClone = gear:Clone()
+                local strterClone = gear:Clone()
+
+                bpckClone.Parent = player.Backpack
+                strterClone.Parent = player.StarterGear
+            end
         end
     end
 end
 
 function ShopService:AlreadyOwnsItem (player, item)
-    if (InventoryService:GetInventory(player)[item:GetAttribute("Category")]:FindFirstChild(item.Name)) then
+    if (InventoryService:GetInventory(player):FindFirstChild(item:GetAttribute("Category")):FindFirstChild(item.Name)) then
         return true
     end
     return false
