@@ -33,20 +33,12 @@ function ChatService:KnitStart()
         elseif (ChatData.UserTags[player.UserId]) then
             speaker:SetExtraData("Tags", {ChatData.UserTags[player.UserId]})
             speaker:SetExtraData("ChatColor", ChatData.UserColor[player.UserId])
-        else
-            local profile = DataService:GetProfile (player)
-            if (profile) then
-                if (profile.Equipped_Tag) then
-                    local storeItems = game:GetService("ServerStorage").Assets.StoreItems
-                    local item_tag = storeItems:FindFirstChild ("item_tag")
-                
-                    if item_tag[profile:GetData (player, "Equipped_Tag")] then
-                        speaker:SetExtraData ("Tags", { TagText = item_tag[profile:GetData (player, "Equipped_Tag")]:GetAttribute ("Name"), TagColor = item_tag[profile:GetData (player, "Equipped_Tag")]:GetAttribute ("Color")})
-                    end
-                end
-            end
         end
     end)
+end
+
+function ChatService:GetRXChat ()
+    return RChatService
 end
 
 function ChatService:KnitInit()

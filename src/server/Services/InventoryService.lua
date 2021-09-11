@@ -60,11 +60,14 @@ function LoadPlayer (player: Player)
                         if Bool.Value then
                             local tag = game.ReplicatedStorage.ShopItems.Tag:FindFirstChild(Bool.Name)
                             local clone = tag:Clone()
+                            clone.Title.Text = tag:GetAttribute("Name")
+                            clone.Adornee = player.Character.Head
+                            clone.Title.TextColor3 = tag:GetAttribute("Color")
     
-                            clone.Parent = player.Character.Head
+                            clone.Parent = player.Character
 
                             player.CharacterAdded:Connect(function(char)
-                                clone.Parent = char.Head
+                                clone.Parent = char
                             end)
                         end
                     end

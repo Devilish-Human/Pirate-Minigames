@@ -19,6 +19,10 @@ end
 
 local UIJanitor = Janitor.new()
 
+function GameUIController:Spectate()
+    
+end
+
 function GameUIController:KnitStart()
     repeat
         wait()

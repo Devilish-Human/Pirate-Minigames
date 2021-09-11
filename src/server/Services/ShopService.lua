@@ -11,7 +11,7 @@ local ShopService = Knit.CreateService {
 
 local shopItems = game:GetService("ReplicatedStorage").ShopItems
 
-local DataService, InventoryService
+local DataService, InventoryService, ChatService
 
 function ShopService:PurchaseItem (player: Player, itemName: string)
     print("A")
@@ -73,10 +73,17 @@ function ShopService:EquipItem (player: Player, itemName)
         local tag = itemToEquip
 
         if tag then
+            for _,v in pairs (player.Character:GetChildren()) do
+                if v:IsA("BillboardGui") and v:GetAttribute("Cost") then
+                    v:Destroy()
+                end
+            end
             if (self:AlreadyOwnsItem(player, tag) and not player.Character.Head:FindFirstChild(tag.Name)) then
                 local plrTag = tag:Clone()
                 plrTag.Title.TextColor3 = tag:GetAttribute("Color")
-                plrTag.Parent = player.Character.Head
+                plrTag.Title.Text = tag:GetAttribute("Name")
+                plrTag.Adornee = player.Character.Head
+                plrTag.Parent = player.Character
             end
             local itemBool = InventoryService:GetInventory(player):FindFirstChild("Tag"):FindFirstChild(tag.Name)
             itemBool.Value = true
@@ -89,7 +96,7 @@ function ShopService:UnequipItem (player, itemName)
 
     for i,v in pairs(shopItems:GetChildren()) do
         for _, item in pairs (v:GetChildren()) do
-            if item.Name == itemName then
+            if item.Name == string.lower(itemName) then
                 itemToEquip = item
             end
         end
@@ -99,13 +106,24 @@ function ShopService:UnequipItem (player, itemName)
         local gear = itemToEquip
 
         if gear then
-            if self:AlreadyOwnsItem(player, gear) and not player.StarterGear:FindFirstChild(gear.Name) then
-                player.Backpack:FindFirstChild(gear.Name):Destroy()
-                player.StarterGear:FindFirstChild(gear.Name):Destroy()
-            end
+            local c1 = player.Backpack:FindFirstChild(gear.Name)
+            local c2 = player.StarterGear:FindFirstChild(gear.Name)
+        
+            c1:Destroy()
+            c2:Destroy()
+
             local itemBool = InventoryService:GetInventory(player):FindFirstChild("Gear"):FindFirstChild(gear.Name)
             itemBool.Value = false
         end
+    elseif (itemToEquip:GetAttribute("Category") == "Tag") then
+        local tag = itemToEquip
+
+        if tag then
+            player.Character.Head:FindFirstChild(tag.Name):Destroy()
+        end
+
+        local itemBool = InventoryService:GetInventory(player):FindFirstChild("Tag"):FindFirstChild(tag.Name)
+        itemBool.Value = false
     end
 end
 
@@ -124,6 +142,10 @@ function ShopService.Client:EquipItem (player, ...)
     return self.Server:EquipItem(player, ...)
 end
 
+function ShopService.Client:UnequipItem (player, ...)
+    return self.Server:UnequipItem(player, ...)
+end
+
 function ShopService:KnitStart()
 end
 
@@ -131,6 +153,7 @@ end
 function ShopService:KnitInit()
     DataService = Knit.GetService("DataService")
     InventoryService = Knit.GetService("InventoryService")
+    ChatService = Knit.GetService("ChatService")
 end
 
 

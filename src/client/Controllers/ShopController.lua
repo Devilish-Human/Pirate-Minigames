@@ -123,7 +123,7 @@ function ShopController:KnitStart()
         if (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Equip") then
             ShopService:EquipItem(selected.Name)
         elseif (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Unequip") then
-            ShopService:UnequipItem (selected.Name)
+            ShopService:UnequipItem(selected.Name)
         else
             ShopService:PurchaseItem(selected.Name)
         end
