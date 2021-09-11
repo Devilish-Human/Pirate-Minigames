@@ -101,8 +101,10 @@ function ShopController:LoadItems(Category)
                     gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
                 end
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 1
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(0.25, 0, 0.143, 0)
             else
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 0
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(1.214, 0, 0, 0)
                 gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = convertComma(currItem:GetAttribute("Cost"))
             end
         end)

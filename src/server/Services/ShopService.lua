@@ -41,10 +41,19 @@ function ShopService:PurchaseItem (player: Player, itemName: string)
     end
 end
 
-function ShopService:EquipItem (player: Player, item)
-    
-    if (item:GetAttribute("Category") == "Gear") then
-        local gear = shopItems:FindFirstChild(item.Name)
+function ShopService:EquipItem (player: Player, itemName)
+    local itemToEquip
+
+    for i,v in pairs(shopItems:GetChildren()) do
+        for _, item in pairs (v:GetChildren()) do
+            if item.Name == itemName then
+                itemToEquip = item
+            end
+        end
+    end
+
+    if (itemToEquip:GetAttribute("Category") == "Gear") then
+        local gear = itemToEquip
 
         if gear then
             if self:AlreadyOwnsItem(player, gear) and not player.StarterGear:FindFirstChild(gear.Name) then
