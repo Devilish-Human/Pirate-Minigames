@@ -10,8 +10,6 @@ local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
 local Component = require(Knit.Util.Component)
 
 -- // Shared Modules
-local Number = require(Knit.Shared.Number)
-local String = require(Knit.Shared.String)
 -- End Shared Modules //
 
 -- // Roblox Services \\ --
