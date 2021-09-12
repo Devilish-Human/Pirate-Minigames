@@ -51,10 +51,18 @@ for _,v in pairs(ingamePlayersFolder:GetChildren()) do
 end
 
 
+local function setVelocity()
+	local conveyorVelocity = 1 * minigame.Conveyor:GetAttribute("ConveyorSpeed")
+	minigame.Conveyor.AssemblyLinearVelocity = conveyorVelocity
+end
+
+setVelocity()
+minigame.Conveyor:GetAttributeChangedSignal("ConveyorSpeed"):Connect(setVelocity)
+
 function SpawnRandomPart ()
 	local touchConnection
 	if (canSpawnBlocks) then
-		local rotations = {0, 90}
+		local rotations = { 0, 90 }
 		local randomRotation = rotations[math.random(1, #rotations)]
 		
 		local allParts = game:GetService("ServerStorage").Assets.Objects.Parts:GetChildren()
@@ -74,7 +82,7 @@ function SpawnRandomPart ()
 		
 		--xSize = math.random(37, 40)
 		--zSize = math.random(4, 10)
-		part.Position = Vector3.new(xPos, 6, -118.5)
+		part.Position = Vector3.new(xPos, 31.76, -155)
 		part.Rotation = Vector3.new(0, yRotate, 0)
 		
 		part.Color = Color3.fromRGB(math.random(1, 255),math.random(1, 255), math.random(1, 255))
@@ -95,7 +103,8 @@ function SpawnRandomPart ()
 		if (minigame.Conveyor:GetAttribute("Speed") > 0 and minigame.Conveyor:GetAttribute("Speed") <= 6) then canSpawnBlocks = false end
 		for _,v in pairs(minigame.Blocks:GetChildren()) do
 			if (v.Name == "P1" or v.Name == "P2") then
-				v:Destroy()
+				--v:Destroy()
+				return
 			end
 		end
 	end
@@ -116,15 +125,21 @@ for i = minigameObject:GetAttribute("Length"), 1, -1 do
 	if (#ingamePlayersFolder:GetChildren() <= 0) then
 		break
 	end
+	for x = 1, 4, 1 do
+		for speed = 0, 20, .1 do
+			
+		end
+	end
 	setSpeedWithTime(i)
 	Knit:Wait(1)
 end
 
-for _, plr in pairs (ingamePlayersFolder:GetChildren()) do
-	if plr then
-		gameManager:addWinner (plr)
-		gameManager:awardPlayer (plr, "Coins", 10)
-		gameManager:awardPlayer (plr, "Wins", 1)
+for i, v in pairs(ingamePlayersFolder:GetChildren()) do
+	local player = v.Value
+	if player then
+		gameManager:awardPlayer(player, "Coins", 20)
+		gameManager:awardPlayer(player, "Wins", 1)
+		player:LoadCharacter()
 	end
 end
 task.wait(2)
@@ -147,7 +162,7 @@ local wonMessages = { "Survived the blocks", "Didn't get pushed", "Won." }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then
-		gameManager:awardPlayer (v.Value, "Coins", 5)
+		gameManager:awardPlayer (v.Value, "Coins", 10)
 
 		local message = loseMessages[math.random(1, #loseMessages)]
 
@@ -188,8 +203,7 @@ end
 
 RoundResults = tempResults
 
-
 canSpawnBlocks = false
-GameService.Client.ShowResults:FireAll (RoundResults)
+--GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
 cleanJanitor:Cleanup()

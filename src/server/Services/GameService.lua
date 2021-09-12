@@ -72,7 +72,7 @@ function GameService:_intermission ()
     for i = INTERMISSION_TIME, 1, -1 do
         Knit:Wait(1)
         --self:setTime (i)
-        self:fireStatus (("Intermission (%s)"):format(i))
+        self:fireStatus (("Choosing the next minigame in %s seconds."):format(i))
     end
 
     self:fireStatus ("Choosing a minigame")
