@@ -1,6 +1,8 @@
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 local RemoteSignal = require(Knit.Util.Remote.RemoteSignal)
 
+local DataStoreService = game:GetService("DataStoreService")
+
 local ShopService = Knit.CreateService {
     Name = "ShopService";
     Client = {
@@ -80,7 +82,6 @@ function ShopService:EquipItem (player: Player, itemName)
             end
             if (self:AlreadyOwnsItem(player, tag) and not player.Character.Head:FindFirstChild(tag.Name)) then
                 local plrTag = tag:Clone()
-                plrTag.Title.TextColor3 = tag:GetAttribute("Color")
                 plrTag.Title.Text = tag:GetAttribute("Name")
                 plrTag.Adornee = player.Character.Head
                 plrTag.Parent = player.Character
@@ -137,13 +138,14 @@ end
 function ShopService.Client:PurchaseItem (player: Player, ...)
     return self.Server:PurchaseItem (player, ...)
 end
-
 function ShopService.Client:EquipItem (player, ...)
     return self.Server:EquipItem(player, ...)
 end
-
 function ShopService.Client:UnequipItem (player, ...)
     return self.Server:UnequipItem(player, ...)
+end
+function ShopService.Client:AlreadyOwnsItem (player, ...)
+    return self.Server:AlreadyOwnsItem (player, ...)
 end
 
 function ShopService:KnitStart()
