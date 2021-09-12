@@ -101,6 +101,11 @@ function GameService:_startGame ()
     repeat
         Knit:Wait(1)
     until gameManager:GetAttribute("hasEnded")
+    for _, v in pairs(Chosen.Players.InGame:GetChildren()) do
+        if v.Value then
+            v.Value:LoadCharacter()
+        end
+    end
     Chosen:Destroy()
 end
 

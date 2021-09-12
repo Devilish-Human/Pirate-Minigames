@@ -119,7 +119,7 @@ function ShopService:UnequipItem (player, itemName)
         local tag = itemToEquip
 
         if tag then
-            player.Character.Head:FindFirstChild(tag.Name):Destroy()
+            player.Character:FindFirstChild(tag.Name):Destroy()
         end
 
         local itemBool = InventoryService:GetInventory(player):FindFirstChild("Tag"):FindFirstChild(tag.Name)

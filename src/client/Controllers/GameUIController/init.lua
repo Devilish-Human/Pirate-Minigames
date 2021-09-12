@@ -1,3 +1,4 @@
+local RunService = game:GetService("RunService")
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 
 local Janitor = require(Knit.Util.Janitor)
@@ -20,7 +21,99 @@ end
 local UIJanitor = Janitor.new()
 
 function GameUIController:Spectate()
+    local player = Knit.Player
+    local cam = game.Workspace.Camera
+
+    local gui = self:GetGameUI()
+    local spectateBtn = gui.Buttons:FindFirstChild("spectateButton")
+    local spectateFr = gui:FindFirstChild("SpectateFrame")
     
+    local spectating = false
+    local index = 1
+
+    local function changeState(bool)
+        if (bool == nil) then
+            spectating = not spectating
+        else
+            spectating = false
+        end
+
+        if spectating then
+            spectateBtn.TextLabel.Text = "Stop Spectating"
+            spectateFr.Visible = true
+        else
+            spectateBtn.TextLabel.Text = "Spectate"
+            spectateFr.Visible = false
+        end
+    end
+
+    local function GetMinigame()
+        return game.Workspace.Game:GetChildren()[1]
+    end
+
+    local function Spectate(player)
+        if (player and player.Character and cam.CameraSubject ~= player.Character) then
+            cam.CameraSubject = player.Character
+        end
+    end
+
+    local function changeIndex(indexNum)
+        local newIndex = index + indexNum
+
+        local MG = GetMinigame()
+        local PlayersFolder = MG.Players
+        local PlayersIG = PlayersFolder.InGame:GetChildren()
+
+        if (newIndex > #PlayersIG) then
+            newIndex = 1
+        elseif newIndex < 1 then
+            newIndex = #PlayersIG
+        end
+
+        index = newIndex
+    end
+
+    game:GetService("UserInputService").InputBegan:Connect(function(input, gameProcessedEvent)
+        if spectateFr.Visible then
+            if (input.KeyCode == Enum.KeyCode.Q) then
+                changeIndex(-1)
+            elseif (input.KeyCode == Enum.KeyCode.E) then
+                changeIndex(1)
+            end
+        end
+    end)
+    
+    spectateFr.nextBtn.MouseButton1Click:Connect(function()
+        changeIndex(1)
+    end)
+    spectateFr.prevBtn.MouseButton1Click:Connect(function()
+        changeIndex(-1)
+    end)
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        local MG = GetMinigame()
+
+        if MG ~= nil then
+            local InGamePlayers = MG:WaitForChild("Players").InGame
+            if (not InGamePlayers:FindFirstChild(player.Name)) then
+                spectateBtn.Visible = true
+                if spectating then
+                    changeIndex(1)
+                    Spectate(InGamePlayers:GetChildren()[index].Value)
+                end
+            else
+                spectateBtn.Visible = false
+                changeState(false)
+            end
+        else
+            spectateBtn.Visible = false
+            changeState(false)
+        end
+    end)
+
+    spectateBtn.MouseButton1Click:Connect(function()
+        changeState()
+    end)
 end
 
 function GameUIController:KnitStart()
@@ -74,6 +167,7 @@ function GameUIController:KnitStart()
         GameService:ToggleAFK()
         updateAFK()
     end))
+    self:Spectate()
 end
 
 
