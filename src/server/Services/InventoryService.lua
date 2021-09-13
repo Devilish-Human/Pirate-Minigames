@@ -121,7 +121,7 @@ function InventoryService:KnitInit()
     game:GetService("Players").PlayerRemoving:Connect (SavePlayer)
 
     task.spawn(function()
-        while wait(60) do
+        while wait(30) do
             for _, player in pairs(game.Players:GetPlayers()) do
                 SavePlayer(player)
             end

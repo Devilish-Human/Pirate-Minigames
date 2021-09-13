@@ -11,6 +11,12 @@ local ShopService = Knit.CreateService {
     };
 }
 
+local ExclusiveItems = {
+    ["Gear"] = {},
+    ["Tag"] = {}
+
+}
+
 local shopItems = game:GetService("ReplicatedStorage").ShopItems
 
 local DataService, InventoryService, ChatService
@@ -36,8 +42,6 @@ function ShopService:PurchaseItem (player: Player, itemName: string)
             end
             profile.Coins -= itemToPurchase:GetAttribute("Cost")
             InventoryService:AddToInventory (player, itemToPurchase)
-            local text = "%s Purchased %s for %s coins"
-            print((text):format(player.Name, itemToPurchase.Name, itemToPurchase:GetAttribute("Cost")))
         else
             self.Client.PrompEvent:Fire (player, "Error", "Not enough coins.", ("You do not have enough coins to buy %s. Try again later when you have enough coins."):format(itemName))
             print(("Purchased failed not enough coins. Need %s more coins"):format(itemToPurchase:GetAttribute("Cost") - profile.Coins))

@@ -1,4 +1,5 @@
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
+---@type Knit
+local Knit: Knit = require(game:GetService("ReplicatedStorage").Knit)
 
 local ShopController = Knit.CreateController { Name = "ShopController" }
 
@@ -122,18 +123,21 @@ function ShopController:LoadItems(Category)
     end
 
     table.sort(list, function(a, b) return a:GetAttribute("Cost") < b:GetAttribute("Cost") end)
-
+    game:GetService("SoundService"):FindFirstChild("switch"):Clone().Parent = gameUI.ShopFrame.Content.Items
     for i, currItem in pairs (list) do
         local button = createItemButton()
         button.Name = currItem.Name
         button.Title.Text = currItem:GetAttribute("Name")
         button.BackgroundColor3 = shopItems[Category]:GetAttribute("Color")
         button.itemIcon.Image = "https://www.roblox.com/asset-thumbnail/image?assetId=" .. currItem:GetAttribute("Id") .. "&width=420&height=420&format=png"
-        button.Coins.CoinsLabel.Text = ShopService:AlreadyOwnsItem(currItem) and "Owned" or tostring(currItem:GetAttribute("Cost"))
+        button.Coins.CoinsLabel.Text = ShopService:AlreadyOwnsItem(currItem) and "Owned" or tostring(convertComma(currItem:GetAttribute("Cost"))) or "Not for sale"
         button.Parent = gameUI.ShopFrame.Content.Items
 
-        button.MouseButton1Click:Connect(function()
+        button.MouseEnter:Connect(function()
+            button.Parent:FindFirstChild("switch"):Play()
+        end)
 
+        button.MouseButton1Click:Connect(function()
             if not gameUI.ShopFrame.infoFrame.Visible then
                 gameUI.ShopFrame.infoFrame.Visible = true
             end
@@ -165,7 +169,6 @@ end
 
 function ShopController:KnitStart()
     gameUI = GameUIController:GetGameUI()
-
     ProcessButtonPresses()
     gameUI.ShopFrame.infoFrame.Visible = true
 
@@ -179,6 +182,8 @@ function ShopController:KnitStart()
         else
             ShopService:PurchaseItem(selected.Name)
             gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Owned"
+            task.wait(.2)
+            gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
         end
     end)
 

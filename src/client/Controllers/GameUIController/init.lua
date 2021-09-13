@@ -123,6 +123,7 @@ function GameUIController:KnitStart()
 
     local GameUI = Knit.Player.PlayerGui.GameUI
 
+    
     local shopFrame = GameUI:FindFirstChild("ShopFrame")
 
     Icon.new()
@@ -144,7 +145,6 @@ function GameUIController:KnitStart()
         :setImage(4882429582)
         :setLabel("Shop")
         :bindEvent("selected", function()
-            print("Selected")
             TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 0.5, 0) }):Play()
         end)
         :bindEvent("deselected", function()
