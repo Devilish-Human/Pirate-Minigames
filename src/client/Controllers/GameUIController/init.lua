@@ -22,7 +22,7 @@ local UIJanitor = Janitor.new()
 
 function GameUIController:Spectate()
     local player = Knit.Player
-    local cam = game.Workspace.Camera
+    local cam = game.Workspace.CurrentCamera
 
     local gui = self:GetGameUI()
     local spectateBtn = gui.Buttons:FindFirstChild("spectateButton")
@@ -51,10 +51,12 @@ function GameUIController:Spectate()
         return game.Workspace.Game:GetChildren()[1]
     end
 
-    local function Spectate(player)
+    local function View(player)
         if (player and player.Character and cam.CameraSubject ~= player.Character) then
             cam.CameraSubject = player.Character
         end
+
+        spectateFr.spectatePlayerName.Text = player.Name
     end
 
     local function changeIndex(indexNum)
@@ -98,8 +100,10 @@ function GameUIController:Spectate()
             if (not InGamePlayers:FindFirstChild(player.Name)) then
                 spectateBtn.Visible = true
                 if spectating then
-                    changeIndex(1)
-                    Spectate(InGamePlayers:GetChildren()[index].Value)
+                    changeIndex(0)
+                    View(InGamePlayers:GetChildren()[index].Value)
+                else
+                    View(game.Players.LocalPlayer)
                 end
             else
                 spectateBtn.Visible = false
@@ -145,11 +149,11 @@ function GameUIController:KnitStart()
         :setImage(4882429582)
         :setLabel("Shop")
         :bindEvent("selected", function()
-            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 0.5, 0) }):Play()
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -50, 0.5, 0) }):Play()
         end)
         :bindEvent("deselected", function()
             print("Deselected!")
-            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, 0, 1.5, 0) }):Play()
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -50, 1.5, 0) }):Play()
         end)
 
     local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")

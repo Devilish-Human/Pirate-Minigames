@@ -61,8 +61,7 @@ function LoadPlayer (player: Player)
                             local tag = game.ReplicatedStorage.ShopItems.Tag:FindFirstChild(Bool.Name)
                             local clone = tag:Clone()
                             clone.Title.Text = tag:GetAttribute("Name")
-                            clone.Adornee = player.Character.Head
-                            clone.Title.TextColor3 = tag:GetAttribute("Color")
+                            clone.Title.TextSize = 25
     
                             clone.Parent = player.Character
 

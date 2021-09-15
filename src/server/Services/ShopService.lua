@@ -81,6 +81,7 @@ function ShopService:EquipItem (player: Player, itemName)
         if tag then
             for _,v in pairs (player.Character:GetChildren()) do
                 if v:IsA("BillboardGui") and v:GetAttribute("Cost") then
+                    InventoryService:GetInventory(player):FindFirstChild("Tag"):FindFirstChild(v.Name).Value = false
                     v:Destroy()
                 end
             end
@@ -95,6 +96,7 @@ function ShopService:EquipItem (player: Player, itemName)
         end
     end
 end
+
 
 function ShopService:UnequipItem (player, itemName)
     local itemToEquip

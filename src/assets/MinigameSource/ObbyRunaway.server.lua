@@ -51,16 +51,14 @@ local loseMessages = { "Stayed behind.", "Did not finish.", "Ran slow.", "Lost."
 local wonMessages = { "Stayed ahead.", "Reached the end.", "Ran fast.", "Won." }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
-	if (v.Value ~= nil) then
-		if v.Value and not gameManager.Winners[v.Value] then
-			gameManager:awardPlayer (v, "Coins", 5)
-		end
+	if (v.Value ~= nil and not table.find(gameManager.Winners, v.Value)) then
+		gameManager:awardPlayer (v.Value, "Coins", 5)
 
 		local message = loseMessages[math.random(1, #loseMessages)]
 
 		RoundResults[v.Value.Name] = {
 			Won = false,
-			Message = "Did not finish",
+			Message = message,
 			Coins = 5
 		}
 	end
@@ -72,7 +70,7 @@ for i, v in pairs (gameManager.Winners) do
 		local message = wonMessages[math.random(1, #wonMessages)]
 		RoundResults[v.Name] = {
 			Won = true,
-			Message = "Reached the end",
+			Message = message,
 			Coins = 10
 		}
 	end
