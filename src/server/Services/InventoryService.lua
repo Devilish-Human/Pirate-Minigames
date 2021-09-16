@@ -66,7 +66,10 @@ function LoadPlayer (player: Player)
                             clone.Parent = player.Character
 
                             player.CharacterAdded:Connect(function(char)
-                                clone.Parent = char
+                                local clone2 = tag:Clone()
+                                clone2.Title.Text = tag:GetAttribute("Name")
+                                clone2.Title.TextSize = 25
+                                clone2.Parent = char
                             end)
                         end
                     end

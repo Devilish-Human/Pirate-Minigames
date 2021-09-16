@@ -74,9 +74,6 @@ function GameService:_intermission ()
         --self:setTime (i)
         self:fireStatus (("Choosing the next minigame in %s seconds."):format(i))
     end
-
-    self:fireStatus ("Choosing a minigame")
-    Knit:Wait(2)
     
     Chosen = MinigameService:ChooseMinigame()
     minigame = maps:FindFirstChild(Chosen.Name)

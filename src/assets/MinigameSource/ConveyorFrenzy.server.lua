@@ -125,11 +125,6 @@ for i = minigameObject:GetAttribute("Length"), 1, -1 do
 	if (#ingamePlayersFolder:GetChildren() <= 0) then
 		break
 	end
-	for x = 1, 4, 1 do
-		for speed = 0, 20, .1 do
-			
-		end
-	end
 	setSpeedWithTime(i)
 	Knit:Wait(1)
 end

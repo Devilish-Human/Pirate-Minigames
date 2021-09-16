@@ -95,21 +95,29 @@ function ProcessButtonPresses()
     
     gameUI.ShopFrame.Content.Items:ClearAllChildren()
     UIGridLayout:Clone().Parent = gameUI.ShopFrame.Content.Items
+    
+    debounce = false
+
     for _, button in pairs (gameUI.ShopFrame.PageButtons:GetChildren()) do
 
-        if button:IsA("GuiButton") then
+        if button:IsA("GuiButton") and not debounce then
             button.MouseButton1Click:Connect(function()
                 gameUI.ShopFrame.Content.Items:ClearAllChildren()
-                if button.Name == "Store" then
-                    gameUI.ShopFrame.Content.Store.Visible = true
-                    gameUI.ShopFrame.Content.Items.Visible = false
-                else
-                    UIGridLayout:Clone().Parent = gameUI.ShopFrame.Content.Items
-                    if (gameUI.ShopFrame.Content.Items.Visible == false) then
-                        gameUI.ShopFrame.Content.Store.Visible = false
-                        gameUI.ShopFrame.Content.Items.Visible = true
+                if not debounce then
+                    debounce = true
+                    if button.Name == "Store" then
+                        gameUI.ShopFrame.Content.Store.Visible = true
+                        gameUI.ShopFrame.Content.Items.Visible = false
+                    else
+                        UIGridLayout:Clone().Parent = gameUI.ShopFrame.Content.Items
+                        if (gameUI.ShopFrame.Content.Items.Visible == false) then
+                            gameUI.ShopFrame.Content.Store.Visible = false
+                            gameUI.ShopFrame.Content.Items.Visible = true
+                        end
+                        ShopController:LoadItems(button.Name)
                     end
-                    ShopController:LoadItems(button.Name)
+                    wait(0.75)
+                    debounce = false
                 end
             end)
         end
@@ -133,35 +141,43 @@ function ShopController:LoadItems(Category)
         button.Coins.CoinsLabel.Text = ShopService:AlreadyOwnsItem(currItem) and "Owned" or tostring(convertComma(currItem:GetAttribute("Cost"))) or "Not for sale"
         button.Parent = gameUI.ShopFrame.Content.Items
 
+        
         button.MouseEnter:Connect(function()
             button.Parent:FindFirstChild("switch"):Play()
         end)
-
+        
+        debounce = false
         button.MouseButton1Click:Connect(function()
-            if not gameUI.ShopFrame.infoFrame.Visible then
-                gameUI.ShopFrame.infoFrame.Visible = true
-            end
-            selected = currItem
-            gameUI.ShopFrame.infoFrame.itemName.Text = currItem:GetAttribute("Name")
-            gameUI.ShopFrame.infoFrame.itemIcon.Image = "https://www.roblox.com/asset-thumbnail/image?assetId=" .. selected:GetAttribute("Id") .. "&width=420&height=420&format=png"
-            gameUI.ShopFrame.infoFrame.itemDescription.Text = currItem:GetAttribute("Description")
+            if not debounce then
+                debounce = true
 
-            if Knit.Player.Inventory[Category]:FindFirstChild(currItem.Name) then
-                if Knit.Player.Inventory[Category]:FindFirstChild(currItem.Name).Value then
-                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Unequip"
-                    button.Coins.CoinsLabel.Text = "Equipped"
-                else
-                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
+                if not gameUI.ShopFrame.infoFrame.Visible then
+                    gameUI.ShopFrame.infoFrame.Visible = true
                 end
-                button.Coins.CoinsLabel.Text = "Owned"
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 1
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(0.25, 0, 0.143, 0)
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Center
-            else
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 0
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(1.214, 0, 0, 0)
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Left
-                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = convertComma(currItem:GetAttribute("Cost"))
+                selected = currItem
+                gameUI.ShopFrame.infoFrame.itemName.Text = currItem:GetAttribute("Name")
+                gameUI.ShopFrame.infoFrame.itemIcon.Image = "https://www.roblox.com/asset-thumbnail/image?assetId=" .. selected:GetAttribute("Id") .. "&width=420&height=420&format=png"
+                gameUI.ShopFrame.infoFrame.itemDescription.Text = currItem:GetAttribute("Description")
+
+                if Knit.Player.Inventory[Category]:FindFirstChild(currItem.Name) then
+                    if Knit.Player.Inventory[Category]:FindFirstChild(currItem.Name).Value then
+                        gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Unequip"
+                        button.Coins.CoinsLabel.Text = "Equipped"
+                    else
+                        gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
+                    end
+                    button.Coins.CoinsLabel.Text = "Owned"
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 1
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(0.25, 0, 0.143, 0)
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Center
+                else
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.ImageTransparency = 0
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Position = UDim2.new(1.214, 0, 0, 0)
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.TextXAlignment = Enum.TextXAlignment.Left
+                    gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = convertComma(currItem:GetAttribute("Cost"))
+                end
+                wait(0.75)
+                debounce = false
             end
         end)
     end
@@ -172,18 +188,24 @@ function ShopController:KnitStart()
     ProcessButtonPresses()
     gameUI.ShopFrame.infoFrame.Visible = true
 
+    debounce = false
     gameUI.ShopFrame.infoFrame.purchaseButton.MouseButton1Click:Connect(function()
-        if (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Equip") then
-            ShopService:EquipItem(selected.Name)
-            gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Unequip"
-        elseif (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Unequip") then
-            ShopService:UnequipItem(selected.Name)
-            gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
-        else
-            ShopService:PurchaseItem(selected.Name)
-            gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Owned"
-            task.wait(.2)
-            gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
+        if not debounce then
+            if (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Equip") then
+                ShopService:EquipItem(selected.Name)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Unequip"
+            elseif (gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text == "Unequip") then
+                ShopService:UnequipItem(selected.Name)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
+            else
+                ShopService:PurchaseItem(selected.Name)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Owned"
+                task.wait(.2)
+                gameUI.ShopFrame.infoFrame.purchaseButton.Coins.CoinsLabel.Text = "Equip"
+            end
+
+            wait(0.75)
+            debounce = false
         end
     end)
 

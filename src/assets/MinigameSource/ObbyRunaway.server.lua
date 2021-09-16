@@ -14,13 +14,15 @@ local cleanJanitor = Janitor.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
+local AMOUNT_TO_GIVE = 10
+
 cleanJanitor:Add(minigame.Finish.Touched:Connect(function(hit)
 	local human = hit.Parent:FindFirstChild("Humanoid")
 	if (human) then
 		local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
 		if (player) then
 			gameManager:addWinner (player)
-			gameManager:awardPlayer (player, "Coins", 10)
+			gameManager:awardPlayer (player, "Coins", AMOUNT_TO_GIVE)
 			gameManager:awardPlayer (player, "Wins", 1)
 			player:LoadCharacter()
 			if ingamePlayersFolder:FindFirstChild(player.Name) then
@@ -52,14 +54,12 @@ local wonMessages = { "Stayed ahead.", "Reached the end.", "Ran fast.", "Won." }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil and not table.find(gameManager.Winners, v.Value)) then
-		gameManager:awardPlayer (v.Value, "Coins", 5)
-
 		local message = loseMessages[math.random(1, #loseMessages)]
 
 		RoundResults[v.Value.Name] = {
 			Won = false,
 			Message = message,
-			Coins = 5
+			Coins = 0
 		}
 	end
 end
@@ -71,7 +71,7 @@ for i, v in pairs (gameManager.Winners) do
 		RoundResults[v.Name] = {
 			Won = true,
 			Message = message,
-			Coins = 10
+			Coins = AMOUNT_TO_GIVE
 		}
 	end
 end
