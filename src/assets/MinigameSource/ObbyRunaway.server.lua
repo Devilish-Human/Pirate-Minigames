@@ -49,8 +49,8 @@ end
 
 local RoundResults = {}
 
-local loseMessages = { "Stayed behind.", "Did not finish.", "Ran slow.", "Lost." }
-local wonMessages = { "Stayed ahead.", "Reached the end.", "Ran fast.", "Won." }
+local loseMessages = { "Stayed behind.", "Did not finish.", "Ran slow." }
+local wonMessages = { "Stayed ahead.", "Reached the end.", "Ran fast." }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil and not table.find(gameManager.Winners, v.Value)) then

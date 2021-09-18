@@ -59,7 +59,7 @@ coroutine.wrap(function()
             if v.Value and shouldTakeDamage then
                 local char = v.Value.Character or v.Value.CharacterAdded:Wait()
 
-                char.Humanoid:TakeDamage (15)
+                char.Humanoid:TakeDamage (5)
             end
         end
     end
@@ -140,8 +140,9 @@ for _, v in pairs (ingamePlayersFolder:GetChildren()) do
         end
     end
 end
-
-GameService.Client.ShowResults:FireAll (RoundResults)
 shouldTakeDamage = false
+
+wait(2)
+GameService.Client.ShowResults:FireAll (RoundResults)
 gameManager:SetAttribute("hasEnded", true)
 cleanJanitor:Cleanup()
