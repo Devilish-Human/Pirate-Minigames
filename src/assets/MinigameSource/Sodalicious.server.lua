@@ -14,7 +14,7 @@ local cleanJanitor = Janitor.new ()
 
 local minigameObject = GameService:GetMinigameObject()
 
-local AMOUNT_TO_GIVE = 20
+local AMOUNT_TO_GIVE = 15
 local function getRandomSodaSpawn()
     local sodaSpawns = minigame:FindFirstChild("SodaSpawns"):GetChildren()
 	return sodaSpawns[math.random(1, #sodaSpawns)].CFrame
@@ -41,7 +41,13 @@ for _, v in pairs (ingamePlayersFolder:GetChildren()) do
     end
 end
 
-for i = 10, 1, -1 do
+cleanJanitor:Add(game.Players.PlayerRemoving:Connect(function(plr)
+	if ingamePlayersFolder:FindFirstChild(plr.Name) then
+		ingamePlayersFolder:FindFirstChild(plr.Name):Destroy()
+	end
+end))
+
+for i = 5, 1, -1 do
 	Knit:Wait(1)
 	GameService:fireStatus (("Minigame will start in %s seconds"):format(tostring(i)))
 end

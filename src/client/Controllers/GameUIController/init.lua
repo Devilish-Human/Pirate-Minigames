@@ -39,9 +39,19 @@ function GameUIController:Spectate()
         end
 
         if spectating then
+            for _, gear in pairs (player.Backpack:GetChildren()) do
+                if gear then
+                    gear:Destroy()
+                end
+            end
             spectateBtn.TextLabel.Text = "Stop Spectating"
             spectateFr.Visible = true
         else
+            for _, gear in pairs (player.StarterGear:GetChildren()) do
+                if gear and not player.Backpack:FindFirstChild(gear.Name) then
+                    gear.Parent = player.Backpack
+                end
+            end
             spectateBtn.TextLabel.Text = "Spectate"
             spectateFr.Visible = false
         end

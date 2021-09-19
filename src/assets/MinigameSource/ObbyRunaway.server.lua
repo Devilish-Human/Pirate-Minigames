@@ -16,6 +16,12 @@ local minigameObject = GameService:GetMinigameObject()
 
 local AMOUNT_TO_GIVE = 10
 
+cleanJanitor:Add(game.Players.PlayerRemoving:Connect(function(plr)
+	if ingamePlayersFolder:FindFirstChild(plr.Name) then
+		ingamePlayersFolder:FindFirstChild(plr.Name):Destroy()
+	end
+end))
+
 cleanJanitor:Add(minigame.Finish.Touched:Connect(function(hit)
 	local human = hit.Parent:FindFirstChild("Humanoid")
 	if (human) then
@@ -32,7 +38,7 @@ cleanJanitor:Add(minigame.Finish.Touched:Connect(function(hit)
 	end
 end))
 
-for i = 10, 1, -1 do
+for i = 5, 1, -1 do
 	Knit:Wait(1)
 	GameService:fireStatus (("Minigame will start in %s seconds"):format(tostring(i)))
 end
@@ -56,11 +62,19 @@ for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil and not table.find(gameManager.Winners, v.Value)) then
 		local message = loseMessages[math.random(1, #loseMessages)]
 
-		RoundResults[v.Value.Name] = {
-			Won = false,
-			Message = message,
-			Coins = 0
-		}
+		if (game:GetService("Players"):FindFirstChild(v.Value.Name)) then
+			RoundResults[v.Value.Name] = {
+				Won = false,
+				Message = message,
+				Coins = 0
+			}
+		else
+			RoundResults[v.Value.Name] = {
+                Won = false,
+                Message = "Left the game.",
+                Coins = 0
+            }
+		end
 	end
 end
 

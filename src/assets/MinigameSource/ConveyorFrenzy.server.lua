@@ -33,7 +33,13 @@ local function setSpeedWithTime (remainingTime)
 	end
 end
 
-for i = 10, 1, -1 do
+cleanJanitor:Add(game.Players.PlayerRemoving:Connect(function(plr)
+	if ingamePlayersFolder:FindFirstChild(plr.Name) then
+		ingamePlayersFolder:FindFirstChild(plr.Name):Destroy()
+	end
+end))
+
+for i = 5, 1, -1 do
 	Knit:Wait(1)
 	GameService:fireStatus (("Minigame will start in %s seconds"):format(tostring(i)))
 end
@@ -152,8 +158,8 @@ end
 
 local RoundResults = {}
 
-local loseMessages = { "Fell into the void", "Got pushed off.", "Lost." }
-local wonMessages = { "Survived the blocks", "Didn't get pushed", "Won." }
+local loseMessages = { "Fell into the void", "Got pushed off." }
+local wonMessages = { "Survived the blocks", "Didn't get pushed" }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then

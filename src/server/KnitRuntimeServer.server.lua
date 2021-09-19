@@ -23,6 +23,12 @@ Knit.Start():Then(function()
         end
     end
 
+    for _,v in pairs (game:GetService("ServerStorage").Assets.MinigameSource:GetChildren()) do
+       if (v) then
+           v.Disabled = true
+       end
+    end
+
     Component.Auto(script.Parent.Components)
 end):Catch(warn)
 

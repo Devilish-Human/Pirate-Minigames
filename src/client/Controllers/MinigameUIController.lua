@@ -94,9 +94,15 @@ function MinigameUIController:KnitStart()
             local won = v.Won
 
             local label = usernameLabel:Clone()
-            label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
+            label.Text = ""
             label.Parent = ResultsFrame.ResultList
             label.Position = UDim2.new (0, 0, 0, 32*x)
+            
+            if (game.Players:FindFirstChild(userName)) then
+                label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
+            else
+                label.Text = ((" %s"):format(userName))
+            end
 
             local earnedCoins = ResultsFrame.earnedLabel
             label.ResultLabel.Text = message
