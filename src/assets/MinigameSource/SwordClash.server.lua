@@ -59,6 +59,7 @@ for i,v in pairs (ingamePlayersFolder:GetChildren()) do
 end
 print("D")
 
+wait()
 for i = minigameObject:GetAttribute("Length"), 1, -1 do
 	GameService:fireStatus(("The minigame will end in %s seconds!"):format(tostring(i)))
 	if (#ingamePlayersFolder:GetChildren() <= 1) then

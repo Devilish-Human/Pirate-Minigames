@@ -25,8 +25,8 @@ local groupColors = {
 
 local userTags = {
     [74633861] = {
-        TagText = "Roblox.com";
-        TagColor = Color3.fromRGB(25, 100, 50)
+        TagText = "PirateNinja";
+        TagColor = Color3.fromRGB(122, 255, 166)
     }
 }
 

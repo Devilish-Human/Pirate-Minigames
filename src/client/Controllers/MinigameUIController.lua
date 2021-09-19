@@ -99,7 +99,11 @@ function MinigameUIController:KnitStart()
             label.Position = UDim2.new (0, 0, 0, 32*x)
             
             if (game.Players:FindFirstChild(userName)) then
-                label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
+                if (game.Players:FindFirstChild(userName).DisplayName == userName) then
+                    label.Text = ((" %s"):format(userName))
+                else
+                    label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
+                end
             else
                 label.Text = ((" %s"):format(userName))
             end
