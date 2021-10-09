@@ -106,6 +106,11 @@ end
 
 RoundResults = tempResults
 
-GameService.Client.ShowResults:FireAll (RoundResults)
+if RoundResults then
+	GameService.Client.ShowResults:FireAll (RoundResults)
+else
+	return
+end
+
 gameManager:SetAttribute("hasEnded", true)
 cleanJanitor:Cleanup()

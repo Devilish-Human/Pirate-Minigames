@@ -138,7 +138,7 @@ end
 for i, v in pairs(ingamePlayersFolder:GetChildren()) do
 	local player = v.Value
 	if player then
-		gameManager:awardPlayer(player, "Coins", 20)
+		gameManager:awardPlayer(player, "Coins", 15)
 		gameManager:awardPlayer(player, "Wins", 1)
 		player:LoadCharacter()
 	end
@@ -163,14 +163,14 @@ local wonMessages = { "Survived the blocks", "Didn't get pushed" }
 
 for i, v in pairs (allPlayersFolder:GetChildren()) do
 	if (v.Value ~= nil) then
-		gameManager:awardPlayer (v.Value, "Coins", 10)
+		gameManager:awardPlayer (v.Value, "Coins", 0)
 
 		local message = loseMessages[math.random(1, #loseMessages)]
 
 		RoundResults[v.Value.Name] = {
 			Won = false,
 			Message = message,
-			Coins = 5
+			Coins = 0
 		}
 	end
 end
@@ -183,7 +183,7 @@ for i, v in pairs (gameManager.Winners) do
 		RoundResults[v.Name] = {
 			Won = true,
 			Message = message,
-			Coins = 10
+			Coins = 15
 		}
 	end
 end

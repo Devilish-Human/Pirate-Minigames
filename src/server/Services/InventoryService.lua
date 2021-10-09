@@ -61,14 +61,12 @@ function LoadPlayer (player: Player)
                             local tag = game.ReplicatedStorage.ShopItems.Tag:FindFirstChild(Bool.Name)
                             local clone = tag:Clone()
                             clone.Title.Text = tag:GetAttribute("Name")
-                            clone.Title.TextSize = 25
     
                             clone.Parent = player.Character
 
                             player.CharacterAdded:Connect(function(char)
                                 local clone2 = tag:Clone()
                                 clone2.Title.Text = tag:GetAttribute("Name")
-                                clone2.Title.TextSize = 25
                                 clone2.Parent = char
                             end)
                         end
@@ -109,6 +107,10 @@ function InventoryService:AddToInventory (player: Player, itemToPurchase)
     SavePlayer(player)
 end
 
+function InventoryService.Client:GetInventory(player: Player)
+    return self.Server:GetInventory (player)
+end
+
 function InventoryService:KnitStart()
     for _, plr in pairs (game:GetService("Players"):GetChildren()) do
         if plr then
@@ -127,6 +129,14 @@ function InventoryService:KnitInit()
             for _, player in pairs(game.Players:GetPlayers()) do
                 SavePlayer(player)
             end
+        end
+    end)
+
+    game:BindToClose(function()
+        for _, player in ipairs (game:GetService("Players"):GetChildren()) do
+            local finished = Instance.new("BindableEvent")
+            local allPLayers = game:GetService("Players"):GetChildren()
+            local le
         end
     end)
 end

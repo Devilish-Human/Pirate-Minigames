@@ -25,6 +25,12 @@ for _, v in pairs (ingamePlayersFolder:GetChildren()) do
                 gear:Destroy()
             end
         end
+
+        for _, v in pairs (v.Value.Character:GetChildren()) do
+            if v:IsA("Tool") then
+                v:Destroy()
+            end
+        end
     end
 end
 
@@ -50,7 +56,7 @@ for i,v in pairs (ingamePlayersFolder:GetChildren()) do
 
         if player and player.Character then
             print("A")
-            local sword = SWORDS.ClassicSword:Clone()
+            local sword = SWORDS.Cutlass:Clone()
             print("B")
             sword.Parent = player.Backpack
             print("C")

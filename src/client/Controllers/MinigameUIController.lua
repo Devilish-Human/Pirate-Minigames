@@ -89,6 +89,9 @@ function MinigameUIController:KnitStart()
 
         local x = 0
         for i,v in pairs (endResult) do
+
+            if not i or not v then return end
+
             local userName = i
             local message = v.Message
             local won = v.Won

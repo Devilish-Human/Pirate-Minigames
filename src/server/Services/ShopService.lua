@@ -17,8 +17,6 @@ local ExclusiveItems = {
 
 }
 
-local shopItems = game:GetService("ReplicatedStorage").ShopItems
-
 local DataService, InventoryService, ChatService
 
 function ShopService:PurchaseItem (player: Player, itemName: string)
@@ -27,7 +25,7 @@ function ShopService:PurchaseItem (player: Player, itemName: string)
 
     local itemToPurchase
     if profile then
-        for i,v in pairs(shopItems:GetChildren()) do
+        for i,v in pairs(self:GetShopItems():GetChildren()) do
             for _, item in pairs (v:GetChildren()) do
                 if item.Name == string.lower(itemName) then
                     itemToPurchase = item
@@ -97,7 +95,6 @@ function ShopService:EquipItem (player: Player, itemName)
     end
 end
 
-
 function ShopService:UnequipItem (player, itemName)
     local itemToEquip
 
@@ -134,6 +131,10 @@ function ShopService:UnequipItem (player, itemName)
     end
 end
 
+function ShopService:GetShopItems ()
+    return game:GetService("ServerStorage").ShopItems
+end
+
 function ShopService:AlreadyOwnsItem (player, item)
     if (InventoryService:GetInventory(player):FindFirstChild(item:GetAttribute("Category")):FindFirstChild(item.Name)) then
         return true
@@ -152,6 +153,9 @@ function ShopService.Client:UnequipItem (player, ...)
 end
 function ShopService.Client:AlreadyOwnsItem (player, ...)
     return self.Server:AlreadyOwnsItem (player, ...)
+end
+function ShopService.Client:GetShopItems ()
+    return self.Server:GetShopItems()
 end
 
 function ShopService:KnitStart()

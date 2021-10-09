@@ -101,11 +101,19 @@ for i, v in pairs (allPlayersFolder:GetChildren()) do
 
 		local message = loseMessages[math.random(1, #loseMessages)]
 
-		RoundResults[v.Value.Name] = {
-			Won = false,
-			Message = message,
-			Coins = 0
-		}
+		if (game:GetService("Players"):FindFirstChild(v.Value.Name)) then
+			RoundResults[v.Value.Name] = {
+				Won = false,
+				Message = message,
+				Coins = 0
+			}
+		else
+			RoundResults[v.Value.Name] = {
+                Won = false,
+                Message = "Left the game.",
+                Coins = 0
+            }
+		end
 	end
 end
 

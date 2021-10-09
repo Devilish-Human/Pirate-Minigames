@@ -39,19 +39,11 @@ function GameUIController:Spectate()
         end
 
         if spectating then
-            for _, gear in pairs (player.Backpack:GetChildren()) do
-                if gear then
-                    gear:Destroy()
-                end
-            end
+            game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, false)
             spectateBtn.TextLabel.Text = "Stop Spectating"
             spectateFr.Visible = true
         else
-            for _, gear in pairs (player.StarterGear:GetChildren()) do
-                if gear and not player.Backpack:FindFirstChild(gear.Name) then
-                    gear.Parent = player.Backpack
-                end
-            end
+            game:GetService("StarterGui"):SetCoreGuiEnabled(Enum.CoreGuiType.Backpack, true)
             spectateBtn.TextLabel.Text = "Spectate"
             spectateFr.Visible = false
         end
@@ -136,9 +128,21 @@ function GameUIController:KnitStart()
     until Knit.Player.Character
 
     local GameUI = Knit.Player.PlayerGui.GameUI
-
     
     local shopFrame = GameUI:FindFirstChild("ShopFrame")
+
+    local shopState = false
+    local shopButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("shopButton")
+
+    shopButton.MouseButton1Click:Connect(function()
+        if shopState == false then
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -50, 0.5, 0) }):Play()
+            shopState = true
+        else
+            shopState = false
+            TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -50, 1.5, 0) }):Play()
+        end
+    end)
 
     Icon.new()
         :setName("CoinIcon")
@@ -154,7 +158,7 @@ function GameUIController:KnitStart()
                 end
             end)
         end)
-    Icon.new()
+    --[[ Icon.new()
         :setName ("ShopIcon")
         :setImage(4882429582)
         :setLabel("Shop")
@@ -164,7 +168,7 @@ function GameUIController:KnitStart()
         :bindEvent("deselected", function()
             print("Deselected!")
             TweenService:Create(shopFrame, TweenInfo.new(0.5, Enum.EasingStyle.Back, Enum.EasingDirection.Out), { Position = UDim2.new(0.5, -50, 1.5, 0) }):Play()
-        end)
+        end) ]]
 
     local afkButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("afkButton")
     local isAFKToggled = Knit.Player:FindFirstChild("isAFK")

@@ -3,15 +3,15 @@ local groupTags = {
 		TagText = "Owner",
 		TagColor = Color3.fromRGB (255, 8, 0)
 	};
-    [245] = {
+    [240] = {
         TagText = "Developer",
         TagColor = Color3.fromRGB (255, 100, 60)
     };
-    [200] = {
+    [40] = {
         TagText = "Game Tester",
         TagColor = Color3.fromRGB (255, 196, 0)
     };
-    [70] = {
+    [5] = {
         TagText = "Fan",
         TagColor = Color3.fromRGB (0, 255, 64)
     }
@@ -24,6 +24,10 @@ local groupColors = {
 
 
 local userTags = {
+    [49287450] = {
+        TagText = "Person?",
+        TagColor = Color3.fromRGB(228, 156, 0)
+    },
     [74633861] = {
         TagText = "PirateNinja";
         TagColor = Color3.fromRGB(122, 255, 166)
