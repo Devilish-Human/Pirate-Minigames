@@ -1,39 +1,30 @@
 {
-  "name": "Pirate Minigames",
+  "name": "pirate-minigames",
   "tree": {
     "$className": "DataModel",
 
     "ReplicatedStorage": {
       "Shared": {
-        "$path": "src/shared",
-        "Roact": {
-          "$path": "vendor/Roact/src"
-        },
-        "TopbarPlus": {
-          "$path": "vendor/TopbarPlus/src"
-        }
+        "$path": "src/shared"
       },
-      "Knit": {
-        "$path": "vendor/Knit/src"
+      "Packages":
+      {
+        "$path": "Packages"
       }
     },
 
     "ServerScriptService": {
-      "Game": {
+      "Framework": {
         "$path": "src/server"
-      }
-    },
-
-    "ServerStorage": {
-      "Assets": {
-        "$ignoreUnknownInstances": true,
-        "$path": "src/assets"
+      },
+      "Packages": {
+        "$path":"ServerPackages"
       }
     },
 
     "StarterPlayer": {
       "StarterPlayerScripts": {
-        "Game": {
+        "FrameworkClient": {
           "$path": "src/client"
         }
       }
@@ -42,6 +33,28 @@
     "Workspace": {
       "$properties": {
         "FilteringEnabled": true
+      },
+      "Baseplate": {
+        "$className": "Part",
+        "$properties": {
+          "Anchored": true,
+          "Color": [
+            0.38823,
+            0.37254,
+            0.38823
+          ],
+          "Locked": true,
+          "Position": [
+            0,
+            -10,
+            0
+          ],
+          "Size": [
+            512,
+            20,
+            512
+          ]
+        }
       }
     },
     "Lighting": {

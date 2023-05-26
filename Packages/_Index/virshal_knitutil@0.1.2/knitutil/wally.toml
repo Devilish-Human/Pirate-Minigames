@@ -1,0 +1,10 @@
+[package]
+name = "virshal/knitutil"
+description = "A module containing useful functions for Knit projects"
+version = "0.1.2"
+license = "MIT"
+authors = ["Virshal"]
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[dependencies]

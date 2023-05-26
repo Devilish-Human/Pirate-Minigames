@@ -10,7 +10,7 @@ local previousCollisionGroups = {}
 local function setCollisionGroup(object)
     if object:IsA("BasePart") then
         previousCollisionGroups[object] = object.CollisionGroupId
-        PhysicsService:SetPartCollisionGroup(object, playerCollisionGroupName)
+        PhysicsService:RegisterCollisionGroup(playerCollisionGroupName)
     end
 end
 

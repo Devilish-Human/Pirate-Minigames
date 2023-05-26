@@ -1,0 +1,17 @@
+[package]
+name = "pirateninja-studio/pirate-minigames"
+version = "0.1.0"
+registry = "https://github.com/UpliftGames/wally-index"
+realm = "shared"
+
+[server-dependencies]
+lunar-cmdr = "scytheric/lunar-cmdr@0.1.4"
+
+[dependencies]
+Janitor = "howmanysmall/janitor@1.15.2"
+Roact = "roblox/roact@1.4.4"
+Fusion = "elttob/fusion@0.2.0"
+KnitUtil = "virshal/knitutil@0.1.2"
+Comm = "sleitnick/comm@0.3.1"
+Component = "sleitnick/component@2.4.6"
+Knit = "sleitnick/knit@1.5.1"
