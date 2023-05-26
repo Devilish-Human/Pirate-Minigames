@@ -12,18 +12,20 @@ Knit.Shared = game:GetService("ReplicatedStorage").Shared
 
 Knit.Config = require(Knit.Shared.Config)
 
-function Knit.Wait (...)
-    return require(Knit.Shared.RBXWait)(...)
+function Knit.Wait(...)
+	return require(Knit.Shared.RBXWait)(...)
 end
 -- Load all services within 'Services':
 
-Knit.Start():Then(function()
-    for _,v in pairs(workspace:GetChildren()) do
-        if (v.Name == "Nodes" and v:IsA("Folder")) then
-            v:Destroy()
-        end
-    end
-    KnitUtil.LoadComponents(script.Parent.Components)
-end):Catch(warn)
+Knit.Start()
+	:Then(function()
+		for _, v in pairs(workspace:GetChildren()) do
+			if v.Name == "Nodes" and v:IsA("Folder") then
+				v:Destroy()
+			end
+		end
+		KnitUtil.LoadComponents(script.Parent.Components)
+	end)
+	:Catch(warn)
 
 --Sodalicious

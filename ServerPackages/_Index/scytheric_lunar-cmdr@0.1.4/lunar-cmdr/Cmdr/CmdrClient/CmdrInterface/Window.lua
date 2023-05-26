@@ -8,7 +8,7 @@ local Player = Players.LocalPlayer
 
 local LINE_HEIGHT = 20
 local WINDOW_MAX_HEIGHT = 300
-local MOUSE_TOUCH_ENUM = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch}
+local MOUSE_TOUCH_ENUM = { Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.Touch }
 
 --- Window handles the command bar GUI
 local Window = {
@@ -47,8 +47,7 @@ function Window:UpdateWindowHeight()
 	end
 
 	Gui.CanvasSize = UDim2.new(Gui.CanvasSize.X.Scale, Gui.CanvasSize.X.Offset, 0, windowHeight)
-	Gui.Size =
-		UDim2.new(
+	Gui.Size = UDim2.new(
 		Gui.Size.X.Scale,
 		Gui.Size.X.Offset,
 		0,
@@ -74,8 +73,7 @@ function Window:AddLine(text, options)
 
 	local str = self.Cmdr.Util.EmulateTabstops(text or "nil", 8)
 	local line = Line:Clone()
-	line.Size =
-		UDim2.new(
+	line.Size = UDim2.new(
 		line.Size.X.Scale,
 		line.Size.X.Offset,
 		0,
@@ -184,16 +182,15 @@ function Window:TraverseHistory(delta)
 
 	if self.HistoryState == nil then
 		self.HistoryState = {
-			Position = #history + 1;
-			InitialText = self:GetEntryText();
+			Position = #history + 1,
+			InitialText = self:GetEntryText(),
 		}
 	end
 
 	self.HistoryState.Position = math.clamp(self.HistoryState.Position + delta, 1, #history + 1)
 
 	self:SetEntryText(
-		self.HistoryState.Position == #history + 1
-			and self.HistoryState.InitialText
+		self.HistoryState.Position == #history + 1 and self.HistoryState.InitialText
 			or history[self.HistoryState.Position]
 	)
 end
@@ -282,7 +279,8 @@ function Window:BeginInput(input, gameProcessed)
 				local lastArg = self.AutoComplete.Arg
 
 				newText = command.Alias
-				insertSpace = self.AutoComplete.NumArgs ~= #command.ArgumentDefinitions and self.AutoComplete.IsPartial == false
+				insertSpace = self.AutoComplete.NumArgs ~= #command.ArgumentDefinitions
+					and self.AutoComplete.IsPartial == false
 
 				local args = command.Arguments
 				for i = 1, #args do
@@ -323,30 +321,24 @@ function Window:BeginInput(input, gameProcessed)
 end
 
 -- Hook events
-Entry.TextBox.FocusLost:Connect(
-	function(submit)
-		return Window:LoseFocus(submit)
-	end
-)
+Entry.TextBox.FocusLost:Connect(function(submit)
+	return Window:LoseFocus(submit)
+end)
 
-UserInputService.InputBegan:Connect(
-	function(input, gameProcessed)
-		return Window:BeginInput(input, gameProcessed)
-	end
-)
+UserInputService.InputBegan:Connect(function(input, gameProcessed)
+	return Window:BeginInput(input, gameProcessed)
+end)
 
-Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(
-	function()
-		if Entry.TextBox.Text:match("\t") then -- Eat \t
-			Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
-			return
-		end
-		if Window.OnTextChanged then
-			Gui.CanvasPosition = Vector2.new(0, math.clamp(Gui.CanvasSize.Height.Offset - 300, 0, math.huge))
-			return Window.OnTextChanged(Entry.TextBox.Text)
-		end
+Entry.TextBox:GetPropertyChangedSignal("Text"):Connect(function()
+	if Entry.TextBox.Text:match("\t") then -- Eat \t
+		Entry.TextBox.Text = Entry.TextBox.Text:gsub("\t", "")
+		return
 	end
-)
+	if Window.OnTextChanged then
+		Gui.CanvasPosition = Vector2.new(0, math.clamp(Gui.CanvasSize.Height.Offset - 300, 0, math.huge))
+		return Window.OnTextChanged(Entry.TextBox.Text)
+	end
+end)
 
 Gui.ChildAdded:Connect(Window.UpdateWindowHeight)
 

@@ -1,4 +1,4 @@
-return function ()
+return function()
 	local Cmdr = Instance.new("ScreenGui")
 	Cmdr.DisplayOrder = 1000
 	Cmdr.Name = "Cmdr"

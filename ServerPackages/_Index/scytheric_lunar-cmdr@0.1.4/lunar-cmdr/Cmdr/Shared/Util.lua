@@ -51,9 +51,10 @@ function Util.MakeFuzzyFinder(setOrContainer)
 		names, instances = transformInstanceSet(setOrContainer:GetChildren())
 	elseif typeof(setOrContainer) == "table" then
 		if
-			typeof(setOrContainer[1]) == "Instance" or typeof(setOrContainer[1]) == "EnumItem" or
-				(typeof(setOrContainer[1]) == "table" and typeof(setOrContainer[1].Name) == "string")
-		 then
+			typeof(setOrContainer[1]) == "Instance"
+			or typeof(setOrContainer[1]) == "EnumItem"
+			or (typeof(setOrContainer[1]) == "table" and typeof(setOrContainer[1].Name) == "string")
+		then
 			names, instances = transformInstanceSet(setOrContainer)
 		elseif type(setOrContainer[1]) == "string" then
 			names = setOrContainer
@@ -126,11 +127,11 @@ end
 --- Parses escape sequences into their fully qualified characters
 function Util.ParseEscapeSequences(text)
 	return text:gsub("\\(.)", {
-		t = "\t";
-		n = "\n";
+		t = "\t",
+		n = "\n",
 	})
-	:gsub("\\u(%x%x%x%x)", charCode)
-	:gsub("\\x(%x%x)", charCode)
+		:gsub("\\u(%x%x%x%x)", charCode)
+		:gsub("\\x(%x%x)", charCode)
 end
 
 function Util.EncodeEscapedOperator(text, op)
@@ -139,13 +140,13 @@ function Util.EncodeEscapedOperator(text, op)
 	local escapedFirst = "%" .. first
 
 	return text:gsub("(" .. escapedFirst .. "+)(" .. escapedOp .. ")", function(esc, op)
-			return (esc:sub(1, #esc-1) .. op):gsub(".", function(char)
-					return "\\u" .. string.format("%04x", string.byte(char), 16)
-			end)
+		return (esc:sub(1, #esc - 1) .. op):gsub(".", function(char)
+			return "\\u" .. string.format("%04x", string.byte(char), 16)
+		end)
 	end)
 end
 
-local OPERATORS = {"&&", "||", ";"}
+local OPERATORS = { "&&", "||", ";" }
 function Util.EncodeEscapedOperators(text)
 	for _, operator in ipairs(OPERATORS) do
 		text = Util.EncodeEscapedOperator(text, operator)
@@ -157,20 +158,15 @@ end
 local function encodeControlChars(text)
 	return (
 		text
-		:gsub("\\\\", "___!CMDR_ESCAPE!___")
-		:gsub("\\\"", "___!CMDR_QUOTE!___")
-		:gsub("\\'", "___!CMDR_SQUOTE!___")
-		:gsub("\\\n", "___!CMDR_NL!___")
+			:gsub("\\\\", "___!CMDR_ESCAPE!___")
+			:gsub('\\"', "___!CMDR_QUOTE!___")
+			:gsub("\\'", "___!CMDR_SQUOTE!___")
+			:gsub("\\\n", "___!CMDR_NL!___")
 	)
 end
 
 local function decodeControlChars(text)
-	return (
-		text
-		:gsub("___!CMDR_ESCAPE!___", "\\")
-		:gsub("___!CMDR_QUOTE!___", "\"")
-		:gsub("___!CMDR_NL!___", "\n")
-	)
+	return (text:gsub("___!CMDR_ESCAPE!___", "\\"):gsub("___!CMDR_QUOTE!___", '"'):gsub("___!CMDR_NL!___", "\n"))
 end
 
 --- Splits a string by space but taking into account quoted sequences which will be treated as a single argument.
@@ -243,7 +239,7 @@ function Util.MakeEnumType(name, values)
 		end,
 		Parse = function(text)
 			return findValue(text, true)
-		end
+		end,
 	}
 end
 
@@ -256,16 +252,13 @@ function Util.ParsePrefixedUnionType(typeValue, rawValue)
 	for i = 1, #split, 2 do
 		types[#types + 1] = {
 			prefix = split[i - 1] or "",
-			type = split[i]
+			type = split[i],
 		}
 	end
 
-	table.sort(
-		types,
-		function(a, b)
-			return #a.prefix > #b.prefix
-		end
-	)
+	table.sort(types, function(a, b)
+		return #a.prefix > #b.prefix
+	end)
 
 	for i = 1, #types do
 		local t = types[i]
@@ -286,8 +279,8 @@ function Util.MakeListableType(type, override)
 		Autocomplete = type.Autocomplete,
 		Default = type.Default,
 		Parse = function(...)
-			return {type.Parse(...)}
-		end
+			return { type.Parse(...) }
+		end,
 	}
 
 	if override then
@@ -318,14 +311,7 @@ function Util.RunCommandString(dispatcher, commandString)
 		local outputEncoded = output:gsub("%$", "\\x24")
 		command = command:gsub("||", output:find("%s") and ("%q"):format(outputEncoded) or outputEncoded)
 
-		output = tostring(
-			dispatcher:EvaluateAndRun(
-				(
-					Util.RunEmbeddedCommands(dispatcher, command)
-				)
-			)
-		)
-
+		output = tostring(dispatcher:EvaluateAndRun((Util.RunEmbeddedCommands(dispatcher, command))))
 
 		if i == #commands then
 			return output
@@ -341,11 +327,11 @@ function Util.RunEmbeddedCommands(dispatcher, str)
 	-- We need to do this because you can't yield in the gsub function
 	for text in str:gmatch("$(%b{})") do
 		local doQuotes = true
-		local commandString = text:sub(2, #text-1)
+		local commandString = text:sub(2, #text - 1)
 
 		if commandString:match("^{.+}$") then -- Allow double curly for literal replacement
 			doQuotes = false
-			commandString = commandString:sub(2, #commandString-1)
+			commandString = commandString:sub(2, #commandString - 1)
 		end
 
 		results[text] = Util.RunCommandString(dispatcher, commandString)
@@ -385,7 +371,6 @@ function Util.MakeAliasCommand(name, commandString)
 
 	commandString = Util.EncodeEscapedOperators(commandString)
 
-
 	local seenArgs = {}
 
 	for arg in commandString:gmatch("$(%d+)") do
@@ -395,7 +380,7 @@ function Util.MakeAliasCommand(name, commandString)
 
 			local argType, argName, argDescription
 			if options then
-				options = options:sub(2, #options-1) -- remove braces
+				options = options:sub(2, #options - 1) -- remove braces
 				argType, argName, argDescription = unpack(options:split("|"))
 			end
 
@@ -404,9 +389,9 @@ function Util.MakeAliasCommand(name, commandString)
 			argDescription = argDescription or ""
 
 			table.insert(args, {
-				Type = argType;
-				Name = argName;
-				Description = argDescription;
+				Type = argType,
+				Name = argName,
+				Description = argDescription,
 			})
 		end
 	end
@@ -419,7 +404,7 @@ function Util.MakeAliasCommand(name, commandString)
 		Args = args,
 		Run = function(context)
 			return Util.RunCommandString(context.Dispatcher, Util.SubstituteArgs(commandString, context.RawArguments))
-		end
+		end,
 	}
 end
 
@@ -427,7 +412,10 @@ end
 function Util.MakeSequenceType(options)
 	options = options or {}
 
-	assert(options.Parse ~= nil or options.Constructor ~= nil, "MakeSequenceType: Must provide one of: Constructor, Parse")
+	assert(
+		options.Parse ~= nil or options.Constructor ~= nil,
+		"MakeSequenceType: Must provide one of: Constructor, Parse"
+	)
 
 	options.TransformEach = options.TransformEach or function(...)
 		return ...
@@ -438,15 +426,15 @@ function Util.MakeSequenceType(options)
 	end
 
 	return {
-		Prefixes = options.Prefixes;
+		Prefixes = options.Prefixes,
 
-		Transform = function (text)
-			return Util.Map(Util.SplitPrioritizedDelimeter(text, {",", "%s"}), function(value)
+		Transform = function(text)
+			return Util.Map(Util.SplitPrioritizedDelimeter(text, { ",", "%s" }), function(value)
 				return options.TransformEach(value)
 			end)
-		end;
+		end,
 
-		Validate = function (components)
+		Validate = function(components)
 			if options.Length and #components > options.Length then
 				return false, ("Maximum of %d values allowed in sequence"):format(options.Length)
 			end
@@ -460,11 +448,11 @@ function Util.MakeSequenceType(options)
 			end
 
 			return true
-		end;
+		end,
 
 		Parse = options.Parse or function(components)
 			return options.Constructor(unpack(components))
-		end
+		end,
 	}
 end
 
@@ -492,7 +480,7 @@ end
 --- Maps arguments #2-n through callback and returns values as tuple
 function Util.Each(callback, ...)
 	local results = {}
-	for i, value in ipairs({...}) do
+	for i, value in ipairs({ ... }) do
 		results[i] = callback(value)
 	end
 	return unpack(results)
@@ -525,7 +513,7 @@ function Util.Mutex()
 	local queue = {}
 	local locked = false
 
-	return function ()
+	return function()
 		if locked then
 			table.insert(queue, coroutine.running())
 			coroutine.yield()

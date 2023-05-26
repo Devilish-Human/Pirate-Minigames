@@ -7,7 +7,7 @@ local c_running = coroutine.running
 local c_resume = coroutine.resume
 
 local Yields = {}
-game:GetService('RunService').Stepped:Connect(function()
+game:GetService("RunService").Stepped:Connect(function()
 	local Clock = o_clock()
 	for Idx, data in next, Yields do
 		local Spent = Clock - data[1]
@@ -19,7 +19,7 @@ game:GetService('RunService').Stepped:Connect(function()
 end)
 
 return function(Time)
-	Time = (type(Time) ~= 'number' or Time < 0) and 0 or Time
-	table.insert(Yields, {o_clock(), Time, c_running()})
+	Time = (type(Time) ~= "number" or Time < 0) and 0 or Time
+	table.insert(Yields, { o_clock(), Time, c_running() })
 	return c_yield()
 end

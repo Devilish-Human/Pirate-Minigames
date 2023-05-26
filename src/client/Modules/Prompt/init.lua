@@ -2,7 +2,7 @@ local Tween = game:GetService("TweenService")
 
 local Knit = require(game:GetService("ReplicatedStorage").Knit)
 
-local PromptHandler  = {}
+local PromptHandler = {}
 
 -- SERVICES --
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -35,36 +35,44 @@ local SettingsTbl = {
 		end,
 	}, 
 }
-]]--
+]]
+--
 
-
-function PromptHandler:Create(settingsTbl)	
-	assert(settingsTbl.Title, "Prompt Title not found") -- This will cause an error if the Title is not found 
+function PromptHandler:Create(settingsTbl)
+	assert(settingsTbl.Title, "Prompt Title not found") -- This will cause an error if the Title is not found
 	assert(settingsTbl.Text, "Prompt Text not found") -- This will cause an error if the Body is not found
-	
+
 	local Prompt = PromptGui:Clone() -- Clone our GUI so we can use it multiple times
 	local PromptFrame = Prompt.PromptBody
 	local ButtonHolder = PromptFrame.Buttons
-	
-	Tween:Create(PromptFrame, TweenInfo.new(.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {BackgroundTransparency = 0}):Play()
-	
+
+	Tween:Create(
+		PromptFrame,
+		TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+		{ BackgroundTransparency = 0 }
+	):Play()
+
 	PromptFrame.Title.Text = settingsTbl.Title -- This will change the Text for the Title
 	PromptFrame.Body.Text = settingsTbl.Text -- This will change the Text for the Body
-	
+
 	local AcceptSettings = settingsTbl.AcceptButton
 	local DenySettings = settingsTbl.DenyButton
-	
+
 	local function CreateButton(BtnType, BtnText, Callback)
 		local Button = BtnType:Clone()
 		Button.Parent = ButtonHolder
-		
+
 		Button.Text = BtnText
-		
+
 		Button.MouseButton1Click:Connect(function()
 			if Callback then
 				Callback()
 			end
-			local a = Tween:Create(PromptFrame, TweenInfo.new(.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In), {BackgroundTransparency = 1})
+			local a = Tween:Create(
+				PromptFrame,
+				TweenInfo.new(0.25, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
+				{ BackgroundTransparency = 1 }
+			)
 			a:Play()
 			a.Completed:Connect(function()
 				Prompt:Destroy()
