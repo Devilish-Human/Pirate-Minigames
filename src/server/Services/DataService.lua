@@ -88,7 +88,6 @@ local _onPlayerRemoving = function(player: Player)
 	end
 end
 
-
 function DataService:KnitStart()
 	for _, plr in pairs(game:GetService("Players"):GetChildren()) do
 		if plr then
