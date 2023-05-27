@@ -2,10 +2,8 @@
 -- Author: PirateNinja
 -- Date: 07/16/2021
 
-local Knit = require(game:GetService("ReplicatedStorage").Knit)
-
-local Roact = require(Knit.Shared.Roact)
-local RBXWait = require(Knit.Shared.RBXWait)
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 
 local TweenService = game:GetService("TweenService")
 
@@ -57,105 +55,105 @@ function MinigameUIController:KnitStart()
 		wait()
 	until Knit.Player.Character ~= nil
 
-	local minigameUI = playerGui:FindFirstChild("MinigameUI")
-	local ObjectiveUI = minigameUI:FindFirstChild("ObjectiveFrame")
-	local ResultsFrame = minigameUI:FindFirstChild("EndResults")
+	-- local minigameUI = playerGui:FindFirstChild("MinigameUI")
+	-- local ObjectiveUI = minigameUI:FindFirstChild("ObjectiveFrame")
+	-- local ResultsFrame = minigameUI:FindFirstChild("EndResults")
 
-	local showObjective = TweenService:Create(
-		ObjectiveUI,
-		TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
-		{ Position = UDim2.new(0.5, 0, 0.88, 0), BackgroundTransparency = 0 }
-	)
-	local hideObjective = TweenService:Create(
-		ObjectiveUI,
-		TweenInfo.new(2.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
-		{ Position = UDim2.new(0.5, 0, 1.88, 0), BackgroundTransparency = 1 }
-	)
+	-- local showObjective = TweenService:Create(
+	-- 	ObjectiveUI,
+	-- 	TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
+	-- 	{ Position = UDim2.new(0.5, 0, 0.88, 0), BackgroundTransparency = 0 }
+	-- )
+	-- local hideObjective = TweenService:Create(
+	-- 	ObjectiveUI,
+	-- 	TweenInfo.new(2.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
+	-- 	{ Position = UDim2.new(0.5, 0, 1.88, 0), BackgroundTransparency = 1 }
+	-- )
 
-	GameService.ShowObjUI:Connect(function(...)
-		local mgName, mgObjective = ...
-		ObjectiveUI.m_Name.Text = mgName
-		ObjectiveUI.m_Objective.Text = mgObjective
+	-- GameService.ShowObjUI:Connect(function(...)
+	-- 	local mgName, mgObjective = ...
+	-- 	ObjectiveUI.m_Name.Text = mgName
+	-- 	ObjectiveUI.m_Objective.Text = mgObjective
 
-		showObjective:Play()
-		wait(3)
-		hideObjective:Play()
-	end)
-	GameService.DisplayStatus:Connect(function(message)
-		minigameUI.StatusLabel.Text = message
-	end)
+	-- 	showObjective:Play()
+	-- 	wait(3)
+	-- 	hideObjective:Play()
+	-- end)
+	-- GameService.DisplayStatus:Connect(function(message)
+	-- 	minigameUI.StatusLabel.Text = message
+	-- end)
 
-	local usernameLabel = createLabel()
-	ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
-	ResultsFrame.earnedLabel.Text = ""
+	-- local usernameLabel = createLabel()
+	-- ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
+	-- ResultsFrame.earnedLabel.Text = ""
 
-	GameService.ShowResults:Connect(function(...)
-		ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
-		local endResult = ...
+	-- GameService.ShowResults:Connect(function(...)
+	-- 	ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
+	-- 	local endResult = ...
 
-		TweenService:Create(
-			ResultsFrame,
-			TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
-			{ Position = UDim2.new(0.5, 0, 0.5, 0) }
-		):Play()
+	-- 	TweenService:Create(
+	-- 		ResultsFrame,
+	-- 		TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
+	-- 		{ Position = UDim2.new(0.5, 0, 0.5, 0) }
+	-- 	):Play()
 
-		local x = 0
-		for i, v in pairs(endResult) do
-			if not i or not v then
-				return
-			end
+	-- 	local x = 0
+	-- 	for i, v in pairs(endResult) do
+	-- 		if not i or not v then
+	-- 			return
+	-- 		end
 
-			local userName = i
-			local message = v.Message
-			local won = v.Won
+	-- 		local userName = i
+	-- 		local message = v.Message
+	-- 		local won = v.Won
 
-			local label = usernameLabel:Clone()
-			label.Text = ""
-			label.Parent = ResultsFrame.ResultList
-			label.Position = UDim2.new(0, 0, 0, 32 * x)
+	-- 		local label = usernameLabel:Clone()
+	-- 		label.Text = ""
+	-- 		label.Parent = ResultsFrame.ResultList
+	-- 		label.Position = UDim2.new(0, 0, 0, 32 * x)
 
-			if game.Players:FindFirstChild(userName) then
-				if game.Players:FindFirstChild(userName).DisplayName == userName then
-					label.Text = ((" %s"):format(userName))
-				else
-					label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
-				end
-			else
-				label.Text = ((" %s"):format(userName))
-			end
+	-- 		if game.Players:FindFirstChild(userName) then
+	-- 			if game.Players:FindFirstChild(userName).DisplayName == userName then
+	-- 				label.Text = ((" %s"):format(userName))
+	-- 			else
+	-- 				label.Text = ((" %s (@%s)"):format(game.Players[userName].DisplayName, userName))
+	-- 			end
+	-- 		else
+	-- 			label.Text = ((" %s"):format(userName))
+	-- 		end
 
-			local earnedCoins = ResultsFrame.earnedLabel
-			label.ResultLabel.Text = message
+	-- 		local earnedCoins = ResultsFrame.earnedLabel
+	-- 		label.ResultLabel.Text = message
 
-			if won == true then
-				label.ResultLabel.TextColor3 = Color3.new(0, 1, 0)
-			else
-				label.ResultLabel.TextColor3 = Color3.new(1, 0, 0)
-			end
-			if userName == Knit.Player.Name then
-				--label.TextColor3 = Color3.fromRGB(218, 145, 0)
-				TweenService:Create(
-					label,
-					TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
-					{ BackgroundColor3 = Color3.fromRGB(218, 145, 0) }
-				):Play()
-			else
-				TweenService:Create(
-					label,
-					TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
-					{ TextColor3 = Color3.fromRGB(255, 255, 255) }
-				):Play()
-			end
-			earnedCoins.Text = ("Earned +%s coins"):format(v.Coins)
-			x += 1
-		end
-		wait(5.5)
-		TweenService:Create(
-			ResultsFrame,
-			TweenInfo.new(0.50, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
-			{ Position = UDim2.new(0.5, 0, 1.5, 0) }
-		):Play()
-	end)
+	-- 		if won == true then
+	-- 			label.ResultLabel.TextColor3 = Color3.new(0, 1, 0)
+	-- 		else
+	-- 			label.ResultLabel.TextColor3 = Color3.new(1, 0, 0)
+	-- 		end
+	-- 		if userName == Knit.Player.Name then
+	-- 			--label.TextColor3 = Color3.fromRGB(218, 145, 0)
+	-- 			TweenService:Create(
+	-- 				label,
+	-- 				TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
+	-- 				{ BackgroundColor3 = Color3.fromRGB(218, 145, 0) }
+	-- 			):Play()
+	-- 		else
+	-- 			TweenService:Create(
+	-- 				label,
+	-- 				TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
+	-- 				{ TextColor3 = Color3.fromRGB(255, 255, 255) }
+	-- 			):Play()
+	-- 		end
+	-- 		earnedCoins.Text = ("Earned +%s coins"):format(v.Coins)
+	-- 		x += 1
+	-- 	end
+	-- 	wait(5.5)
+	-- 	TweenService:Create(
+	-- 		ResultsFrame,
+	-- 		TweenInfo.new(0.50, Enum.EasingStyle.Quint, Enum.EasingDirection.In),
+	-- 		{ Position = UDim2.new(0.5, 0, 1.5, 0) }
+	-- 	):Play()
+	-- end)
 end
 
 function MinigameUIController:KnitInit()

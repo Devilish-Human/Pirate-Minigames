@@ -35,6 +35,7 @@ function Minigame.new(Properties: MinigameProperties)
 
 	self.Players = {} -- All players alive & dead
 	self.Contestants = {} -- Alive players or winners
+	self.Winners = {} -- Winners of the minigame
 
 	return self
 end

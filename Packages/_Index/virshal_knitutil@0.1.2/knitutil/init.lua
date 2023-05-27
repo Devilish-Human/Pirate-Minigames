@@ -42,7 +42,7 @@ function KnitUtil.LoadComponents(container: Instance)
 
 	local components = KnitUtil:_getComponentsTable()
 
-	for _, v in pairs(container:GetChildren()) do
+    for _, v in pairs (container:GetChildren()) do
 		if v:IsA("ModuleScript") then
 			print("Loading component", v)
 
@@ -53,7 +53,7 @@ function KnitUtil.LoadComponents(container: Instance)
 
 			print("\tLoaded component", v)
 		end
-	end
+    end
 
 	return components
 end
@@ -185,17 +185,17 @@ end
 function KnitUtil.MethodFromInstance(instance: Instance, methodName: string)
 	local components = KnitUtil:_getComponentsTable()
 
-	for _, tag in pairs(CollectionService:GetTags(instance)) do
-		local componentBase = components[tag]
+	for _, tag in pairs (CollectionService:GetTags(instance)) do
+		local componentBase = components[tag]		
 		if not componentBase then
 			continue
 		end
-
-		local component = componentBase:FromInstance(instance)
+		
+		local component = componentBase:FromInstance(instance)		
 		if not component then
 			continue
 		end
-
+		
 		local value = component[methodName]
 		if value and typeof(value) == "function" then
 			return function(...)
@@ -227,13 +227,13 @@ end
 function KnitUtil.VariableFromInstance(instance: Instance, variableName: string)
 	local components = KnitUtil:_getComponentsTable()
 
-	for _, tag in pairs(CollectionService:GetTags(instance)) do
-		local componentBase = components[tag]
+	for _, tag in pairs (CollectionService:GetTags(instance)) do
+		local componentBase = components[tag]		
 		if not componentBase then
 			continue
 		end
-
-		local component = componentBase:FromInstance(instance)
+		
+		local component = componentBase:FromInstance(instance)		
 		if not component then
 			continue
 		end

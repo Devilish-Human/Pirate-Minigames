@@ -6,6 +6,7 @@ realm = "shared"
 
 [server-dependencies]
 lunar-cmdr = "scytheric/lunar-cmdr@0.1.4"
+ProfileService = "alreadypro/profileservice@1.0.4"
 
 [dependencies]
 Janitor = "howmanysmall/janitor@1.15.2"
@@ -15,3 +16,4 @@ KnitUtil = "virshal/knitutil@0.1.2"
 Comm = "sleitnick/comm@0.3.1"
 Component = "sleitnick/component@2.4.6"
 Knit = "sleitnick/knit@1.5.1"
+Cmdr = "evaera/cmdr@1.11.0"

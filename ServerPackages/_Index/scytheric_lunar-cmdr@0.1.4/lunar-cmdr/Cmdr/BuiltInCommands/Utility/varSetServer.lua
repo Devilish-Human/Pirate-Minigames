@@ -6,7 +6,7 @@ local DataStoresActive, DataStore = pcall(function()
 	return DataStore
 end)
 
-return function(context, key, value)
+return function (context, key, value)
 	local gameWide = false
 	local saved = true
 

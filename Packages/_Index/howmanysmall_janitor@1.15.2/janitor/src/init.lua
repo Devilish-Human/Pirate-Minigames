@@ -14,8 +14,7 @@ local FoundPromiseLibrary, Promise = GetPromiseLibrary()
 local IndicesReference = Symbol("IndicesReference")
 local LinkToInstanceIndex = Symbol("LinkToInstanceIndex")
 
-local INVALID_METHOD_NAME =
-	"Object is a %s and as such expected `true?` for the method name and instead got %s. Traceback: %s"
+local INVALID_METHOD_NAME = "Object is a %s and as such expected `true?` for the method name and instead got %s. Traceback: %s"
 local METHOD_NOT_FOUND_ERROR = "Object %s doesn't have method %s, are you sure you want to add it? Traceback: %s"
 local NOT_A_PROMISE = "Invalid argument #1 to 'Janitor:AddPromise' (Promise expected, got %s (%s)) Traceback: %s"
 
@@ -42,9 +41,9 @@ Janitor.__index = Janitor
 ]=]
 
 local TypeDefaults = {
-	["function"] = true,
-	thread = true,
-	RBXScriptConnection = "Disconnect",
+	["function"] = true;
+	thread = true;
+	RBXScriptConnection = "Disconnect";
 }
 
 --[=[
@@ -53,8 +52,8 @@ local TypeDefaults = {
 ]=]
 function Janitor.new(): Janitor
 	return setmetatable({
-		CurrentlyCleaning = false,
-		[IndicesReference] = nil,
+		CurrentlyCleaning = false;
+		[IndicesReference] = nil;
 	}, Janitor) :: any
 end
 
@@ -170,14 +169,7 @@ function Janitor:Add<T>(Object: T, MethodName: BooleanOrString?, Index: any?): T
 		end
 	else
 		if not (Object :: any)[NewMethodName] then
-			warn(
-				string.format(
-					METHOD_NOT_FOUND_ERROR,
-					tostring(Object),
-					tostring(NewMethodName),
-					debug.traceback(nil :: any, 2)
-				)
-			)
+			warn(string.format(METHOD_NOT_FOUND_ERROR, tostring(Object), tostring(NewMethodName), debug.traceback(nil :: any, 2)))
 		end
 	end
 
@@ -214,31 +206,20 @@ end
 function Janitor:AddPromise(PromiseObject)
 	if FoundPromiseLibrary then
 		if not Promise.is(PromiseObject) then
-			error(
-				string.format(
-					NOT_A_PROMISE,
-					typeof(PromiseObject),
-					tostring(PromiseObject),
-					debug.traceback(nil :: any, 2)
-				)
-			)
+			error(string.format(NOT_A_PROMISE, typeof(PromiseObject), tostring(PromiseObject), debug.traceback(nil :: any, 2)))
 		end
 
 		if PromiseObject:getStatus() == Promise.Status.Started then
 			local Id = newproxy(false)
-			local NewPromise = self:Add(
-				Promise.new(function(Resolve, _, OnCancel)
-					if OnCancel(function()
-						PromiseObject:cancel()
-					end) then
-						return
-					end
+			local NewPromise = self:Add(Promise.new(function(Resolve, _, OnCancel)
+				if OnCancel(function()
+					PromiseObject:cancel()
+				end) then
+					return
+				end
 
-					Resolve(PromiseObject)
-				end),
-				"cancel",
-				Id
-			)
+				Resolve(PromiseObject)
+			end), "cancel", Id)
 
 			NewPromise:finallyCall(self.Remove, self, Id)
 			return NewPromise
@@ -552,7 +533,7 @@ end
 	@since v1.15.1
 	@return {[any]: any}
 ]=]
-function Janitor:GetAll(): { [any]: any }
+function Janitor:GetAll(): {[any]: any}
 	local This = self[IndicesReference]
 	return if This then table.freeze(table.clone(This)) else {}
 end
@@ -678,13 +659,9 @@ Janitor.__call = Janitor.Cleanup
 function Janitor:LinkToInstance(Object: Instance, AllowMultiple: boolean?): RBXScriptConnection
 	local IndexToUse = AllowMultiple and newproxy(false) or LinkToInstanceIndex
 
-	return self:Add(
-		Object.Destroying:Connect(function()
-			self:Cleanup()
-		end),
-		"Disconnect",
-		IndexToUse
-	)
+	return self:Add(Object.Destroying:Connect(function()
+		self:Cleanup()
+	end), "Disconnect", IndexToUse)
 end
 
 --[=[
@@ -782,7 +759,7 @@ end
 ]=]
 function Janitor:LinkToInstances(...: Instance)
 	local ManualCleanup = Janitor.new()
-	for _, Object in { ... } do
+	for _, Object in {...} do
 		ManualCleanup:Add(self:LinkToInstance(Object, true), "Disconnect")
 	end
 
@@ -807,7 +784,7 @@ export type Janitor = {
 	RemoveListNoClean: (self: Janitor, ...any) -> Janitor,
 
 	Get: (self: Janitor, Index: any) -> any?,
-	GetAll: (self: Janitor) -> { [any]: any },
+	GetAll: (self: Janitor) -> {[any]: any},
 
 	Cleanup: (self: Janitor) -> (),
 	Destroy: (self: Janitor) -> (),

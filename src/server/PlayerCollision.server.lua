@@ -2,7 +2,7 @@ local PhysicsService = game:GetService("PhysicsService")
 local Players = game:GetService("Players")
 
 local playerCollisionGroupName = "Players"
-PhysicsService:CreateCollisionGroup(playerCollisionGroupName)
+PhysicsService:RegisterCollisionGroup(playerCollisionGroupName)
 PhysicsService:CollisionGroupSetCollidable(playerCollisionGroupName, playerCollisionGroupName, false)
 
 local previousCollisionGroups = {}

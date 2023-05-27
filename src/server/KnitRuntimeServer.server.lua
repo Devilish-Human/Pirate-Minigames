@@ -4,28 +4,45 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
-local KnitUtil = require(ReplicatedStorage:FindFirstChild("Packages").KnitUtil)
-local Component = require(ReplicatedStorage:FindFirstChild("Packages").Component)
+Knit.Shared = ReplicatedStorage:FindFirstChild("Shared")
 
+Knit.Loaded = false
 Knit.Modules = {}
-Knit.Shared = game:GetService("ReplicatedStorage").Shared
+Knit.Components = {}
+Knit.Class = {}
 
-Knit.Config = require(Knit.Shared.Config)
+local SERVERTAG = "[SERVER]"
+local KNITTAG = "[KNIT]"
 
-function Knit.Wait(...)
-	return require(Knit.Shared.RBXWait)(...)
+for _, v in ipairs(script.Parent:GetDescendants()) do
+    local IsModule = v:IsA("ModuleScript")
+    local IsService = v:IsDescendantOf(script.Parent.Services) and v.Name:match("Service$")
+    local IsComponent = v:IsDescendantOf(script.Parent.Components) and v.Name:match("Component$")
+
+    if (IsModule) then
+            if (IsService) then
+                require(v)
+                print(`{SERVERTAG} Loaded service {v.Name}.`)
+            else if (IsComponent) then
+                Knit.Components[v.Name] = require(v)
+                print(`{SERVERTAG} Loaded component {v.Name}.`)
+            else
+                Knit.Modules[v.Name] = v
+            end
+        end
+    end
 end
--- Load all services within 'Services':
 
-Knit.Start()
-	:Then(function()
-		for _, v in pairs(workspace:GetChildren()) do
-			if v.Name == "Nodes" and v:IsA("Folder") then
-				v:Destroy()
-			end
-		end
-		KnitUtil.LoadComponents(script.Parent.Components)
-	end)
-	:Catch(warn)
+for _,v in ipairs(script.Parent:GetDescendants()) do
+    if (v:IsA("ModuleScript")) then
+        Knit[v.Name] = require(v)
+    end
+end
 
+print(Knit.Components)
+
+Knit.Start():andThen(function()
+    print(`{KNITTAG} Knit::Framework has been successfully loaded.`)
+    Knit.Loaded = true
+end):catch(warn)
 --Sodalicious

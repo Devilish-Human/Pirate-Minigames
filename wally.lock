@@ -3,8 +3,18 @@
 registry = "test"
 
 [[package]]
+name = "alreadypro/profileservice"
+version = "1.0.4"
+dependencies = []
+
+[[package]]
 name = "elttob/fusion"
 version = "0.2.0"
+dependencies = []
+
+[[package]]
+name = "evaera/cmdr"
+version = "1.11.0"
 dependencies = []
 
 [[package]]
@@ -20,7 +30,7 @@ dependencies = []
 [[package]]
 name = "pirateninja-studio/pirate-minigames"
 version = "0.1.0"
-dependencies = [["Comm", "sleitnick/comm@0.3.1"], ["Component", "sleitnick/component@2.4.6"], ["Fusion", "elttob/fusion@0.2.0"], ["Janitor", "howmanysmall/janitor@1.15.2"], ["Knit", "sleitnick/knit@1.5.1"], ["KnitUtil", "virshal/knitutil@0.1.2"], ["Roact", "roblox/roact@1.4.4"]]
+dependencies = [["Cmdr", "evaera/cmdr@1.11.0"], ["Comm", "sleitnick/comm@0.3.1"], ["Component", "sleitnick/component@2.4.6"], ["Fusion", "elttob/fusion@0.2.0"], ["Janitor", "howmanysmall/janitor@1.15.2"], ["Knit", "sleitnick/knit@1.5.1"], ["KnitUtil", "virshal/knitutil@0.1.2"], ["Roact", "roblox/roact@1.4.4"]]
 
 [[package]]
 name = "roblox/roact"
