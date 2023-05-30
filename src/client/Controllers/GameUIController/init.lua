@@ -9,9 +9,7 @@ local GameUIController = Knit.CreateController({ Name = "GameUIController" })
 
 local DataService, GameService
 
-function GameUIController:GetGameUI()
-	return Knit.Player.PlayerGui.GameUI
-end
+local playerGui 
 
 function GameUIController:Spectate()
 	-- local player = Knit.Player
