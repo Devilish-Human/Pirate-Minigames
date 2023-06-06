@@ -23,9 +23,14 @@ version = "1.15.2"
 dependencies = []
 
 [[package]]
+name = "kepiar/topbarplus"
+version = "0.1.1"
+dependencies = []
+
+[[package]]
 name = "pirateninja-studio/pirate-minigames"
 version = "0.1.0"
-dependencies = [["Cmdr", "evaera/cmdr@1.11.0"], ["Comm", "sleitnick/comm@0.3.1"], ["Component", "sleitnick/component@2.4.6"], ["Janitor", "howmanysmall/janitor@1.15.2"], ["Knit", "sleitnick/knit@1.5.1"], ["KnitUtil", "virshal/knitutil@0.1.2"]]
+dependencies = [["Cmdr", "evaera/cmdr@1.11.0"], ["Comm", "sleitnick/comm@0.3.1"], ["Component", "sleitnick/component@2.4.6"], ["Janitor", "howmanysmall/janitor@1.15.2"], ["Knit", "sleitnick/knit@1.5.1"], ["KnitUtil", "virshal/knitutil@0.1.2"], ["Signal", "sleitnick/signal@1.5.0"], ["TopbarPlus", "kepiar/topbarplus@0.1.1"]]
 
 [[package]]
 name = "scytheric/lunar-cmdr"

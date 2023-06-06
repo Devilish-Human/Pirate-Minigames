@@ -1,6 +1,10 @@
 local Knit = require(game:GetService("ReplicatedStorage").Packages.Knit)
 
-return function (context)
+return function (_, minigame)
     local MinigameService = Knit.GetService("MinigameService")
-    print(MinigameService:ChooseMinigame())
+    local GameService = Knit.GetService("GameService")
+
+    GameService.SetMinigame:Fire(minigame)
+
+    print(minigame)
 end

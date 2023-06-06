@@ -9,7 +9,9 @@ Knit.Shared = ReplicatedStorage:FindFirstChild("Shared")
 Knit.Loaded = false
 Knit.Modules = {}
 Knit.Components = {}
-Knit.Class = {}
+Knit.Class = {
+    Minigame = {}
+}
 
 local SERVERTAG = "[SERVER]"
 local KNITTAG = "[KNIT]"
@@ -35,7 +37,7 @@ end
 
 for _,v in ipairs(script.Parent:GetDescendants()) do
     if (v:IsA("ModuleScript")) then
-        Knit[v.Name] = require(v)
+        Knit.Class.Minigame[v.Name] = require(v)
     end
 end
 

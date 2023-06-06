@@ -7,7 +7,7 @@ local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 
 local Minigame = require(script.Parent)
-local DataService
+local DataService, GameService
 
 local ObbyRunaway = Minigame.new {
 	Name = "ObbyRunaway",
@@ -26,11 +26,17 @@ function ObbyRunaway.new(instance: Instance)
 	self._janitor = Janitor.new()
 	self.Instance = instance
 	self.Finished = false;
+	self.Length = 60
 	return self
 end
 
 function ObbyRunaway:Init()
 	DataService = Knit.GetService("DataService")
+	GameService = Knit.GetService("GameService")
+
+	self.Instance:GetAttributeChangedSignal("Finished"):Connect(function()
+		self:Stop()
+	end)
 end
 
 function ObbyRunaway:Get()
@@ -38,7 +44,8 @@ function ObbyRunaway:Get()
 end
 
 function ObbyRunaway:Start()
-	self._janitor:Add(self.Instance.Game.FinishLine.Touch:Connect(function(hit)
+	self._beginLine = self.Instance.StartLine
+	self._janitor:Add(self.Instance:FindFirstChild("FinishLine").Touched:Connect(function(hit)
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
 
@@ -49,6 +56,30 @@ function ObbyRunaway:Start()
 			end
 		end
 	end))
+
+	for i = 10, 1, -1 do
+		task.wait(1)
+		print(`Minigame will start in {i} seconds.`)
+		GameService.Client.StatusChanged:FireAll(`Minigame will start in {i} seconds.`)
+
+		if (i == 1) then
+			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
+		end
+	end
+
+	self._beginLine:Destroy()
+
+	task.wait(3)
+
+	for i = self.Length, 1, -1 do
+		task.wait(1)
+		print(`Minigame will end in {i} seconds.`)
+		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
+	end
+
+	-- Clean up
+	self.Instance:SetAttribute("Finished", true)
+	print("Mining has ended.")
 end
 
 function ObbyRunaway:_awardWinners(player)
@@ -86,7 +117,7 @@ function ObbyRunaway:Stop()
 		end
 	end
 
-	task.wait(1)
+	task.wait(3)
 
 	self._beginLine:Destroy()
 	self.Winners = {}
@@ -103,7 +134,6 @@ function ObbyRunaway:GetPlayers()
 end
 
 function ObbyRunaway:Destroy()
-	self:Stop()
 	print("Minigame ended..")
 	Janitor:Cleanup()
 end

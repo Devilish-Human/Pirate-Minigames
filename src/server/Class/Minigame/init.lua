@@ -12,9 +12,10 @@ export type MTeam = {
 }
 export type MinigameProperties = {
 	Name: string,
-	Team: MTeam,
 	Type: string?,
+	Team: MTeam?,
 	Objective: string,
+	Length: number,
 	Reward: {
 		any: any,
 	},
@@ -26,6 +27,7 @@ function Minigame.new(Properties: MinigameProperties)
 
 	self.Name = Properties.Name
 	self.Objective = Properties.Objective
+	self.Length = Properties.Length or 30
 	self.Type = Properties.Type
 	self.Team = Properties.Team or {}
 	self.Reward = Properties.Reward or {

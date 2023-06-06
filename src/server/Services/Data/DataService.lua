@@ -7,8 +7,7 @@ local DataTemplate = require(script.Parent.DataTemplate)
 
 local DataService = Knit.CreateService {
     Name = "DataService";
-    Client = {
-    };
+    Client = {};
     Profiles = {};
 }
 
@@ -39,7 +38,7 @@ end
 function DataService:Update(player: Player, dataName: string, callback)
     local oldData = self:Get(player, dataName)
     local newData = callback(oldData)
-    return self:Set(player, dataName, newData)
+    self:Set(player, dataName, newData)
 end
 
 function DataService._onPlayerJoin(player: Player)
@@ -85,9 +84,11 @@ function DataService:KnitStart()
 	task.spawn(function()
         while task.wait(1) do
             for _, player in ipairs(Players:GetPlayers()) do
-                self:Update(player, "Coins", function(coins)
-                    return coins + Random.new():NextInteger(5, 25)
-                end)
+				-- self:Update(player, "Coins", function(coins)
+				-- 	if (coins ~= nil) then
+				-- 		return coins + Random.new():NextInteger(5, 25)
+				-- 	end
+                -- end)
                 print(self:Get(player, "Coins"))
             end
         end

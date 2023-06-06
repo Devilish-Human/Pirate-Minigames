@@ -1,11 +1,15 @@
 local RunService = game:GetService("RunService")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
+local Icon = require(ReplicatedStorage:FindFirstChild("Packages").TopbarPlus)
 
 local Tween = game:GetService("TweenService")
 local TweenService = game:GetService("TweenService")
 
 local GameUIController = Knit.CreateController({ Name = "GameUIController" })
+
+
+local ConvertComma = Knit.Modules.ConvertComma
 
 local DataService, GameService
 
@@ -118,7 +122,11 @@ function GameUIController:KnitStart()
 		wait()
 	until Knit.Player.Character
 
-	-- local GameUI = Knit.Player.PlayerGui.GameUI
+	local GameUI = Knit.Player.PlayerGui.MainUI
+	local StatusBar = Knit.Player.PlayerGui:WaitForChild("StatusBar")
+
+	local StatusLabel = StatusBar:FindFirstChild("Content").Status
+
 
 	-- local shopFrame = GameUI:FindFirstChild("ShopFrame")
 
@@ -143,20 +151,29 @@ function GameUIController:KnitStart()
 	-- 	end
 	-- end)
 
-	-- Icon.new()
-	-- 	:setName("CoinIcon")
-	-- 	:setImage(363483133)
-	-- 	:setLabel(DataService.GetData("Coins") or 0)
-	-- 	:setRight()
-	-- 	:lock()
-	-- 	:give(function(icon)
-	-- 		return DataService.CoinsChanged:Connect(function(coins)
-	-- 			icon:setLabel(tostring(coins))
-	-- 			if coins >= 1000 then
-	-- 				icon:setLabel(ConvertComma(tostring(coins)))
-	-- 			end
-	-- 		end)
-	-- 	end)
+	GameService.StatusChanged:Connect(function(status)
+		StatusLabel.Text = status
+	end)
+
+	local Coins = 0
+	DataService:Get("Coins"):andThen(function(Value)
+		Coins = Value
+	end)
+
+	 Icon.new()
+	 	:setName("CoinIcon")
+	 	:setImage(363483133)
+	 	:setLabel(Coins)
+	 	:setRight()
+	 	:lock()
+	 	:give(function(icon)
+			return DataService:Get("Coins"):andThen(function(Value)
+				-- icon:setLabel(tostring(Value))
+				-- if Value >= 1000 then
+				-- 	icon:setLabel(ConvertComma(tostring(Value)))
+	 			-- end
+			end)
+	 	end)
 	--[[ Icon.new()
         :setName ("ShopIcon")
         :setImage(4882429582)
