@@ -61,6 +61,11 @@ function DataService._onPlayerJoin(player: Player)
     else
         player:Kick()
     end
+
+    local isAFK = Instance.new("BoolValue")
+    isAFK.Name = "isAFK"
+    isAFK.Value = false
+    isAFK.Parent = player
 end
 
 function DataService.Client:Get(player: Player, dataName: string)

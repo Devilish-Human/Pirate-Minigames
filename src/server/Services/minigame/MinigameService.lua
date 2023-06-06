@@ -17,51 +17,71 @@ local MinigameService = Knit.CreateService({
 local Minigames = {"ObbyRunaway"}
 local MapsFolder = ServerStorage:FindFirstChild("Assets"):FindFirstChild("Maps")
 
+function MinigameService:GetPlayers()
+    local Players = {}
+    for _, player in next, game:GetService("Players"):GetChildren() do
+        if (player:FindFirstChild("isAFK") and not player:FindFirstChild("isAFK").Value) then
+            table.insert(Players, player)
+        end
+        return Players
+    end
+end
+
 function MinigameService:ChooseMinigame()
     local minigame = Minigames[math.random(1, #Minigames)]
     return minigame
 end
 
-
+local Minigame
 function MinigameService:PlaceMap(minigame: string)
     local minigameMaps = MapsFolder[minigame]:GetChildren()
     local chosenMap = minigameMaps[math.random(1, #minigameMaps)]:Clone()
-    local class = require(ServerScriptService.Framework.Class.Minigame:FindFirstChild(minigame))
+    local MinigameModule = require(ServerScriptService.Framework.Class.Minigame:FindFirstChild(minigame))
 
-    local minigameModule
 
-    if (class) then
-        minigameModule = class.new(chosenMap)
+    if (MinigameModule) then
+        Minigame = MinigameModule.new(chosenMap)
 
         
-        chosenMap:SetAttribute("Name", minigameModule.Name)
-        chosenMap:SetAttribute("Objective", minigameModule.Objective)
-        chosenMap:SetAttribute("Type", minigameModule.Type)
+        chosenMap:SetAttribute("Name", Minigame.Name)
+        chosenMap:SetAttribute("Objective", Minigame.Objective)
+        chosenMap:SetAttribute("Type", Minigame.Type)
         chosenMap:SetAttribute("Finished", false)
         
-        minigameModule:Init()
+        Minigame:Init()
         
         local connection = workspace.ChildRemoved:Connect(function(child)
             if (child.Name == chosenMap.Name) then
-                minigameModule:Destroy()
+                Minigame:Destroy()
             end
         end)
 
         self.StartMinigame:Connect(function ()
-            print(minigameModule.Name)
-            print(minigameModule.Objective)
-            minigameModule:Start()
+            Minigame:Start()
         end)
         self.StopMinigame:Connect(function ()
             connection:Disconnect()
-            minigameModule:Destroy()
+            Minigame:Destroy()
         end)
-
     end
 
     chosenMap.Parent = workspace.Game
 
     return chosenMap
+end
+
+function MinigameService:TeleportPlayer(player: Player, teleportLocation)
+    if player and player.Character and player.Character.PrimaryPart ~= nil then
+        player.Character.PrimaryPart.CFrame = teleportLocation.CFrame * CFrame.new(0, 5, 0)
+        teleportLocation:Destroy()
+
+        table.insert(Minigame.Contestants, player)
+        table.insert(Minigame.Players, player)
+
+        player.Character.Humanoid.Died:Connect(function()
+            table.remove(Minigame.Contestants, 1)
+        end)
+    end
 end
 
 return MinigameService

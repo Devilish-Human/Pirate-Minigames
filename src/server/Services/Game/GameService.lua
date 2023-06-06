@@ -53,14 +53,25 @@ function GameService:_intermission()
 
 	Chosen = MinigameService:ChooseMinigame() or ForceChosenMinigame
 
-
+	self.Client.StatusChanged:FireAll(`Minigame chosen: {Chosen}`)
+	task.wait(2)
 	print(Chosen)
 end
 
 function GameService:_startGame()
 	local Minigame = MinigameService:PlaceMap(Chosen)
+
+	self.Client.StatusChanged:FireAll(`Objective: {Minigame:GetAttribute("Objective")}`)
+	task.wait(2)
 	
-	print(Minigame)
+	-- Teleport players
+
+	self.Client.StatusChanged:FireAll("Teleporting players")
+	for _, plr in pairs(MinigameService:GetPlayers()) do
+		local teleport = Minigame.Teleports:GetChildren()[math.random(1, #Minigame.Teleports:GetChildren())]
+		MinigameService:TeleportPlayer(plr, teleport)
+	end
+
 
 	MinigameService.StartMinigame:Fire()
 

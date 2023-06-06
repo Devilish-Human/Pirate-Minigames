@@ -7,14 +7,14 @@ local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 
 local Minigame = require(script.Parent)
-local DataService, GameService
+local DataService, GameService, MinigameService
 
 local ObbyRunaway = Minigame.new {
 	Name = "ObbyRunaway",
 	Objective = "Complete the obby to win.",
 	Type = "Race",
 	Reward = {
-		Points = 5,
+		Points = 10,
 		Exp = 6,
 	},
 }
@@ -33,9 +33,12 @@ end
 function ObbyRunaway:Init()
 	DataService = Knit.GetService("DataService")
 	GameService = Knit.GetService("GameService")
+	MinigameService = Knit.GetService("MinigameService")
 
-	self.Instance:GetAttributeChangedSignal("Finished"):Connect(function()
-		self:Stop()
+	MinigameService.SetFinished:Connect(function(state)
+		self.Finished = state
+
+		self.Instance:SetAttribute("Finished", self.Finished)
 	end)
 end
 
@@ -44,19 +47,28 @@ function ObbyRunaway:Get()
 end
 
 function ObbyRunaway:Start()
-	self._beginLine = self.Instance.StartLine
+	self._beginLine = self.Instance:FindFirstChild("BeginLine")
+	local debounce = false
 	self._janitor:Add(self.Instance:FindFirstChild("FinishLine").Touched:Connect(function(hit)
+		debounce = true
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
 
 		if (human) then
-			local player = game:GetService("Players"):GetPlayerFromCharacter(human)
-			if (player) then
-				self:_awardWinners(player)
+			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
+			if (player and debounce == true) then
+				self:_addWinner(player)
+				self:_awardPlayer(player)
+				player:LoadCharacter()
+				table.remove(self.Contestants, 1)
 			end
 		end
-	end))
 
+		task.wait(3)
+		print(self.Winners)
+		debounce = false
+	end))
+	
 	for i = 10, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will start in {i} seconds.`)
@@ -66,25 +78,35 @@ function ObbyRunaway:Start()
 			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
 		end
 	end
-
+	
+	print(self.Players)
+	print(self.Contestants)
+	
 	self._beginLine:Destroy()
-
-	task.wait(3)
-
 	for i = self.Length, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will end in {i} seconds.`)
 		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
+
+		if (#self.Contestants <= 0) then
+			break
+		end
 	end
 
 	-- Clean up
-	self.Instance:SetAttribute("Finished", true)
+	MinigameService.SetFinished:Fire(true)
 	print("Mining has ended.")
 end
 
-function ObbyRunaway:_awardWinners(player)
-	if (#self.Winners <= 1) then
-		DataService:Update(player, "Coins", function(money)
+function ObbyRunaway:_addWinner(player: Player)
+	if (self.Contestants[player] and not self.Winners[player]) then
+		table.insert(self.Winners, player)
+	end
+end
+
+function ObbyRunaway:_awardPlayer(player: Player)
+	if (#self.Winners == 1) then
+		DataService:Update(self.Winners[1], "Coins", function(money)
 			return money + (self.Reward.Points * 1.25)
 		end)
 	else
@@ -92,18 +114,25 @@ function ObbyRunaway:_awardWinners(player)
 			return money + (self.Reward.Points)
 		end)
 	end
-	DataService:Update(player, "Win", function(money)
+	DataService:Update(player, "Wins", function(money)
 		return money + 1
 	end)
 end
 
 function ObbyRunaway:Stop()
 	local message = "Won."
-	if (#self.Winners <= 1) then
+
+	for index,player in ipairs(self.Winners) do
+		if (table.find(self.Contestants, index)) then
+			self:_awardWinners(player)
+		end
+	end
+
+	if (#self.Winners == 1) then
 		for _,winner in ipairs(self.Winners) do
 			self.RoundResult[winner.Name] = {
 				Won = true,
-				Message = message,
+				Message = "Sole Winner",
 				Coins = (self.Reward.Points * 1.25)
 			}
 		end
@@ -116,13 +145,6 @@ function ObbyRunaway:Stop()
 			}
 		end
 	end
-
-	task.wait(3)
-
-	self._beginLine:Destroy()
-	self.Winners = {}
-	self.Players = {}
-	self.Contestants = {}
 end
 
 function ObbyRunaway:GetContestants()
@@ -134,7 +156,10 @@ function ObbyRunaway:GetPlayers()
 end
 
 function ObbyRunaway:Destroy()
-	print("Minigame ended..")
+	table.clear(self.Players)
+	table.clear(self.Contestants)
+	table.clear(self.Winners)
+
 	Janitor:Cleanup()
 end
 
