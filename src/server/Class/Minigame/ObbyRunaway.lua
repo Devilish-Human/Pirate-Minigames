@@ -59,7 +59,7 @@ function ObbyRunaway:Start()
 
 	for i = 10, 1, -1 do
 		task.wait(1)
-		print(`Minigame will start in {i} seconds.`)
+		--print(`Minigame will start in {i} seconds.`)
 		GameService.Client.StatusChanged:FireAll(`Minigame will start in {i} seconds.`)
 
 		if (i == 1) then
@@ -73,7 +73,7 @@ function ObbyRunaway:Start()
 
 	for i = self.Length, 1, -1 do
 		task.wait(1)
-		print(`Minigame will end in {i} seconds.`)
+		--print(`Minigame will end in {i} seconds.`)
 		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
 	end
 

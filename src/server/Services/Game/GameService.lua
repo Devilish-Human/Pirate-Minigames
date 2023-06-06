@@ -39,7 +39,7 @@ function GameService:_intermission()
 
 	for i = 15, 1, -1 do
 		task.wait(1)
-		print(`Choosing next minigame to play in {i} seconds`)
+		--print(`Choosing next minigame to play in {i} seconds`)
 		self.Client.StatusChanged:FireAll(`Choosing next minigame to play in {i} seconds`)
 
 		if (ForceChosenMinigame == nil or ForceChosenMinigame == "" or ForceChosenMinigame == " ") then
