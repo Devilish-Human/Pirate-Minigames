@@ -1,2 +1,2 @@
-return { "ObbyRunaway", "Sodalicious", "SwordClash" }
+return { "ObbyRunaway", "Sodalicious" }
 --return { "SwordClash" }
