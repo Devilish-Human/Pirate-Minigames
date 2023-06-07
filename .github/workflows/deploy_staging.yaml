@@ -19,8 +19,6 @@ jobs:
     
     - name: Install Aftman
       uses: ok-nick/setup-aftman@v0
-      with:
-          version: "^1.0.0"
-          token: ${{ SECRETS.GITHUB_TOKEN }}
+
     - run: rojo build -o game.rbxl
     - run: rbxcloud experience publish -f game.rbxl -p 6213542949 -u 2279328857 -t published -a ${{ secrets.API_KEY }}
