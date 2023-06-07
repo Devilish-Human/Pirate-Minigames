@@ -20,7 +20,7 @@ local Signal = require(ReplicatedStorage:FindFirstChild("Packages").Signal)
 
 local Chosen
 local ForceChosenMinigame = nil
-local MinigameService
+local MinigameService, DataService
 
 local GameFolder
 
@@ -113,10 +113,22 @@ function GameService:KnitStart()
 	end
 
 	task.spawn(self:Initialize())
+	while true do
+		for _, player in ipairs(Players:GetPlayers()) do
+			DataService:Update(player, "Coins", function(coins)
+				if (coins) then
+					return coins + Random.new():NextInteger(5, 25)
+				end
+			end)
+			print(DataService:Get(player, "Coins"))
+		end
+		task.wait(1)
+	end
 end
 
 function GameService:KnitInit()
 	MinigameService = Knit.GetService("MinigameService")
+	DataService = Knit.GetService("DataService")
 end
 -- End Knit //
 return GameService

@@ -94,18 +94,5 @@ function DataService:KnitStart()
     for _, player in ipairs(Players:GetPlayers()) do
         task.spawn(self._onPlayerJoin, player)
     end
-
-	task.spawn(function()
-        while task.wait(1) do
-            for _, player in ipairs(Players:GetPlayers()) do
-				-- self:Update(player, "Coins", function(coins)
-				-- 	if (coins ~= nil) then
-				-- 		return coins + Random.new():NextInteger(5, 25)
-				-- 	end
-                -- end)
-                print(self:Get(player, "Coins"))
-            end
-        end
-	end)
 end
 return DataService

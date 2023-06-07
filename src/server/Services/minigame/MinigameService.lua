@@ -81,6 +81,9 @@ function MinigameService:TeleportPlayer(player: Player, teleportLocation)
         player.Character.Humanoid.Died:Connect(function()
             table.remove(Minigame.Contestants, 1)
         end)
+
+        print(Minigame.Contestants)
+        print(Minigame.Players)
     end
 end
 

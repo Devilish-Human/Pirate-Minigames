@@ -11,7 +11,6 @@ local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 local Minigame = require(script.Parent)
 local DataService, GameService, MinigameService
 
-
 local ASSETS_FOLDER = ServerStorage:FindFirstChild("Assets")
 local SODA_FOLDER = ASSETS_FOLDER:FindFirstChild("Objects").Sodas
 
@@ -64,7 +63,7 @@ function Sodalicious:Start()
 	end
 
 	for _, v in pairs (self.Contestants) do
-		if v.Value then
+		if v then
 			local char = v.Character or v.CharacterAdded:Wait()
 	
 			if char then
@@ -86,7 +85,6 @@ function Sodalicious:Start()
 
 	self._janitor:Add(task.spawn(function()
 		while true do
-			task.wait(1)
 			local sodaClone = SODA_FOLDER:GetChildren()[math.random(1, #SODA_FOLDER:GetChildren())]:Clone()
 			sodaClone.Parent = self.Instance:FindFirstChild("Objects")
 			sodaClone.Handle.CFrame = getRandomSodaSpawn()
@@ -95,10 +93,10 @@ function Sodalicious:Start()
 			for _, plr in pairs(self.Contestants) do
 				if (plr and self._shouldTakeDamage) then
 					local char = plr.Character or plr.Character.CharacterAdded:Wait()
-					char.Humanoid:TakeDamage(5)
+					task.wait(1)
+					char.Humanoid:TakeDamage(2)
 				end
 			end
-
 			task.wait(1)
 		end
 	end))
@@ -114,17 +112,17 @@ function Sodalicious:Start()
 	end
 
 
-	for i, v in self.Contestants do
-		local player: Player = v
-
-		if (player) then
-			self:_addWinner(player)
-			self:_awardPlayer(player)
-			player:LoadCharacter()
-		end
+	for i, v in self.Winners do
+		print(v)
 	end
 
 	MinigameService.SetFinished:Fire(true)
+
+	task.wait(3)
+
+	table.clear(self.Players)
+	table.clear(self.Contestants)
+	table.clear(self.Winners)
 end
 
 function Sodalicious:_addWinner(player: Player)
@@ -178,11 +176,7 @@ function Sodalicious:Stop()
 end
 
 function Sodalicious:Destroy()
-	table.clear(self.Players)
-	table.clear(self.Contestants)
-	table.clear(self.Winners)
-
-    self._janitor:Cleanup()
+	self._janitor:Cleanup()
 end
 
 return Sodalicious

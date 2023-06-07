@@ -9,6 +9,8 @@ local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 local Minigame = require(script.Parent)
 local DataService, GameService, MinigameService
 
+local debounce = false
+
 local ObbyRunaway = Minigame.new {
 	Name = "ObbyRunaway",
 	Objective = "Complete the obby to win.",
@@ -53,46 +55,50 @@ function ObbyRunaway:Get()
 end
 
 function ObbyRunaway:Start()
-	local debounce = false
 	self._beginLine = self.Instance:FindFirstChild("BeginLine")
 	self._janitor:Add(self.Instance:FindFirstChild("FinishLine").Touched:Connect(function(hit)
+		debounce = true
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
-		
 		if (human) then
 			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
-			debounce = true
-			if (player and debounce) then
+			if (player and debounce == true) then
 				self:_addWinner(player)
-				self:_awardPlayer(player)
 				player:LoadCharacter()
 				table.remove(self.Contestants, 1)
 			end
 		end
 
-		debounce = false
 		task.wait(3)
 	end))
+	debounce = false
 	
 	for i = 10, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will start in {i} seconds.`)
 		GameService.Client.StatusChanged:FireAll(`Minigame will start in {i} seconds.`)
-
-		if (i == 1) then
-			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
-		end
 	end
-
-	self._beginLine:Destroy()
 
 	for i = self.Length, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will end in {i} seconds.`)
 		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
 
+		if (i == self.Length) then
+			self._beginLine:Destroy()
+		end
+
 		if (#self.Contestants <= 0) then
 			break
+		end
+	end
+
+	-- award winners
+	for _, v in self.Winners do
+		local player: Player = v
+
+		if (player) then
+			self:_awardPlayer(player)
 		end
 	end
 
@@ -108,28 +114,19 @@ function ObbyRunaway:_addWinner(player: Player)
 end
 
 function ObbyRunaway:_awardPlayer(player: Player)
-	if (#self.Winners == 1) then
-		DataService:Update(self.Winners[1], "Coins", function(money)
-			return money + 12
-		end)
-	else
-		DataService:Update(player, "Coins", function(money)
-			return money + (self.Reward.Points)
-		end)
-	end
-	DataService:Update(player, "Wins", function(money)
-		return money + 1
+	DataService:Update(player, "Coins", function(Coins)
+		local bonus = (#self.Winners == 1 and self.Reward.Points * 1.25)
+		local reward = (self.Reward.Points + bonus)
+
+		return Coins + reward
+	end)
+	DataService:Update(player, "Wins", function(Wins)
+		return Wins + 1
 	end)
 end
 
 function ObbyRunaway:Stop()
 	local message = "Won."
-
-	for index,player in ipairs(self.Winners) do
-		if (table.find(self.Contestants, index)) then
-			self:_awardWinners(player)
-		end
-	end
 
 	if (#self.Winners == 1) then
 		for _,winner in ipairs(self.Winners) do
@@ -148,7 +145,16 @@ function ObbyRunaway:Stop()
 			}
 		end
 	end
+
+	print(self:GetContestants(), self:GetPlayers())
+
+	task.wait(3)
+
+	table.clear(self.Players)
+	table.clear(self.Contestants)
+	table.clear(self.Winners)
 end
+
 
 function ObbyRunaway:GetContestants()
 	return self.Contestants
@@ -159,10 +165,6 @@ function ObbyRunaway:GetPlayers()
 end
 
 function ObbyRunaway:Destroy()
-	table.clear(self.Players)
-	table.clear(self.Contestants)
-	table.clear(self.Winners)
-
 	Janitor:Cleanup()
 end
 
