@@ -167,7 +167,7 @@ function GameUIController:KnitStart()
 	 	:setRight()
 	 	:lock()
 	 	:give(function(icon)
-			return DataService:Get("Coins"):andThen(function(coins)
+			return DataService.CoinsChanged:Connect(function(coins)
 				icon:setLabel(tostring(coins))
 				if coins >= 1000 then
 					icon:setLabel(ConvertComma(tostring(coins)))

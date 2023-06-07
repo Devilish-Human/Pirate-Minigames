@@ -17,6 +17,7 @@ local ObbyRunaway = Minigame.new {
 		Points = 10,
 		Exp = 6,
 	},
+	Length = 60
 }
 ObbyRunaway.__index = ObbyRunaway
 
@@ -26,20 +27,25 @@ function ObbyRunaway.new(instance: Instance)
 	self._janitor = Janitor.new()
 	self.Instance = instance
 	self.Finished = false;
-	self.Length = 60
 	return self
 end
 
-function ObbyRunaway:Init()
+function ObbyRunaway:Initialize()
 	DataService = Knit.GetService("DataService")
 	GameService = Knit.GetService("GameService")
 	MinigameService = Knit.GetService("MinigameService")
 
-	MinigameService.SetFinished:Connect(function(state)
+	self._janitor:Add(MinigameService.SetFinished:Connect(function(state)
 		self.Finished = state
 
 		self.Instance:SetAttribute("Finished", self.Finished)
-	end)
+	end))
+	self._janitor:Add(game:GetService("Players").PlayerRemoving:Connect(function(plr)
+		local plrIndex = table.find(self.Contestants, plr)
+		if (table.find(self.Contestants, plr)) then
+			table.remove(self.Contestants, plrIndex)
+		end
+	end))
 end
 
 function ObbyRunaway:Get()
@@ -78,11 +84,9 @@ function ObbyRunaway:Start()
 			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
 		end
 	end
-	
-	print(self.Players)
-	print(self.Contestants)
-	
+
 	self._beginLine:Destroy()
+
 	for i = self.Length, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will end in {i} seconds.`)

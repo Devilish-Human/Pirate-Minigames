@@ -2,6 +2,7 @@
 -- Authors: PirateNinja Studios / PirateNinja Twelve
 -- Date: 06/06/2023
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
@@ -25,13 +26,103 @@ function Sodalicious.new(instance: Instance)
 	self._janitor = Janitor.new()
 	self.Instance = instance
 	self.Finished = false;
-	self.Length = 60
 	return self
 end
 
-function Sodalicious:Start()
-    
+function Sodalicious:Initialize()
+    DataService = Knit.GetService("DataService")
+	GameService = Knit.GetService("GameService")
+	MinigameService = Knit.GetService("MinigameService")
+
+	self._janitor:Add(MinigameService.SetFinished:Connect(function(state)
+		self.Finished = state
+
+		self.Instance:SetAttribute("Finished", self.Finished)
+	end))
+	self._janitor:Add(game:GetService("Players").PlayerRemoving:Connect(function(plr)
+		local plrIndex = table.find(self.Contestants, plr)
+		if (table.find(self.Contestants, plr)) then
+			table.remove(self.Contestants, plrIndex)
+		end
+	end))
 end
+
+function Sodalicious:Get()
+	return self.Instance
+end
+
+function Sodalicious:Start()
+	local function getRandomSodaSpawn()
+		local sodaSpawns = self.Instance:FindFirstChild("SodaSpawns"):GetChildren()
+		return sodaSpawns[math.random(1, #sodaSpawns)].CFrame
+	end
+
+	for i = 10, 1, -1 do
+		task.wait(1)
+		--print(`Minigame will start in {i} seconds.`)
+		GameService.Client.StatusChanged:FireAll(`Minigame will start in {i} seconds.`)
+
+		if (i == 1) then
+			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
+		end
+	end
+
+	self._janitor:Add(task.spawn(function()
+		while true do
+			task.wait(1)
+			local sodaClone = Instance.new("Part")
+			sodaClone.Parent = self.Instance:FindFirstChild("Objects")
+			sodaClone.CFrame = getRandomSodaSpawn()
+
+			task.wait(1)
+		end
+	end))
+
+	for i = self.Length, 1, -1 do
+		task.wait(1)
+		--print(`Minigame will end in {i} seconds.`)
+		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
+
+		if (#self.Contestants <= 0) then
+			break
+		end
+	end
+
+
+	for i, v in self.Contestants do
+		local player: Player = v
+
+		if (player) then
+			self:_addWinner(player)
+			self:_awardPlayer(player)
+			player:LoadCharacter()
+		end
+	end
+
+	MinigameService.SetFinished:Fire(true)
+end
+
+function Sodalicious:_addWinner(player: Player)
+	if (self.Contestants[player] and not self.Winners[player]) then
+		table.insert(self.Winners, player)
+	end
+end
+
+function Sodalicious:_awardPlayer(player: Player)
+	if (#self.Winners == 1) then
+		DataService:Update(player, "Coins", function(money)
+			return money + (self.Reward.Points * 1.25)
+		end)
+	else
+		DataService:Update(player, "Coins", function(money)
+			return money + (self.Reward.Points)
+		end)
+	end
+	DataService:Update(player, "Wins", function(money)
+		return money + 1
+	end)
+end
+
 
 function Sodalicious:Stop()
     local message = "Survived"
@@ -62,6 +153,10 @@ function Sodalicious:Stop()
 end
 
 function Sodalicious:Destroy()
+	table.clear(self.Players)
+	table.clear(self.Contestants)
+	table.clear(self.Winners)
+
     self._janitor:Cleanup()
 end
 

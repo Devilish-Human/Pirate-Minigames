@@ -7,7 +7,10 @@ local DataTemplate = require(script.Parent.DataTemplate)
 
 local DataService = Knit.CreateService {
     Name = "DataService";
-    Client = {};
+    Client = {
+        CoinsChanged = Knit:CreateSignal();
+        WinsChanged = Knit:CreateSignal();
+    };
     Profiles = {};
 }
 
@@ -32,6 +35,12 @@ function DataService:Set(player: Player, dataName: string, dataValue: any)
     assert(profile.Data[dataName], `Data does not exist dataName: {dataName}`)
 	assert(type(profile.Data[dataName]) == type(dataValue), "")
 	
+    if (dataName == "Coins") then
+        self.Client.CoinsChanged:Fire(player, dataValue)
+    elseif (dataName == "Wins") then
+        self.Client.WinsChanged:Fire(player, dataValue)
+    end
+
     profile.Data[dataName] = dataValue
 end
 

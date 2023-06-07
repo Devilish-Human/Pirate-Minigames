@@ -13,8 +13,8 @@ local MinigameService = Knit.CreateService({
     SetFinished = Signal.new();
 })
 
---local Minigames = require(Knit.Modules.MinigameData)
-local Minigames = {"ObbyRunaway"}
+--local Minigames = require(script.Parent.MinigameData)
+local Minigames = {"ObbyRunaway", "Sodalicious"}
 local MapsFolder = ServerStorage:FindFirstChild("Assets"):FindFirstChild("Maps")
 
 function MinigameService:GetPlayers()
@@ -48,7 +48,7 @@ function MinigameService:PlaceMap(minigame: string)
         chosenMap:SetAttribute("Type", Minigame.Type)
         chosenMap:SetAttribute("Finished", false)
         
-        Minigame:Init()
+        Minigame:Initialize()
         
         local connection = workspace.ChildRemoved:Connect(function(child)
             if (child.Name == chosenMap.Name) then

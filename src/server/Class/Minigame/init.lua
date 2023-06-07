@@ -46,6 +46,8 @@ function Minigame:Get()
 	return self.Instance
 end
 
+function Minigame:Initialize() end
+
 function Minigame:Start() end
 
 function Minigame:Stop() end
