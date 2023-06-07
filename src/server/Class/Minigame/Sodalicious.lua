@@ -4,11 +4,16 @@
 
 local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local ServerStorage = game:GetService("ServerStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 
 local Minigame = require(script.Parent)
 local DataService, GameService, MinigameService
+
+
+local ASSETS_FOLDER = ServerStorage:FindFirstChild("Assets")
+local SODA_FOLDER = ASSETS_FOLDER:FindFirstChild("Objects").Sodas
 
 local Sodalicious = Minigame.new {
 	Name = "Sodalicious",
@@ -26,6 +31,7 @@ function Sodalicious.new(instance: Instance)
 	self._janitor = Janitor.new()
 	self.Instance = instance
 	self.Finished = false;
+	self._shouldTakeDamage = false
 	return self
 end
 
@@ -39,7 +45,7 @@ function Sodalicious:Initialize()
 
 		self.Instance:SetAttribute("Finished", self.Finished)
 	end))
-	self._janitor:Add(game:GetService("Players").PlayerRemoving:Connect(function(plr)
+	self._janitor:Add(Players.PlayerRemoving:Connect(function(plr)
 		local plrIndex = table.find(self.Contestants, plr)
 		if (table.find(self.Contestants, plr)) then
 			table.remove(self.Contestants, plrIndex)
@@ -57,6 +63,16 @@ function Sodalicious:Start()
 		return sodaSpawns[math.random(1, #sodaSpawns)].CFrame
 	end
 
+	for _, v in pairs (self.Contestants) do
+		if v.Value then
+			local char = v.Character or v.CharacterAdded:Wait()
+	
+			if char then
+				char:FindFirstChild("Health").Disabled = true
+			end
+		end
+	end
+
 	for i = 10, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will start in {i} seconds.`)
@@ -66,13 +82,22 @@ function Sodalicious:Start()
 			GameService.Client.StatusChanged:FireAll("Setting up minigame.")
 		end
 	end
+	self._shouldTakeDamage = true
 
 	self._janitor:Add(task.spawn(function()
 		while true do
 			task.wait(1)
-			local sodaClone = Instance.new("Part")
+			local sodaClone = SODA_FOLDER:GetChildren()[math.random(1, #SODA_FOLDER:GetChildren())]:Clone()
 			sodaClone.Parent = self.Instance:FindFirstChild("Objects")
-			sodaClone.CFrame = getRandomSodaSpawn()
+			sodaClone.Handle.CFrame = getRandomSodaSpawn()
+			sodaClone.SodaScript.Enabled = true
+
+			for _, plr in pairs(self.Contestants) do
+				if (plr and self._shouldTakeDamage) then
+					local char = plr.Character or plr.Character.CharacterAdded:Wait()
+					char.Humanoid:TakeDamage(5)
+				end
+			end
 
 			task.wait(1)
 		end

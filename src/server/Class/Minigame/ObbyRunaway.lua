@@ -53,16 +53,16 @@ function ObbyRunaway:Get()
 end
 
 function ObbyRunaway:Start()
-	self._beginLine = self.Instance:FindFirstChild("BeginLine")
 	local debounce = false
+	self._beginLine = self.Instance:FindFirstChild("BeginLine")
 	self._janitor:Add(self.Instance:FindFirstChild("FinishLine").Touched:Connect(function(hit)
-		debounce = true
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
-
+		
 		if (human) then
 			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
-			if (player and debounce == true) then
+			debounce = true
+			if (player and debounce) then
 				self:_addWinner(player)
 				self:_awardPlayer(player)
 				player:LoadCharacter()
@@ -70,9 +70,8 @@ function ObbyRunaway:Start()
 			end
 		end
 
-		task.wait(3)
-		print(self.Winners)
 		debounce = false
+		task.wait(3)
 	end))
 	
 	for i = 10, 1, -1 do
@@ -111,7 +110,7 @@ end
 function ObbyRunaway:_awardPlayer(player: Player)
 	if (#self.Winners == 1) then
 		DataService:Update(self.Winners[1], "Coins", function(money)
-			return money + (self.Reward.Points * 1.25)
+			return money + 12
 		end)
 	else
 		DataService:Update(player, "Coins", function(money)
