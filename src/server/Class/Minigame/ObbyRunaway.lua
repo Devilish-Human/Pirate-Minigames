@@ -60,18 +60,18 @@ function ObbyRunaway:Start()
 		debounce = true
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
-		if (human) then
+		
+		if (human and debounce == true) then
 			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
-			if (player and debounce == true) then
+			if (player) then
 				self:_addWinner(player)
 				player:LoadCharacter()
 				table.remove(self.Contestants, 1)
 			end
 		end
-
 		task.wait(3)
+		debounce = false
 	end))
-	debounce = false
 	
 	for i = 10, 1, -1 do
 		task.wait(1)
