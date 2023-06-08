@@ -105,6 +105,12 @@ function ObbyRunaway:Start()
 	-- Clean up
 	MinigameService.SetFinished:Fire(true)
 	print("Mining has ended.")
+
+	task.wait(3)
+
+	table.clear(self.Players)
+	table.clear(self.Contestants)
+	table.clear(self.Winners)
 end
 
 function ObbyRunaway:_addWinner(player: Player)
@@ -145,14 +151,6 @@ function ObbyRunaway:Stop()
 			}
 		end
 	end
-
-	print(self:GetContestants(), self:GetPlayers())
-
-	task.wait(3)
-
-	table.clear(self.Players)
-	table.clear(self.Contestants)
-	table.clear(self.Winners)
 end
 
 
