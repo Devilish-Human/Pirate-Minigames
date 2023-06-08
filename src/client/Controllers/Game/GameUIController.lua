@@ -127,6 +127,7 @@ function GameUIController:KnitStart()
 
 	local StatusLabel = StatusBar:FindFirstChild("Content").Status
 
+	StatusLabel.FontFace = Font.fromEnum(Enum.Font.Ubuntu)
 
 	-- local shopFrame = GameUI:FindFirstChild("ShopFrame")
 
