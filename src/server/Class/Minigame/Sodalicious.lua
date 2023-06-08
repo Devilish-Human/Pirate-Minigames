@@ -90,7 +90,6 @@ function Sodalicious:Start()
 			sodaClone.Handle.CFrame = getRandomSodaSpawn()
 			sodaClone.SodaScript.Enabled = true
 		end
-
 		while true do
 			for _, plr in pairs(self.Contestants) do
 				if (plr and self._shouldTakeDamage) then
