@@ -112,12 +112,12 @@ function Sodalicious:Start()
 	end
 
 
-	for i, v in pairs(self:GetContestants()) do
+	for i, v in pairs(self.Contestants) do
 		local player = v
 		if player then
 			print("Awarding")
 			self:_addWinner(player)
-			self:_addWinner(player)
+			self:_awardPlayer(player)
 			player:LoadCharacter()
 			print(`Awarded {self.Reward.Points} coins`)
 		end

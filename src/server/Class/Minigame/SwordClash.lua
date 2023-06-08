@@ -8,10 +8,11 @@ local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 
 local Minigame = require(script.Parent)
-local DataService, GameService, MinigameService
 
 local ASSETS_FOLDER = ServerStorage:FindFirstChild("Assets")
 local SWORD_FOLDER = ASSETS_FOLDER:FindFirstChild("Objects").Swords
+
+local DataService, GameService, MinigameService
 
 local SwordClash = Minigame.new {
     Name = "SwordClash",
@@ -31,6 +32,12 @@ function SwordClash.new(instance)
 	self.Instance = instance
 	self.Finished = false;
 	return self
+end
+
+function SwordClash:Initialize()
+    GameService = Knit.GetService("GameService")
+    DataService = Knit.GetService("DataService")
+    MinigameService = Knit.GetService("MinigameService")
 end
 
 function SwordClash:Start()
