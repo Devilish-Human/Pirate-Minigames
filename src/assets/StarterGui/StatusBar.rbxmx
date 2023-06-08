@@ -4,12 +4,12 @@
       <string name="Name">StatusBar</string>
       <BinaryString name="AttributesSerialize"></BinaryString>
       <bool name="AutoLocalize">true</bool>
-      <bool name="ClipToDeviceSafeArea">true</bool>
+      <bool name="ClipToDeviceSafeArea">false</bool>
       <int name="DisplayOrder">0</int>
       <bool name="Enabled">true</bool>
       <bool name="ResetOnSpawn">false</bool>
       <Ref name="RootLocalizationTable">null</Ref>
-      <token name="SafeAreaCompatibility">1</token>
+      <token name="SafeAreaCompatibility">0</token>
       <token name="ScreenInsets">2</token>
       <token name="SelectionBehaviorDown">0</token>
       <token name="SelectionBehaviorLeft">0</token>
