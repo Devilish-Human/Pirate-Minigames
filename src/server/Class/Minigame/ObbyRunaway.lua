@@ -65,6 +65,7 @@ function ObbyRunaway:Start()
 			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
 			if (player) then
 				self:_addWinner(player)
+				self:_awardPlayer(player)
 				player:LoadCharacter()
 				table.remove(self.Contestants, 1)
 			end
