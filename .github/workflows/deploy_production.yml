@@ -23,5 +23,7 @@ jobs:
           version: "^1.0.0"
           token: ${{ secrets.GITHUB_TOKEN }}
       
+    - run: remodel run remodel.lua
+
     - run: rojo build -o game.rbxl
-    - run: rbxcloud experience publish -f game.rbxl -p 4801346342 -u 1620278789 -t published -a ${{ secrets.ROBLOX_API_KEY }}
+    - run: rbxcloud experience publish -f game.rbxl -p 6213542949 -u 2279328857 -t published -a ${{ secrets.ROBLOX_API_KEY }}
