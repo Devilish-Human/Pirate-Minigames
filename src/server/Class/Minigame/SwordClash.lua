@@ -2,12 +2,16 @@
 -- Authors: PirateNinja Studios / PirateNinja Twelve
 -- Date: 06/06/2023
 
+local ServerStorage = game:GetService("ServerStorage")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
 
 local Minigame = require(script.Parent)
 local DataService, GameService, MinigameService
+
+local ASSETS_FOLDER = ServerStorage:FindFirstChild("Assets")
+local SWORD_FOLDER = ASSETS_FOLDER:FindFirstChild("Objects").Swords
 
 local SwordClash = Minigame.new {
     Name = "SwordClash",

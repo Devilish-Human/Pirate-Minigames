@@ -33,10 +33,6 @@ local GameService = Knit.CreateService({
 })
 
 function GameService:_intermission()
-	self.SetMinigame:Connect(function(v)
-		ForceChosenMinigame = v
-	end)
-
 	for i = 15, 1, -1 do
 		task.wait(1)
 		--print(`Choosing next minigame to play in {i} seconds`)
@@ -51,7 +47,17 @@ function GameService:_intermission()
 
 	end
 
-	Chosen = MinigameService:ChooseMinigame() or ForceChosenMinigame
+	self.SetMinigame:Connect(function(v)
+		if (v and MinigameService.Minigames[v]) then
+			Chosen = v
+		end
+	end)
+
+	if (Chosen) then
+		return
+	else
+		Chosen = MinigameService:ChooseMinigame()
+	end
 
 	self.Client.StatusChanged:FireAll(`Minigame chosen: {Chosen}`)
 	task.wait(2)

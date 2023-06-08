@@ -16,7 +16,7 @@ local SODA_FOLDER = ASSETS_FOLDER:FindFirstChild("Objects").Sodas
 
 local Sodalicious = Minigame.new {
 	Name = "Sodalicious",
-	Objective = "Complete the obby to win.",
+	Objective = "Stay hydrated before the time runs out.",
 	Type = "Survival",
 	Reward = {
 		Points = 15,

@@ -11,10 +11,11 @@ local MinigameService = Knit.CreateService({
     StartMinigame = Signal.new();
     StopMinigame = Signal.new();
     SetFinished = Signal.new();
+    Minigames = {"ObbyRunaway", "Sodalicious"};
 })
 
 --local Minigames = require(script.Parent.MinigameData)
-local Minigames = {"ObbyRunaway", "Sodalicious"}
+
 local MapsFolder = ServerStorage:FindFirstChild("Assets"):FindFirstChild("Maps")
 
 function MinigameService:GetPlayers()
@@ -28,7 +29,7 @@ function MinigameService:GetPlayers()
 end
 
 function MinigameService:ChooseMinigame()
-    local minigame = Minigames[math.random(1, #Minigames)]
+    local minigame = self.Minigames[math.random(1, #self.Minigames)]
     return minigame
 end
 
