@@ -9,7 +9,10 @@ local CmdrService = Knit.CreateService {
         44821621,
         74633861,
         135459427,
-    }
+    },
+
+    Watchdog = require(script.Parent.Watchdog),
+    CheckedPlayers = {},
 }
 
 function CmdrService:KnitInit()

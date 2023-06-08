@@ -20,7 +20,7 @@ local Signal = require(ReplicatedStorage:FindFirstChild("Packages").Signal)
 
 local Chosen
 local ForceChosenMinigame = nil
-local MinigameService, DataService
+local MinigameService, DataService, CmdrService
 
 local GameFolder
 
@@ -102,6 +102,17 @@ function GameService:Initialize()
 	end
 end
 
+function _onPlayerAdded(player: Player)
+	if (CmdrService.CheckedPlayers[player]) then return end
+	CmdrService.CheckedPlayers[player] = true
+
+	if (not CmdrService.Watchdog.Verify(player)) then return end
+end
+
+function _onPlayerRemoving(player: Player)
+	CmdrService.CheckedPlayers[player] = nil
+end
+
 -- Knit
 function GameService:KnitStart()
 	if (GameFolder == nil) then
@@ -112,23 +123,34 @@ function GameService:KnitStart()
 		GameFolder = workspace.Game
 	end
 
+	Players.PlayerAdded:Connect(_onPlayerAdded)
+	Players.PlayerRemoving:Connect(_onPlayerRemoving)
+
 	task.spawn(self:Initialize())
-	while true do
-		for _, player in ipairs(Players:GetPlayers()) do
-			DataService:Update(player, "Coins", function(coins)
-				if (coins) then
-					return coins + Random.new():NextInteger(5, 25)
-				end
-			end)
-			print(DataService:Get(player, "Coins"))
+
+	task.spawn(function()
+		while true do
+			for _, player in ipairs(Players:GetPlayers()) do
+				DataService:Update(player, "Coins", function(coins)
+					if (coins) then
+						return coins + Random.new():NextInteger(5, 25)
+					end
+				end)
+				print(DataService:Get(player, "Coins"))
+			end
+			task.wait(1)
 		end
-		task.wait(1)
+	end)
+
+	for _, player in ipairs(Players:GetPlayers()) do
+		_onPlayerAdded(player)
 	end
 end
 
 function GameService:KnitInit()
 	MinigameService = Knit.GetService("MinigameService")
 	DataService = Knit.GetService("DataService")
+	CmdrService = Knit.GetService("CmdrService")
 end
 -- End Knit //
 return GameService
