@@ -1,3 +1,4 @@
+---@diagnostic disable: undefined-global
 local game = remodel.readPlaceFile("assetplace.rbxlx")
 
 remodel.createDirAll("src/assets/ServerStorage")
