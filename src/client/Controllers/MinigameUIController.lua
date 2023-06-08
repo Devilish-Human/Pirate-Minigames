@@ -52,7 +52,7 @@ local function createLabel()
 end
 function MinigameUIController:KnitStart()
 	repeat
-		wait()
+		task.wait(1)
 	until Knit.Player.Character ~= nil
 
 	-- local minigameUI = playerGui:FindFirstChild("MinigameUI")
