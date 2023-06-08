@@ -29,6 +29,10 @@
       }
     },
 
+    "StarterGui": {
+      "$path": "src/assets/StarterGui"
+    },
+
     "StarterPlayer": {
       "StarterPlayerScripts": {
         "FrameworkClient": {
