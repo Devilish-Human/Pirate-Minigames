@@ -84,19 +84,22 @@ function Sodalicious:Start()
 	self._shouldTakeDamage = true
 
 	self._janitor:Add(task.spawn(function()
-		while true do
+		local function spawnSoda()
 			local sodaClone = SODA_FOLDER:GetChildren()[math.random(1, #SODA_FOLDER:GetChildren())]:Clone()
 			sodaClone.Parent = self.Instance:FindFirstChild("Objects")
 			sodaClone.Handle.CFrame = getRandomSodaSpawn()
 			sodaClone.SodaScript.Enabled = true
+		end
 
+		while true do
 			for _, plr in pairs(self.Contestants) do
 				if (plr and self._shouldTakeDamage) then
 					local char = plr.Character or plr.Character.CharacterAdded:Wait()
-					task.wait(1)
-					char.Humanoid:TakeDamage(2)
+					task.wait(2)
+					char.Humanoid:TakeDamage(5)
 				end
 			end
+			spawnSoda()
 			task.wait(1)
 		end
 	end))
