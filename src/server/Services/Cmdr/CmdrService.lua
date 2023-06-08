@@ -31,7 +31,6 @@ function CmdrService:KnitInit()
     Cmdr:RegisterDefaultCommands()
     Cmdr:RegisterCommandsIn(script.Parent.Commands)
     Cmdr:RegisterHooksIn(script.Parent.Hooks)
-    Cmdr:RegisterTypesIn(script.Parent.Types)
 end
 
 function CmdrService:KnitStart()
