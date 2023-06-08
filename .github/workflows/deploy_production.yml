@@ -17,11 +17,11 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
     
-    - uses: ok-nick/setup-aftman@v0
+    - uses: ok-nick/setup-aftman@v1
       name: Install Aftman
       with:
           version: "^1.0.0"
-          token: ${{ SECRETS.GITHUB_TOKEN }}
-
+          token: ${{ secrets.GITHUB_TOKEN }}
+      
     - run: rojo build -o game.rbxl
-    - run: rbxcloud experience publish -f game.rbxl -p 4801346342 -u 1620278789 -t published -a ${{ secrets.API_KEY }}
+    - run: rbxcloud experience publish -f game.rbxl -p 4801346342 -u 1620278789 -t published -a ${{ secrets.ROBLOX_API_KEY }}
