@@ -8,7 +8,14 @@ export type DataType = {
         Titles: {},
         Effects: {},
         [any]: {}
-    }
+    };
+
+    Equipped: {
+        Gears: {};
+        Titles: {};
+        Effects: {};
+        [any]: any
+    };
 }
 
 local DataTemplate: DataType = {
@@ -17,6 +24,12 @@ local DataTemplate: DataType = {
     Wins = 0,
 
     Inventory = {
+        Gears = {},
+        Titles = {},
+        Effects = {}
+    },
+
+    Equipped = {
         Gears = {},
         Titles = {},
         Effects = {}
