@@ -16,6 +16,18 @@ local CmdrService = Knit.CreateService {
 }
 
 function CmdrService:KnitInit()
+    if (not script.Parent.Types) then
+        local typesFolder = Instance.new("Folder")
+        typesFolder.Name = "Types"
+        typesFolder.Parent = script.Parent
+    end
+
+    if (not script.Parent.Hooks) then
+        local typesFolder = Instance.new("Folder")
+        typesFolder.Name = "Types"
+        typesFolder.Parent = script.Parent
+    end
+
     Cmdr:RegisterDefaultCommands()
     Cmdr:RegisterCommandsIn(script.Parent.Commands)
     Cmdr:RegisterHooksIn(script.Parent.Hooks)
