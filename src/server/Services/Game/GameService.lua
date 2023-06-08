@@ -112,7 +112,7 @@ function _onPlayerAdded(player: Player)
 	if (CmdrService.CheckedPlayers[player]) then return end
 	CmdrService.CheckedPlayers[player] = true
 
-	if (not CmdrService.Watchdog.Verify(player)) then return end
+	--if (not CmdrService.Watchdog.Verify(player)) then return end
 end
 
 function _onPlayerRemoving(player: Player)

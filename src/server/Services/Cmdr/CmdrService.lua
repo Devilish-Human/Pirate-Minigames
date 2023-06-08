@@ -11,7 +11,7 @@ local CmdrService = Knit.CreateService {
         135459427,
     },
 
-    Watchdog = require(script.Parent.Watchdog),
+    --Watchdog = require(script.Parent.Watchdog),
     CheckedPlayers = {},
 }
 
@@ -19,10 +19,6 @@ function CmdrService:KnitInit()
     Cmdr:RegisterDefaultCommands()
     Cmdr:RegisterCommandsIn(script.Parent.Commands)
     Cmdr:RegisterHooksIn(script.Parent.Hooks)
-end
-
-function CmdrService:KnitStart()
-    
 end
 
 return CmdrService

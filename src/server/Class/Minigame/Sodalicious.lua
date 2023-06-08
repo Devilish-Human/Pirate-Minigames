@@ -112,8 +112,15 @@ function Sodalicious:Start()
 	end
 
 
-	for i, v in self.Winners do
-		print(v)
+	for i, v in pairs(self:GetContestants()) do
+		local player = v
+		if player then
+			print("Awarding")
+			self:_addWinner(player)
+			self:_addWinner(player)
+			player:LoadCharacter()
+			print(`Awarded {self.Reward.Points} coins`)
+		end
 	end
 
 	MinigameService.SetFinished:Fire(true)

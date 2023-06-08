@@ -91,6 +91,8 @@
 				=> Returns the note with the specified id stored on the server (or all if not specified).
 ]]
 
+local RunService = game:GetService("RunService")
+
 -- Settings
 local Settings = require(script.Settings)
 
@@ -129,7 +131,7 @@ local MessagingService = game:GetService("MessagingService")
 local Players = game:GetService("Players")
 local ServerId = (game:GetService("RunService"):IsStudio()) and "Studio" or game.JobId
 
-local WatchdogStore : DataStore = game:GetService("DataStoreService"):GetDataStore("Watchdog_1")
+local WatchdogStore : DataStore = (RunService:IsStudio() and nil or game:GetService("DataStoreService"):GetDataStore("Watchdog_1"))
 local Moderators : List
 
 local LogCategories = {
