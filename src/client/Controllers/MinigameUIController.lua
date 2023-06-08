@@ -79,9 +79,6 @@ function MinigameUIController:KnitStart()
 	-- 	wait(3)
 	-- 	hideObjective:Play()
 	-- end)
-	-- GameService.DisplayStatus:Connect(function(message)
-	-- 	minigameUI.StatusLabel.Text = message
-	-- end)
 
 	-- local usernameLabel = createLabel()
 	-- ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()
