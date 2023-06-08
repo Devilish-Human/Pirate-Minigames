@@ -35,7 +35,7 @@ for _, v in ipairs(script.Parent:GetDescendants()) do
     end
 end
 
-for _,v in ipairs(script.Parent:GetDescendants()) do
+for _,v in ipairs(script.Class.Minigame.Parent:GetDescendants()) do
     if (v:IsA("ModuleScript")) then
         Knit.Class.Minigame[v.Name] = require(v)
     end
