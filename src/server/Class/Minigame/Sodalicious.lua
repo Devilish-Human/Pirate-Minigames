@@ -95,7 +95,7 @@ function Sodalicious:Start()
 				if (plr and self._shouldTakeDamage) then
 					local char = plr.Character or plr.Character.CharacterAdded:Wait()
 					task.wait(2)
-					char.Humanoid:TakeDamage(5)
+					char.Humanoid:TakeDamage(4)
 				end
 			end
 			spawnSoda()
@@ -106,7 +106,7 @@ function Sodalicious:Start()
 	for i = self.Length, 1, -1 do
 		task.wait(1)
 		--print(`Minigame will end in {i} seconds.`)
-		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds.`)
+		GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds; {self.Objective}`)
 
 		if (#self.Contestants <= 0) then
 			break
