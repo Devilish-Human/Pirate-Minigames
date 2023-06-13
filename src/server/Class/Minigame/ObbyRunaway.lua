@@ -122,7 +122,7 @@ end
 
 function ObbyRunaway:_awardPlayer(player: Player)
 	DataService:Update(player, "Coins", function(Coins)
-		local bonus = (#self.Winners == 1 and self.Reward.Points * 1.25)
+		local bonus = (#self.Winners == 1 and self.Reward.Points * 1.25 or 0)
 		local reward = (self.Reward.Points + bonus)
 
 		return Coins + reward
