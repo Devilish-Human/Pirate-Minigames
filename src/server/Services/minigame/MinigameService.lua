@@ -39,7 +39,6 @@ function MinigameService:PlaceMap(minigame: string)
     local chosenMap = minigameMaps[math.random(1, #minigameMaps)]:Clone()
     local MinigameModule = require(ServerScriptService.Framework.Class.Minigame:FindFirstChild(minigame))
 
-
     if (MinigameModule) then
         Minigame = MinigameModule.new(chosenMap)
 
@@ -82,9 +81,6 @@ function MinigameService:TeleportPlayer(player: Player, teleportLocation)
         player.Character.Humanoid.Died:Connect(function()
             table.remove(Minigame.Contestants, 1)
         end)
-
-        print(Minigame.Contestants)
-        print(Minigame.Players)
     end
 end
 

@@ -74,8 +74,12 @@ function GameService:_startGame()
 
 	self.Client.StatusChanged:FireAll("Teleporting players")
 	for _, plr in pairs(MinigameService:GetPlayers()) do
-		local teleport = Minigame.Teleports:GetChildren()[math.random(1, #Minigame.Teleports:GetChildren())]
-		MinigameService:TeleportPlayer(plr, teleport)
+		if plr then
+			local teleport = Minigame.Teleports:GetChildren()[math.random(1, #Minigame.Teleports:GetChildren())]
+			MinigameService:TeleportPlayer(plr, teleport)
+
+			print(plr)
+		end
 	end
 
 
