@@ -23,7 +23,6 @@ local SwordClash = Minigame.new {
         Points = 20,
         Exp = 6
     },
-    MaxSurvivors = 1
 }
 SwordClash.__index = SwordClash
 
@@ -31,6 +30,7 @@ function SwordClash.new(instance)
     local self = setmetatable({}, SwordClash)
 	self._janitor = Janitor.new()
 	self.Instance = instance
+    self.MaxSurvivors = 1
 	self.Finished = false;
 	return self
 end
@@ -94,9 +94,18 @@ function SwordClash:Start()
     end
 
     for _, plr in pairs (self.Contestants) do
-        self:_addWinner(plr)
-        self:_awardPlayer(plr)
+        if (not self.Winners[plr]) then
+            table.insert(self.Winners, plr)
+        end
+
+        plr:LoadCharacter()
     end
+
+    for _, winner in pairs(self.Winners) do
+        self:_awardPlayer(winner)
+    end
+
+    task.wait(2)
 
     MinigameService.SetFinished:Fire(true)
 

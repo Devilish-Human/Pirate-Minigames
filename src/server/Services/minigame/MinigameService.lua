@@ -11,12 +11,14 @@ local MinigameService = Knit.CreateService({
     StartMinigame = Signal.new();
     StopMinigame = Signal.new();
     SetFinished = Signal.new();
-    Minigames = {"ObbyRunaway", "Sodalicious", "SwordClash"};
+    Minigames = require(script.Parent.MinigameData);
 })
 
 --local Minigames = require(script.Parent.MinigameData)
 
 local MapsFolder = ServerStorage:FindFirstChild("Assets"):FindFirstChild("Maps")
+
+local GameService
 
 function MinigameService:GetPlayers()
     local Players = {}
@@ -83,9 +85,15 @@ function MinigameService:TeleportPlayer(player: Player, teleportLocation)
             table.remove(Minigame.Contestants, 1)
         end)
 
+        GameService.Client.ShowObjective:Fire(player, Minigame.Name, Minigame.Objective)
+
         print(Minigame.Contestants)
         print(Minigame.Players)
     end
+end
+
+function MinigameService:KnitInit()
+    GameService = Knit.GetService("GameService")
 end
 
 return MinigameService
