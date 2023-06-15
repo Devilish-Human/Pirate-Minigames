@@ -6,7 +6,7 @@ on:
     - develop
   pull_request:
     branches:
-    - develop
+    - devlop-staging
   
 jobs:
 
