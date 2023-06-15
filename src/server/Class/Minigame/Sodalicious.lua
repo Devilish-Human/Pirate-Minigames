@@ -94,7 +94,7 @@ function Sodalicious:Start()
 				if (plr and self._shouldTakeDamage) then
 					local char = plr.Character or plr.Character.CharacterAdded:Wait()
 					task.wait(1)
-					char.Humanoid:TakeDamage(2)
+					char.Humanoid:TakeDamage(5)
 				end
 			end
 			task.wait(1)
