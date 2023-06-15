@@ -85,27 +85,27 @@
 			<Properties>
 				<BinaryString name="AttributesSerialize"></BinaryString>
 				<CoordinateFrame name="CFrame">
-					<X>46.1826668</X>
-					<Y>11.4369612</Y>
-					<Z>3994.96118</Z>
-					<R00>-0.0446224585</R00>
-					<R01>-0.269453317</R01>
-					<R02>0.961979091</R02>
+					<X>75.0329666</X>
+					<Y>29.2585144</Y>
+					<Z>4004.82617</Z>
+					<R00>0.272437096</R00>
+					<R01>-0.401685685</R01>
+					<R02>0.874314964</R02>
 					<R10>-0</R10>
-					<R11>0.962938249</R11>
-					<R12>0.269721985</R12>
-					<R20>-0.999003947</R20>
-					<R21>0.0120356577</R21>
-					<R22>-0.0429686718</R22>
+					<R11>0.908687353</R11>
+					<R12>0.41747734</R12>
+					<R20>-0.962173641</R20>
+					<R21>-0.113736317</R21>
+					<R22>0.247560129</R22>
 				</CoordinateFrame>
 				<Ref name="CameraSubject">null</Ref>
 				<token name="CameraType">0</token>
 				<float name="FieldOfView">70</float>
 				<token name="FieldOfViewMode">0</token>
 				<CoordinateFrame name="Focus">
-					<X>44.2587051</X>
-					<Y>10.8975163</Y>
-					<Z>3995.04712</Z>
+					<X>73.2843475</X>
+					<Y>28.4235649</Y>
+					<Z>4004.33105</Z>
 					<R00>1</R00>
 					<R01>0</R01>
 					<R02>0</R02>
@@ -5672,351 +5672,6 @@ zNLfaoZA///+//PAj5CH]]></BinaryString>
 					</Vector3>
 				</Properties>
 			</Item>
-		</Item>
-		<Item class="Model" referent="RBX9A5D8820382847B58D006A81DF911F1B">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<token name="LevelOfDetail">0</token>
-				<CoordinateFrame name="ModelMeshCFrame">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-					<R00>1</R00>
-					<R01>0</R01>
-					<R02>0</R02>
-					<R10>0</R10>
-					<R11>1</R11>
-					<R12>0</R12>
-					<R20>0</R20>
-					<R21>0</R21>
-					<R22>1</R22>
-				</CoordinateFrame>
-				<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-				<Vector3 name="ModelMeshSize">
-					<X>0</X>
-					<Y>0</Y>
-					<Z>0</Z>
-				</Vector3>
-				<token name="ModelStreamingMode">0</token>
-				<string name="Name">Ungroup StarterGui</string>
-				<bool name="NeedsPivotMigration">false</bool>
-				<Ref name="PrimaryPart">null</Ref>
-				<float name="ScaleFactor">1</float>
-				<int64 name="SourceAssetId">5554206310</int64>
-				<BinaryString name="Tags"></BinaryString>
-				<UniqueId name="UniqueId">6a2f74c4654aa4540496942900006a39</UniqueId>
-				<OptionalCoordinateFrame name="WorldPivotData">
-					<CFrame>
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CFrame>
-				</OptionalCoordinateFrame>
-			</Properties>
-		</Item>
-		<Item class="Folder" referent="RBX54C410458211452DBA2E9350F2E1C8CE">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">[ROUND] Shop GUI Kit ~ V1</string>
-				<int64 name="SourceAssetId">4607107490</int64>
-				<BinaryString name="Tags"></BinaryString>
-				<UniqueId name="UniqueId">6a2f74c4654aa4540496942900007074</UniqueId>
-			</Properties>
-			<Item class="Model" referent="RBXF3AF4E2BED80416EA534F760A0751010">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<token name="LevelOfDetail">0</token>
-					<CoordinateFrame name="ModelMeshCFrame">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<Vector3 name="ModelMeshSize">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<token name="ModelStreamingMode">0</token>
-					<string name="Name">Ungroup in [StarterGUI]</string>
-					<bool name="NeedsPivotMigration">false</bool>
-					<Ref name="PrimaryPart">null</Ref>
-					<float name="ScaleFactor">1</float>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-					<UniqueId name="UniqueId">6a2f74c4654aa4540496942900007075</UniqueId>
-					<OptionalCoordinateFrame name="WorldPivotData">
-						<CFrame>
-							<X>0</X>
-							<Y>0</Y>
-							<Z>0</Z>
-							<R00>1</R00>
-							<R01>0</R01>
-							<R02>0</R02>
-							<R10>0</R10>
-							<R11>1</R11>
-							<R12>0</R12>
-							<R20>0</R20>
-							<R21>0</R21>
-							<R22>1</R22>
-						</CFrame>
-					</OptionalCoordinateFrame>
-				</Properties>
-			</Item>
-			<Item class="Model" referent="RBXA7F4BB2A5B3C4ADBB7DFDE633E3595DF">
-				<Properties>
-					<BinaryString name="AttributesSerialize"></BinaryString>
-					<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-					<token name="LevelOfDetail">0</token>
-					<CoordinateFrame name="ModelMeshCFrame">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-						<R00>1</R00>
-						<R01>0</R01>
-						<R02>0</R02>
-						<R10>0</R10>
-						<R11>1</R11>
-						<R12>0</R12>
-						<R20>0</R20>
-						<R21>0</R21>
-						<R22>1</R22>
-					</CoordinateFrame>
-					<SharedString name="ModelMeshData">yuZpQdnvvUBOTYh1jqZ2cA==</SharedString>
-					<Vector3 name="ModelMeshSize">
-						<X>0</X>
-						<Y>0</Y>
-						<Z>0</Z>
-					</Vector3>
-					<token name="ModelStreamingMode">0</token>
-					<string name="Name">Ungroup in [ServerScriptService]</string>
-					<bool name="NeedsPivotMigration">false</bool>
-					<Ref name="PrimaryPart">null</Ref>
-					<float name="ScaleFactor">1</float>
-					<int64 name="SourceAssetId">-1</int64>
-					<BinaryString name="Tags"></BinaryString>
-					<UniqueId name="UniqueId">6a2f74c4654aa4540496942900007136</UniqueId>
-					<OptionalCoordinateFrame name="WorldPivotData">
-						<CFrame>
-							<X>0</X>
-							<Y>0</Y>
-							<Z>0</Z>
-							<R00>1</R00>
-							<R01>0</R01>
-							<R02>0</R02>
-							<R10>0</R10>
-							<R11>1</R11>
-							<R12>0</R12>
-							<R20>0</R20>
-							<R21>0</R21>
-							<R22>1</R22>
-						</CFrame>
-					</OptionalCoordinateFrame>
-				</Properties>
-				<Item class="Script" referent="RBXB37E630DDC824593B9AF79CF4903A325">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<bool name="Disabled">false</bool>
-						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">BuyCoins [EDIT]</string>
-						<token name="RunContext">0</token>
-						<string name="ScriptGuid">{6A5EC76D-3523-4CA2-81E6-62C8753A558A}</string>
-						<ProtectedString name="Source"><![CDATA[local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end
-
-
-local MPS = game:GetService("MarketplaceService")
-
-MPS.ProcessReceipt = function(receiptInfo)
-	if receiptInfo.ProductId == 0 then -- Replace the '0' with your Developer Product ID
-		local player = game.Players:GetPlayerByUserId(receiptInfo.PlayerId)
-		player.leaderstats.Coins.Value = player.leaderstats.Coins.Value + 0 -- Replace the '0' with the amount of coins you want given to the player
-		return Enum.ProductPurchaseDecision.PurchaseGranted
-	end
-end]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-						<UniqueId name="UniqueId">6a2f74c4654aa4540496942900007137</UniqueId>
-					</Properties>
-				</Item>
-				<Item class="Script" referent="RBX97876BCEAB824440B124FF377D5E9F52">
-					<Properties>
-						<BinaryString name="AttributesSerialize"></BinaryString>
-						<bool name="Disabled">false</bool>
-						<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-						<Content name="LinkedSource"><null></null></Content>
-						<string name="Name">Leaderboard</string>
-						<token name="RunContext">0</token>
-						<string name="ScriptGuid">{9A7FB3FF-00BC-46AF-ABB6-9CEAAAB9229D}</string>
-						<ProtectedString name="Source"><![CDATA[game.Players.PlayerAdded:Connect(function(plr)
-	
-	-- Do not change anything in between the lines
-	
-	----------------------------------------------
-	
-	local folder = Instance.new("Folder", plr)
-	folder.Name = "leaderstats"
-	local value = Instance.new("IntValue", folder)
-	
-	----------------------------------------------
-	
-	value.Name = "Coins" -- Change this to what you want to show up on the leaderboard
-
-end)]]></ProtectedString>
-						<int64 name="SourceAssetId">-1</int64>
-						<BinaryString name="Tags"></BinaryString>
-						<UniqueId name="UniqueId">6a2f74c4654aa4540496942900007138</UniqueId>
-					</Properties>
-				</Item>
-			</Item>
-		</Item>
-		<Item class="Decal" referent="RBX0">
-			<Properties>
-				<BinaryString name="AttributesSerialize"></BinaryString>
-				<Color3 name="Color3">
-					<R>1</R>
-					<G>1</G>
-					<B>1</B>
-				</Color3>
-				<token name="Face">5</token>
-				<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
-				<string name="Name">Robux Icon White</string>
-				<int64 name="SourceAssetId">11560341145</int64>
-				<BinaryString name="Tags"></BinaryString>
-				<Content name="Texture"><url>http://www.roblox.com/asset/?id=11560341132</url></Content>
-				<float name="Transparency">0</float>
-				<UniqueId name="UniqueId">6a2f74c4654aa45404969429000086f1</UniqueId>
-				<int name="ZIndex">1</int>
-			</Properties>
 		</Item>
 	</Item>
 	<Item class="SoundService" referent="RBX29B84FCF79914053B014D097A15AF4C0">
@@ -48556,7 +48211,7 @@ aW50IEdlcm5hZGU=]]></BinaryString>
 										<R11>0.999949992</R11>
 										<R12>0.00447173323</R12>
 										<R20>0.447195709</R20>
-										<R21>-2.61765633e-16</R21>
+										<R21>-2.09416694e-16</R21>
 										<R22>0.894436121</R22>
 									</CoordinateFrame>
 									<UniqueId name="HistoryId">00000000000000000000000000000000</UniqueId>
@@ -57748,7 +57403,7 @@ c3QyAwAAAE1hcAIKAAAATWFwIFRlc3QgMg==]]></BinaryString>
 									<CFrame>
 										<X>1</X>
 										<Y>13.7799425</Y>
-										<Z>4030</Z>
+										<Z>4010</Z>
 										<R00>1</R00>
 										<R01>0</R01>
 										<R02>0</R02>
@@ -57776,7 +57431,7 @@ c3QyAwAAAE1hcAIKAAAATWFwIFRlc3QgMg==]]></BinaryString>
 									<CoordinateFrame name="CFrame">
 										<X>1</X>
 										<Y>13.7799301</Y>
-										<Z>4044.25</Z>
+										<Z>4024.25</Z>
 										<R00>1</R00>
 										<R01>0</R01>
 										<R02>0</R02>
@@ -57873,7 +57528,7 @@ c3QyAwAAAE1hcAIKAAAATWFwIFRlc3QgMg==]]></BinaryString>
 									<CoordinateFrame name="CFrame">
 										<X>-38.25</X>
 										<Y>13.7799301</Y>
-										<Z>4030</Z>
+										<Z>4010</Z>
 										<R00>1</R00>
 										<R01>0</R01>
 										<R02>0</R02>
@@ -57970,7 +57625,7 @@ c3QyAwAAAE1hcAIKAAAATWFwIFRlc3QgMg==]]></BinaryString>
 									<CoordinateFrame name="CFrame">
 										<X>40.25</X>
 										<Y>13.7799301</Y>
-										<Z>4030</Z>
+										<Z>4010</Z>
 										<R00>1</R00>
 										<R01>0</R01>
 										<R02>0</R02>
@@ -60093,7 +59748,7 @@ c3QyAwAAAE1hcAIKAAAATWFwIFRlc3QgMg==]]></BinaryString>
 								<bool name="Massless">false</bool>
 								<token name="Material">256</token>
 								<string name="MaterialVariantSerialized"></string>
-								<string name="Name">StartLine</string>
+								<string name="Name">StartBase</string>
 								<CoordinateFrame name="PivotOffset">
 									<X>0</X>
 									<Y>0</Y>
