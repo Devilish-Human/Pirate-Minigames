@@ -22,7 +22,8 @@ local SwordClash = Minigame.new {
     Reward = {
         Points = 20,
         Exp = 6
-    }
+    },
+    MaxSurvivors = 1
 }
 SwordClash.__index = SwordClash
 
@@ -49,34 +50,52 @@ function SwordClash:_givePlayersSwords()
     end
 end
 
+local playerGears = {}
+
 function SwordClash:Start()
     -- Remove players gears
     for _, plr in pairs(self.Contestants) do
         if plr then
             for _, gear in pairs(plr:FindFirstChild("Backpack"):GetChildren()) do
                 if gear then
+                    table.insert(playerGears[plr], gear)
                     gear:Destroy()
                 end
             end
 
             for _, v in pairs(plr.Character:GetChildren()) do
                 if v:IsA("Tool") then
+                    if table.find(playerGears[plr], v) then return end
+                    table.insert(playerGears[plr], v)
                     v:Destroy()
                 end
             end
         end
     end
 
+    print(playerGears)
+
     for i = 5, 1, -1 do
         task.wait(1)
         GameService.Client.StatusChanged:FireAll(`Minigame will start in {i} seconds.`)
     end
+
+    self:_givePlayersSwords()
 
     -- Unanchor players if necessary
 
     for i = self.Length, 1, -1 do
         task.wait(1)
         GameService.Client.StatusChanged:FireAll(`Minigame will end in {i} seconds; {self.Objective}`)
+
+        if (#self.Contestants <= self.MaxSurvivors) then
+            break
+        end
+    end
+
+    for _, plr in pairs (self.Contestants) do
+        self:_addWinner(plr)
+        self:_awardPlayer(plr)
     end
 
     MinigameService.SetFinished:Fire(true)
@@ -118,7 +137,7 @@ end
 
 function SwordClash:_awardPlayer(player: Player)
 	DataService:Update(player, "Coins", function(Coins)
-		local bonus = (#self.Winners == 1 and self.Reward.Points * 1.25)
+		local bonus = (#self.Winners == 1 and self.Reward.Points * 1.25 or 0)
 		local reward = (self.Reward.Points + bonus)
 
 		return Coins + reward

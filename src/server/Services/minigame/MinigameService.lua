@@ -11,7 +11,7 @@ local MinigameService = Knit.CreateService({
     StartMinigame = Signal.new();
     StopMinigame = Signal.new();
     SetFinished = Signal.new();
-    Minigames = {"ObbyRunaway", "Sodalicious"};
+    Minigames = {"ObbyRunaway", "Sodalicious", "SwordClash"};
 })
 
 --local Minigames = require(script.Parent.MinigameData)
@@ -24,8 +24,8 @@ function MinigameService:GetPlayers()
         if (player:FindFirstChild("isAFK") and not player:FindFirstChild("isAFK").Value) then
             table.insert(Players, player)
         end
-        return Players
     end
+    return Players
 end
 
 function MinigameService:ChooseMinigame()
