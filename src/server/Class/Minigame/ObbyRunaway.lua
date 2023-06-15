@@ -2,6 +2,7 @@
 -- Authors: PirateNinja Studios / PirateNinja Twelve
 -- Date: 05/25/2023
 
+local Players = game:GetService("Players")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local Knit = require(ReplicatedStorage:FindFirstChild("Packages").Knit)
 local Janitor = require(ReplicatedStorage:FindFirstChild("Packages").Janitor)
@@ -60,11 +61,12 @@ function ObbyRunaway:Start()
 		debounce = true
 		local char = hit.Parent
 		local human = char:FindFirstChild("Humanoid")
-		
-		if (human and debounce == true) then
-			local player = game:GetService("Players"):GetPlayerFromCharacter(human.Parent)
-			if (player) then
+		if (human) then
+			local player = Players:GetPlayerFromCharacter(human.Parent)
+			if (player and debounce == true) then
 				self:_addWinner(player)
+				print(char)
+				print(human.Parent.Name)
 				self:_awardPlayer(player)
 				player:LoadCharacter()
 				table.remove(self.Contestants, 1)
@@ -96,13 +98,10 @@ function ObbyRunaway:Start()
 
 	-- award winners
 	for _, v in self.Winners do
-		local player: Player = v
-
-		if (player) then
-			self:_awardPlayer(player)
-		end
+		print(self.Winners, v)
 	end
 
+	task.wait(2)
 	-- Clean up
 	MinigameService.SetFinished:Fire(true)
 	print("Mining has ended.")

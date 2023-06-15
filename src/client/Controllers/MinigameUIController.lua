@@ -55,30 +55,29 @@ function MinigameUIController:KnitStart()
 		task.wait(1)
 	until Knit.Player.Character ~= nil
 
-	-- local minigameUI = playerGui:FindFirstChild("MinigameUI")
-	-- local ObjectiveUI = minigameUI:FindFirstChild("ObjectiveFrame")
+	local minigameUI = playerGui:FindFirstChild("MainUI")
+	local ObjectiveUI = minigameUI:FindFirstChild("ObjectiveFrame")
 	-- local ResultsFrame = minigameUI:FindFirstChild("EndResults")
 
-	-- local showObjective = TweenService:Create(
-	-- 	ObjectiveUI,
-	-- 	TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
-	-- 	{ Position = UDim2.new(0.5, 0, 0.88, 0), BackgroundTransparency = 0 }
-	-- )
-	-- local hideObjective = TweenService:Create(
-	-- 	ObjectiveUI,
-	-- 	TweenInfo.new(2.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
-	-- 	{ Position = UDim2.new(0.5, 0, 1.88, 0), BackgroundTransparency = 1 }
-	-- )
+	local showObjective = TweenService:Create(ObjectiveUI,
+	 	TweenInfo.new(1.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
+		{ Position = UDim2.new(0.5, 0, 0.88, 0), BackgroundTransparency = 0 }
+	 )
+	 local hideObjective = TweenService:Create(
+	 	ObjectiveUI,
+	 	TweenInfo.new(2.5, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut),
+	 	{ Position = UDim2.new(0.5, 0, 1.88, 0), BackgroundTransparency = 1 }
+	)
 
-	-- GameService.ShowObjUI:Connect(function(...)
-	-- 	local mgName, mgObjective = ...
-	-- 	ObjectiveUI.m_Name.Text = mgName
-	-- 	ObjectiveUI.m_Objective.Text = mgObjective
+	GameService.ShowObjective:Connect(function(...)
+		local mgName, mgObjective = ...
+		ObjectiveUI.mName.Text = mgName
+	 	ObjectiveUI.mObjective.Text = mgObjective
 
-	-- 	showObjective:Play()
-	-- 	wait(3)
-	-- 	hideObjective:Play()
-	-- end)
+	 	showObjective:Play()
+	 	task.wait(10)
+	 	hideObjective:Play()
+	 end)
 
 	-- local usernameLabel = createLabel()
 	-- ResultsFrame:WaitForChild("ResultList"):ClearAllChildren()

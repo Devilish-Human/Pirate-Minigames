@@ -156,25 +156,22 @@ function GameUIController:KnitStart()
 		StatusLabel.Text = status
 	end)
 
-	local Coins = 0
-	DataService:Get("Coins"):andThen(function(Value)
-		Coins = Value
+	local moneyIcon = Icon.new()
+	:setName("CoinIcon")
+	:setImage(363483133)
+	:setRight()
+	:lock()
+	:give(function(icon)
+		return DataService.CoinsChanged:Connect(function(coins)
+			icon:setLabel(tostring(coins))
+		end)
 	end)
 
-	 Icon.new()
-	 	:setName("CoinIcon")
-	 	:setImage(363483133)
-	 	:setLabel(Coins)
-	 	:setRight()
-	 	:lock()
-	 	:give(function(icon)
-			return DataService.CoinsChanged:Connect(function(coins)
-				icon:setLabel(tostring(coins))
-				if coins >= 1000 then
-					icon:setLabel(ConvertComma(tostring(coins)))
-	 			end
-			end)
-	 	end)
+	DataService:Get("Coins"):andThen(function(Value)
+		moneyIcon:setLabel(Value)
+	end)
+
+
 	--[[ Icon.new()
         :setName ("ShopIcon")
         :setImage(4882429582)

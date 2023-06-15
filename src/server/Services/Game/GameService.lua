@@ -27,7 +27,8 @@ local GameFolder
 local GameService = Knit.CreateService({
 	Name = "GameService",
 	Client = {
-		StatusChanged = Knit:CreateSignal()
+		StatusChanged = Knit:CreateSignal();
+		ShowObjective = Knit.CreateSignal();
 	},
 	SetMinigame = Signal.new();
 })
