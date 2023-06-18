@@ -106,6 +106,13 @@
           <int name="BorderSizePixel">0</int>
           <bool name="ClipsDescendants">false</bool>
           <bool name="Draggable">false</bool>
+          <Font name="FontFace">
+            <Family>
+              <url>rbxasset://fonts/families/Ubuntu.json</url>
+            </Family>
+            <Weight>400</Weight>
+            <Style>Normal</Style>
+          </Font>
           <int name="LayoutOrder">0</int>
           <float name="LineHeight">1</float>
           <int name="MaxVisibleGraphemes">-1</int>
