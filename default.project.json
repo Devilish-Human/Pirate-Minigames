@@ -1,5 +1,6 @@
 {
   "name": "pirate-minigames",
+  "servePlaceIds" : [6213542949, 0],
   "tree": {
     "$className": "DataModel",
 

@@ -10,3 +10,7 @@
 *.ai
 
 .vscode/
+
+# Added by cargo
+
+/target
