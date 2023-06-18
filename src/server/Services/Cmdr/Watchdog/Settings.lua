@@ -30,7 +30,8 @@ return {
 	-- Watchdog Settings
 	DefaultMods = {
 		[-1] = "Server", -- id -1 is reserved for game
-		[44821621] = "PirateNinja12", -- put your id and name like this
+		[44821621] = "PirateNinja12", -- put your id and name like this,
+		[74633861] = "PirateNinja Studio"
 	},
 	
 	LogCategories = {

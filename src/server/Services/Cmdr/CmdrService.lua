@@ -11,11 +11,12 @@ local CmdrService = Knit.CreateService {
         135459427,
     },
 
-    SERVER_MOD_ID = {};
+    ServerModeratorId = -1;
     Watchdog = require(script.Parent.Watchdog),
+    WDSetting = require(script.Parent.Watchdog.Settings);
     CheckedPlayers = {},
-    NotesPerPlayer = {};
     PlayerCooldowns = {};
+    PlayerNotes = {};
 }
 
 function CmdrService:KnitInit()
