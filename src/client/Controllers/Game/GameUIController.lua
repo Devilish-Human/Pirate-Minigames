@@ -129,7 +129,17 @@ function GameUIController:KnitStart()
 
 	StatusLabel.FontFace = Font.fromEnum(Enum.Font.Ubuntu)
 
-	-- local shopFrame = GameUI:FindFirstChild("ShopFrame")
+	local shopFrame = GameUI:FindFirstChild("Shop")
+
+	local shopButton = Icon.new()
+		:setLabel("Shop")
+		:setLeft()
+		:bindEvent("selected", function(icon)
+			shopFrame:TweenPosition(UDim2.fromScale(0.5, 0.5), Enum.EasingDirection.In, Enum.EasingStyle.Linear, 0.1)
+		end)
+		:bindEvent("deselected", function(icon)
+			shopFrame:TweenPosition(UDim2.fromScale(0.5, 1.5), Enum.EasingDirection.Out, Enum.EasingStyle.Quad, 0.1)
+		end)
 
 	-- local shopState = false
 	-- local shopButton = GameUI:FindFirstChild("Buttons"):FindFirstChild("shopButton")
