@@ -75,8 +75,9 @@ function ShopController:_createTab(name, bgcolor)
             tab["uIStroke"].Color = Color3.fromRGB(255, 255, 255)
             tab.page.Visible = true
             
-            ShopController.CurrentTab = tab
             tab.TabChanged:Fire()
+            ShopController.CurrentTab = tab
+
         end
     end
     
@@ -88,15 +89,6 @@ function ShopController:_createTab(name, bgcolor)
             tab.page.Visible = false
             tab["uIStroke"].Color = tab.Color
             tab.tabTemplate.BackgroundColor3 = tab.Color
-        end
-    end
-
-    function tab:Clear()
-        if tab == ShopController.CurrentTab then
-            for _,v in pairs(self.page:GetChildren()) do
-                if v:IsA("UIListLayout") or v:IsA("UIGridLayout") then return end
-                v:Destroy()
-            end
         end
     end
 
@@ -146,7 +138,7 @@ function ShopController:_createItemButton(name: string, tab: table, itemData: ta
     item["ItemButton"].Size = UDim2.fromOffset(100, 100)
 
     item["textLabel"] = Instance.new("TextLabel")
-    item["textLabel"].Name = name
+    item["textLabel"].Name = "Label"
     item["textLabel"].FontFace = Font.new("rbxasset://fonts/families/Ubuntu.json")
     item["textLabel"].Text = itemData.DisplayName
     item["textLabel"].TextColor3 = Color3.fromRGB(255, 255, 255)
@@ -157,7 +149,7 @@ function ShopController:_createItemButton(name: string, tab: table, itemData: ta
     item["textLabel"].BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     item["textLabel"].BackgroundTransparency = 1
     item["textLabel"].Size = UDim2.fromScale(1, 0.3)
-    item["textLabel"].Parent = item["imageButton"]
+    item["textLabel"].Parent = item["ItemButton"]
 
     item["ItemButton"].Parent = tab.page
 
@@ -165,38 +157,44 @@ function ShopController:_createItemButton(name: string, tab: table, itemData: ta
 end
 
 local ItemList = {
-    Gear = {},
-    Tag = {}
+    ["Gears"] = {},
+    ["Tags"] = {}
 }
 
 local TabList = {}
 
-function ShopController:_generateItems(tab)
-    tab:Clear()
+function ShopController:_generateItems()
+    for _, v in ipairs(ItemList) do
+        table.clear(v)
+    end
 
-    for i, v in pairs(self.ShopData) do
-        for item, itemData in pairs(v) do
-            if (self.CurrentTab == tab) then
-                ItemList[i][string.lower(item)] = self:_createItemButton(item, tab, itemData)
+    for category, items in pairs(self.ShopData) do
+        for item, itemData in pairs(items) do
+            if (self.CurrentTab.Name == category) then
+                ItemList[category][string.lower(item)] = self:_createItemButton(item, self.CurrentTab, itemData)
             end
         end
     end
+
+    print(TabList)
+    print(self.CurrentTab)
 end
 
 function ShopController:KnitStart()
     for tab, items in pairs(self.ShopData) do
         TabList[tab] = self:_createTab(tab)
+        TabList[tab].TabChanged:Fire()
     end
 
+    self:_generateItems()
+
     self.CurrentTab.TabChanged:Connect(function()
-        self:_generateItems(self.CurrentTab)
-
-        print("Current Tab", self.CurrentTab)
+        for _,v in pairs(self.CurrentTab.page:GetChildren()) do
+            if v:IsA("UIListLayout") or v:IsA("UIGridLayout") then return end
+            v:Destroy()
+        end
+        self:_generateItems()
     end)
-    
-    self:_generateItems(self.CurrentTab)
-
-    print(self.CurrentTab)
 end
 
 function ShopController:KnitInit()

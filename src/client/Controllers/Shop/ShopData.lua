@@ -6,7 +6,7 @@ export type Item = {
 }
 
 return {
-    ["Gear"] = {
+    ["Gears"] = {
         ["BloxyCola"] = {
             DisplayName = "Throwing Spork",
             Description = "A cold refreshment drink on a hot day.",
@@ -15,7 +15,7 @@ return {
         },
         ["Spork"] = {
             DisplayName = "Throwing Spork",
-            Description = 0,
+            Description = "0",
             Cost = 250,
             Id = 107458429,
         },
@@ -27,7 +27,7 @@ return {
         }
     },
 
-    ["Tag"] = {
+    ["Tags"] = {
         ["Beginner"] = {
             DisplayName = "Beginner Tag",
             Description = "The beginner tag",

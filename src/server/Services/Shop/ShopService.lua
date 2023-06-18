@@ -30,7 +30,7 @@ function ShopService:GetItemCategory(item)
 
     for _, cat in pairs(ShopItems:GetChildren()) do
         for _, obj in pairs(cat:GetChildren()) do
-            if obj.Name == item then
+            if obj.Name == string.lower(item) then
                 category = cat
             end
         end
@@ -41,12 +41,25 @@ end
 
 function ShopService:PurchaseItem(player, itemName)
     local category = self:GetItemCategory(itemName)
-    local item = category:FindFirstChild(itemName)
+    local item = category:FindFirstChild(string.lower(itemName))
 
     if DataService:Get(player, "Coins") >= item:GetAttribute("Cost") then
         print(`{player} has purchased ({category}) {itemName} for {item:GetAttribute("Cost")} coins`)
+
+        DataService:Update(player, "Coins", function(coins)
+            return coins - item:GetAttribute("Cost")
+        end)
+
+        DataService:Update(player, "Inventory", function(items)
+            local oldInventory = items
+            local Inventory = table.clone(oldInventory)
+            if (not Inventory[category][itemName]) then
+                Inventory[category][itemName] = true
+            end
+            return Inventory
+        end)
     else
-        print(`{player} tried purchasing ({category}) {itemName} for {item:GetAttribute("Cost")} coins`)
+        print(`{player} tried purchasing ({category}) {itemName} for {item:GetAttribute("Cost")} coins but has {DataService:Get(player, "Coins")}`)
     end
 end
 
