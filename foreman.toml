@@ -4,4 +4,4 @@ wally = { source = "UpliftGames/wally", version = "0.3.1"}
 stylua = { source = "JohnnyMorganz/stylua", version = "0.14.2"}
 selene = { source = "Kampfkarren/selene", version = "0.20.0"}
 rbxcloud = { source = "Sleitnick/rbxcloud", version = "0.3.0"}
-remodel = { source = remodel = "UpliftGames/remodel", version = "0.12.0-uplift.release.12"}
+remodel = { source = "UpliftGames/remodel", version = "0.12.0-uplift.release.12"}
